@@ -1,0 +1,26 @@
+[
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T14:17:27.473Z",
+    "effect": "dragon"
+  },
+  {
+    "from": "namdeptrai",
+    "text": "adu",
+    "time": "2026-07-21T14:21:45.417Z",
+    "effect": "none"
+  },
+  {
+    "from": "namdeptrai",
+    "text": "hi",
+    "time": "2026-07-21T14:37:15.561Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T14:37:32.585Z",
+    "effect": "dragon"
+  }
+]

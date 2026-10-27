@@ -1,0 +1,2663 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d1a;
+            padding: 20px;
+            transition: background 0.3s;
+        }
+        
+        .app-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            max-height: 750px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: rgba(0,0,0,0.4);
+            border-right: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        .sidebar .user-info {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .sidebar .user-info .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C2BD9, #2E86DE);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .sidebar .user-info .info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .sidebar .user-info .info .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sidebar .user-info .info .name .role-badge {
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .sidebar .user-info .info .name .role-badge.admin { background: #e74c3c; color: #fff; }
+        .sidebar .user-info .info .name .role-badge.promax { background: linear-gradient(135deg, #f7971e, #ffd200); color: #222; }
+        .sidebar .user-info .info .name .role-badge.pro { background: #2E86DE; color: #fff; }
+        .sidebar .user-info .info .name .role-badge.user { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+        
+        .sidebar .user-info .info .status {
+            font-size: 0.65rem;
+            color: #2ecc71;
+        }
+        
+        .sidebar .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        
+        .sidebar .tabs button {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        
+        .sidebar .tabs button:hover { color: rgba(255,255,255,0.7); }
+        .sidebar .tabs button.active { color: #fff; border-bottom: 2px solid #6C2BD9; }
+        
+        .sidebar .list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        
+        .sidebar .list .item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: rgba(255,255,255,0.6);
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar .list .item:hover {
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+        }
+        
+        .sidebar .list .item.active {
+            background: rgba(108,43,217,0.15);
+            color: #fff;
+            border-left-color: #6C2BD9;
+        }
+        
+        .sidebar .list .item .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        
+        .sidebar .list .item .info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .sidebar .list .item .info .name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .sidebar .list .item .info .name .role-badge {
+            font-size: 0.5rem;
+            padding: 1px 6px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .sidebar .list .item .info .name .role-badge.admin { background: #e74c3c; color: #fff; }
+        .sidebar .list .item .info .name .role-badge.promax { background: #f7971e; color: #222; }
+        .sidebar .list .item .info .name .role-badge.pro { background: #2E86DE; color: #fff; }
+        .sidebar .list .item .info .name .role-badge.user { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+        
+        .sidebar .list .item .info .status {
+            font-size: 0.6rem;
+            opacity: 0.4;
+        }
+        
+        .sidebar .list .item .info .status.online {
+            color: #2ecc71;
+            opacity: 1;
+        }
+        
+        .sidebar .list .item .actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        
+        .sidebar .list .item .actions button {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.15);
+            cursor: pointer;
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        
+        .sidebar .list .item .actions button:hover {
+            color: #e74c3c;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .sidebar .actions {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .sidebar .actions button {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.5);
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        
+        .sidebar .actions button:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        
+        .sidebar .actions button.store-btn {
+            background: rgba(247, 151, 30, 0.2);
+            border-color: #f7971e;
+            color: #f7971e;
+        }
+        
+        .sidebar .actions button.store-btn:hover {
+            background: rgba(247, 151, 30, 0.3);
+        }
+        
+        .sidebar .actions button.danger:hover {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        .sidebar .actions button.admin-btn.hidden { display: none; }
+
+        /* ===== MAIN ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .main .header {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.02);
+            flex-shrink: 0;
+        }
+        
+        .main .header .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .main .header .info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .main .header .info h4 {
+            color: #fff;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .main .header .info h4 .role-badge {
+            font-size: 0.5rem;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .main .header .info h4 .role-badge.admin { background: #e74c3c; color: #fff; }
+        .main .header .info h4 .role-badge.promax { background: #f7971e; color: #222; }
+        .main .header .info h4 .role-badge.pro { background: #2E86DE; color: #fff; }
+        .main .header .info h4 .role-badge.user { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+        
+        .main .header .info p {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.65rem;
+        }
+        
+        .main .header .actions {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .main .header .actions button {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.25);
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        
+        .main .header .actions button:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+        
+        .main .header .actions button.danger:hover {
+            color: #e74c3c;
+        }
+
+        /* ===== TOOLBAR ===== */
+        .chat-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 24px;
+            background: rgba(255,255,255,0.01);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        
+        .chat-toolbar button {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.4);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .chat-toolbar button:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        
+        .chat-toolbar .color-picker-wrap {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.7rem;
+        }
+        
+        .chat-toolbar .color-picker-wrap input[type="color"] {
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+        }
+        
+        .chat-toolbar .effect-badge {
+            background: rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.3);
+            margin-left: 2px;
+        }
+        
+        .chat-toolbar .emoji-picker-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .chat-toolbar .emoji-picker {
+            display: none;
+            position: absolute;
+            bottom: 35px;
+            left: 0;
+            background: rgba(20,20,40,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 10px;
+            width: 260px;
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.06);
+            z-index: 10;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        
+        .chat-toolbar .emoji-picker.show {
+            display: flex;
+        }
+        
+        .chat-toolbar .emoji-picker span {
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        
+        .chat-toolbar .emoji-picker span:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.2);
+        }
+
+        /* ===== MESSAGES ===== */
+        .main .messages {
+            flex: 1;
+            padding: 16px 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .main .messages .msg {
+            max-width: 72%;
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            word-break: break-word;
+            animation: slideIn 0.25s ease-out;
+            position: relative;
+        }
+        
+        .main .messages .msg.me {
+            align-self: flex-end;
+            background: #6C2BD9;
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .main .messages .msg.other {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.06);
+            color: #ddd;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .main .messages .msg .sender {
+            font-size: 0.6rem;
+            opacity: 0.5;
+            margin-bottom: 2px;
+        }
+        
+        .main .messages .msg .time {
+            font-size: 0.55rem;
+            opacity: 0.3;
+            margin-top: 2px;
+            text-align: right;
+        }
+        
+        .main .messages .empty-state {
+            color: rgba(255,255,255,0.2);
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .main .messages .empty-state i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        /* ===== EFFECTS ===== */
+        .main .messages .msg.effect-twinkle { animation: twinkle 1.2s infinite; }
+        .main .messages .msg.effect-shimmer { background: linear-gradient(120deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.05) 100%); background-size: 200% 100%; animation: shimmer 2s infinite; }
+        .main .messages .msg.effect-glow { animation: glowPulse 1.5s infinite; }
+        .main .messages .msg.effect-bubble { animation: bubbleFloat 2s ease-in-out infinite; }
+        .main .messages .msg.effect-explode { animation: explode 0.8s ease-out; }
+        .main .messages .msg.effect-rainbow { background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff); background-size: 300% 300%; animation: rainbowMove 3s ease infinite; color: #fff; border: none; }
+        .main .messages .msg.effect-fire { background: linear-gradient(135deg, #ff4500, #ff8c00, #ffd700); background-size: 200% 200%; animation: fireMove 0.8s ease infinite alternate; color: #fff; border: none; box-shadow: 0 0 30px rgba(255,69,0,0.3); }
+        .main .messages .msg.effect-dragon { background: linear-gradient(135deg, #1a1a2e, #2c3e50); color: #f1c40f; border: 2px solid #f1c40f; animation: dragonPulse 1.5s ease-in-out infinite; box-shadow: 0 0 40px rgba(241,196,15,0.2); overflow: visible; }
+        .main .messages .msg.effect-dragon::before { content: '🐉'; position: absolute; font-size: 1.5rem; top: -16px; right: -16px; animation: dragonSpin 3s linear infinite; }
+        .main .messages .msg.effect-dragon::after { content: '🐉'; position: absolute; font-size: 1.5rem; bottom: -16px; left: -16px; animation: dragonSpinReverse 4s linear infinite; }
+
+        @keyframes twinkle { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.96)} }
+        @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+        @keyframes glowPulse { 0%,100%{box-shadow:0 0 10px rgba(255,255,255,0.1),0 0 20px rgba(255,255,255,0.05)} 50%{box-shadow:0 0 30px rgba(255,255,255,0.3),0 0 60px rgba(255,255,255,0.1)} }
+        @keyframes bubbleFloat { 0%,100%{transform:translateY(0px) scale(1)} 50%{transform:translateY(-8px) scale(1.02)} }
+        @keyframes explode { 0%{transform:scale(0.3);opacity:0} 50%{transform:scale(1.2);opacity:1} 100%{transform:scale(1);opacity:1} }
+        @keyframes rainbowMove { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        @keyframes fireMove { 0%{background-position:0% 0%} 100%{background-position:100% 100%} }
+        @keyframes dragonPulse { 0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(241,196,15,0.2)} 50%{transform:scale(1.02);box-shadow:0 0 60px rgba(241,196,15,0.4)} }
+        @keyframes dragonSpin { from{transform:rotate(0deg) translateX(6px) rotate(0deg)} to{transform:rotate(360deg) translateX(6px) rotate(-360deg)} }
+        @keyframes dragonSpinReverse { from{transform:rotate(0deg) translateX(-6px) rotate(0deg)} to{transform:rotate(-360deg) translateX(-6px) rotate(360deg)} }
+        @keyframes slideIn { from{opacity:0;transform:translateY(8px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+        /* ===== INPUT AREA ===== */
+        .main .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 12px 24px 16px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            flex-shrink: 0;
+        }
+        
+        .main .input-area input {
+            flex: 1;
+            padding: 10px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        
+        .main .input-area input:focus {
+            border-color: #6C2BD9;
+            background: rgba(255,255,255,0.06);
+        }
+        
+        .main .input-area input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+        
+        .main .input-area button {
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: none;
+            background: #6C2BD9;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .main .input-area button:hover {
+            transform: scale(1.04);
+            box-shadow: 0 0 30px rgba(108,43,217,0.3);
+        }
+        
+        .main .input-area button:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== MODALS ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease-out;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal .modal-content {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 92%;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.05);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: scaleIn 0.25s ease-out;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal .modal-content h3 {
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal .modal-content h3 .store-icon {
+            color: #f7971e;
+        }
+        
+        .modal .modal-content p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+        
+        .modal .modal-content .contact-info {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .modal .modal-content .contact-info .discord {
+            background: rgba(108, 43, 217, 0.3);
+            border: 1px solid rgba(108, 43, 217, 0.3);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        
+        .modal .modal-content .contact-info .discord i {
+            color: #6C2BD9;
+        }
+        
+        .modal .modal-content .contact-info .email {
+            background: rgba(46, 134, 222, 0.2);
+            border: 1px solid rgba(46, 134, 222, 0.2);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .modal .modal-content .contact-info .email i {
+            color: #2E86DE;
+        }
+        
+        .modal .modal-content .store-section {
+            margin: 12px 0;
+        }
+        
+        .modal .modal-content .store-section .section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        
+        .modal .modal-content .store-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+            position: relative;
+        }
+        
+        .modal .modal-content .store-item:hover {
+            border-color: rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .modal .modal-content .store-item .item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .modal .modal-content .store-item .item-info .icon {
+            font-size: 1.4rem;
+        }
+        
+        .modal .modal-content .store-item .item-info .name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .modal .modal-content .store-item .item-info .price {
+            font-size: 0.75rem;
+            color: #f7971e;
+        }
+        
+        .modal .modal-content .store-item .item-actions {
+            display: none;
+            gap: 8px;
+        }
+        
+        .modal .modal-content .store-item:hover .item-actions {
+            display: flex;
+        }
+        
+        .modal .modal-content .store-item .item-actions button {
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .modal .modal-content .store-item .item-actions .buy-btn {
+            background: #6C2BD9;
+            color: #fff;
+        }
+        
+        .modal .modal-content .store-item .item-actions .buy-btn:hover {
+            background: #5A1FB0;
+        }
+        
+        .modal .modal-content .store-item .item-actions .gift-btn {
+            background: #f7971e;
+            color: #222;
+        }
+        
+        .modal .modal-content .store-item .item-actions .gift-btn:hover {
+            background: #e08e0b;
+        }
+        
+        .modal .modal-content .store-item .owned-badge {
+            background: #2ecc71;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        
+        .modal .modal-content .store-item .locked-badge {
+            background: #e74c3c;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        
+        .modal .modal-content .qr-section {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        
+        .modal .modal-content .qr-section.show {
+            display: block;
+        }
+        
+        .modal .modal-content .qr-section .qr-placeholder {
+            width: 160px;
+            height: 160px;
+            margin: 12px auto;
+            background: #0d0d1a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(255,255,255,0.05);
+            font-size: 3rem;
+            color: #6C2BD9;
+        }
+        
+        .modal .modal-content .qr-section .note {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 8px;
+        }
+        
+        .modal .modal-content .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        
+        .modal .modal-content .btn-group button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .modal .modal-content .btn-group .btn-primary {
+            background: #6C2BD9;
+            color: #fff;
+        }
+        
+        .modal .modal-content .btn-group .btn-primary:hover {
+            background: #5A1FB0;
+        }
+        
+        .modal .modal-content .btn-group .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .modal .modal-content .btn-group .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .modal .modal-content .btn-group .btn-success {
+            background: #2ecc71;
+            color: #fff;
+        }
+        
+        .modal .modal-content .btn-group .btn-success:hover {
+            background: #27ae60;
+        }
+        
+        .modal .modal-content .friend-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin: 8px 0;
+        }
+        
+        .modal .modal-content .friend-list .friend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .modal .modal-content .friend-list .friend-item .name {
+            font-weight: 500;
+        }
+        
+        .modal .modal-content .friend-list .friend-item .select-btn {
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: none;
+            background: #6C2BD9;
+            color: #fff;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        
+        .modal .modal-content .friend-list .friend-item .select-btn:hover {
+            background: #5A1FB0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .app-container {
+                border-radius: 0;
+                height: 100vh;
+                max-height: none;
+            }
+            
+            .sidebar {
+                width: 60px;
+            }
+            
+            .sidebar .user-info .info .name,
+            .sidebar .user-info .info .status,
+            .sidebar .list .item .info,
+            .sidebar .actions button span {
+                display: none;
+            }
+            
+            .sidebar .user-info {
+                justify-content: center;
+                padding: 12px;
+            }
+            
+            .sidebar .list .item {
+                justify-content: center;
+                padding: 12px;
+            }
+            
+            .sidebar .list .item .avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 0.6rem;
+            }
+            
+            .sidebar .actions {
+                justify-content: center;
+                padding: 8px;
+            }
+            
+            .sidebar .actions button {
+                padding: 4px 8px;
+                font-size: 0.6rem;
+            }
+            
+            .sidebar .tabs button {
+                font-size: 0.6rem;
+                padding: 8px 4px;
+            }
+            
+            .main .messages {
+                padding: 12px 16px;
+            }
+            
+            .main .input-area {
+                padding: 10px 16px 14px;
+            }
+            
+            .chat-toolbar {
+                padding: 6px 16px;
+                gap: 4px;
+            }
+            
+            .chat-toolbar button {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            
+            .chat-toolbar .color-picker-wrap {
+                font-size: 0.6rem;
+            }
+            
+            .chat-toolbar .color-picker-wrap input[type="color"] {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .modal .modal-content {
+                padding: 20px;
+                margin: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 50px;
+            }
+            
+            .sidebar .list .item .avatar {
+                width: 24px;
+                height: 24px;
+                font-size: 0.5rem;
+            }
+            
+            .main .messages .msg {
+                max-width: 85%;
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+            
+            .main .input-area input {
+                font-size: 0.85rem;
+                padding: 8px 14px;
+            }
+            
+            .main .input-area button {
+                font-size: 0.8rem;
+                padding: 8px 16px;
+            }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="app">
+    <div class="chat-layout" id="chatLayout" style="display:none;">
+        
+        <!-- ===== SIDEBAR ===== -->
+        <div class="sidebar" id="sidebar">
+            <div class="user-info">
+                <div class="avatar" id="sidebarAvatar">U</div>
+                <div class="info">
+                    <div class="name">
+                        <span id="sidebarName">User</span>
+                        <span class="role-badge user" id="sidebarTier">User</span>
+                    </div>
+                    <div class="status">● Online</div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <button class="active" id="tabFriends"><i class="fas fa-user-friends"></i> <span class="tab-label">Bạn bè</span></button>
+                <button id="tabGroups"><i class="fas fa-users"></i> <span class="tab-label">Nhóm</span></button>
+            </div>
+            
+            <div class="list" id="sidebarList"></div>
+            
+            <div class="actions">
+                <button id="addFriendBtn"><i class="fas fa-user-plus"></i> <span>Kết bạn</span></button>
+                <button id="createGroupBtn"><i class="fas fa-plus-circle"></i> <span>Nhóm</span></button>
+                <button id="storeBtn" class="store-btn"><i class="fas fa-store"></i> <span>Store</span></button>
+                <button id="upgradeBtn" class="store-btn"><i class="fas fa-crown"></i> <span>Nâng cấp</span></button>
+                <button id="downgradeBtn" class="danger"><i class="fas fa-arrow-down"></i> <span>Hạ</span></button>
+                <button id="adminBtn" class="admin-btn hidden"><i class="fas fa-user-cog"></i> <span>Admin</span></button>
+                <button id="changeDisplayNameBtn"><i class="fas fa-user-edit"></i> <span>Tên</span></button>
+                <button id="logoutBtn" class="danger"><i class="fas fa-sign-out-alt"></i> <span>Thoát</span></button>
+            </div>
+        </div>
+
+        <!-- ===== MAIN CHAT ===== -->
+        <div class="main">
+            <div class="header">
+                <div class="avatar" id="chatAvatar">💬</div>
+                <div class="info">
+                    <h4 id="chatTitle">Chat Pro</h4>
+                    <p id="chatSub">Chọn bạn bè hoặc nhóm để trò chuyện</p>
+                </div>
+                <div class="actions">
+                    <button id="clearChatBtn" title="Xóa tin nhắn"><i class="fas fa-trash-alt"></i></button>
+                    <button id="leaveGroupBtn" title="Rời nhóm" style="display:none;"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <div class="chat-toolbar">
+                <button id="emojiBtn"><i class="fas fa-smile"></i> Emoji</button>
+                <button id="effectBtn"><i class="fas fa-magic"></i> Hiệu ứng <span class="effect-badge" id="currentEffectLabel">Off</span></button>
+                <div class="color-picker-wrap"><span>Màu nền</span><input type="color" id="bgColorPicker" value="#0d0d1a"></div>
+                <div class="color-picker-wrap"><span>Màu tin</span><input type="color" id="msgColorPicker" value="#6C2BD9"></div>
+                <div class="emoji-picker-container">
+                    <div class="emoji-picker" id="emojiPicker"></div>
+                </div>
+            </div>
+
+            <div class="messages" id="messages">
+                <div class="empty-state">
+                    <i class="fas fa-comments"></i>
+                    Chọn một cuộc trò chuyện để bắt đầu
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="msgInput" placeholder="Nhập tin nhắn..." />
+                <button id="sendBtn"><i class="fas fa-paper-plane"></i> Gửi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- Add Friend Modal -->
+<div class="modal" id="addFriendModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-plus" style="color:#6C2BD9;"></i> Kết bạn</h3>
+        <p>Nhập tên đăng nhập để gửi lời mời kết bạn</p>
+        <input type="text" id="friendUsername" placeholder="Tên đăng nhập">
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('addFriendModal')">Hủy</button>
+            <button class="btn-primary" id="sendFriendRequestBtn">Gửi lời mời</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create Group Modal -->
+<div class="modal" id="createGroupModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-users" style="color:#f7971e;"></i> Tạo nhóm mới</h3>
+        <p>Nhập tên nhóm</p>
+        <input type="text" id="groupNameInput" placeholder="Tên nhóm">
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('createGroupModal')">Hủy</button>
+            <button class="btn-primary" id="createGroupConfirmBtn">Tạo nhóm</button>
+        </div>
+    </div>
+</div>
+
+<!-- Store Modal -->
+<div class="modal" id="storeModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-store store-icon"></i> Cửa hàng Chat Pro</h3>
+        <p>Mua rank và hiệu ứng tin nhắn</p>
+        
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <div class="discord">
+                <i class="fab fa-discord"></i>
+                <span>Discord: <strong>nvi3tn4m</strong></span>
+            </div>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <span>Gmail: <strong>nguyenvietnamtthsp@gmail.com</strong></span>
+            </div>
+        </div>
+        
+        <!-- Rank Section -->
+        <div class="store-section">
+            <div class="section-title"><i class="fas fa-crown" style="color:#f7971e;"></i> Nâng cấp Rank</div>
+            <div class="store-item" id="rankPro">
+                <div class="item-info">
+                    <span class="icon">⭐</span>
+                    <div>
+                        <div class="name">Pro</div>
+                        <div class="price">10.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyRank('pro')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('pro')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="rankProMax">
+                <div class="item-info">
+                    <span class="icon">👑</span>
+                    <div>
+                        <div class="name">ProMax</div>
+                        <div class="price">20.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyRank('promax')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('promax')">Tặng</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Effects Section -->
+        <div class="store-section">
+            <div class="section-title"><i class="fas fa-magic" style="color:#9b59b6;"></i> Hiệu ứng tin nhắn</div>
+            <div class="store-item" id="effect-twinkle">
+                <div class="item-info">
+                    <span class="icon">✨</span>
+                    <div>
+                        <div class="name">Lấp lánh</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('twinkle')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('twinkle')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-shimmer">
+                <div class="item-info">
+                    <span class="icon">💫</span>
+                    <div>
+                        <div class="name">Sáng bóng</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('shimmer')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('shimmer')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-glow">
+                <div class="item-info">
+                    <span class="icon">🌟</span>
+                    <div>
+                        <div class="name">Chói lóa</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('glow')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('glow')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-bubble">
+                <div class="item-info">
+                    <span class="icon">🫧</span>
+                    <div>
+                        <div class="name">Bong bóng</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('bubble')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('bubble')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-explode">
+                <div class="item-info">
+                    <span class="icon">💥</span>
+                    <div>
+                        <div class="name">Nổ</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('explode')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('explode')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-rainbow">
+                <div class="item-info">
+                    <span class="icon">🌈</span>
+                    <div>
+                        <div class="name">Cầu vồng</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('rainbow')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('rainbow')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-fire">
+                <div class="item-info">
+                    <span class="icon">🔥</span>
+                    <div>
+                        <div class="name">Lửa</div>
+                        <div class="price">5.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('fire')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('fire')">Tặng</button>
+                </div>
+            </div>
+            <div class="store-item" id="effect-dragon">
+                <div class="item-info">
+                    <span class="icon">🐉</span>
+                    <div>
+                        <div class="name">Rồng cuộn</div>
+                        <div class="price">8.000 VND</div>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="buy-btn" onclick="buyEffect('dragon')">Mua</button>
+                    <button class="gift-btn" onclick="showGiftFriends('dragon')">Tặng</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="qr-section" id="qrSection">
+            <div class="qr-placeholder"><i class="fas fa-qrcode"></i></div>
+            <p id="qrPrice" style="font-weight:600;color:#f7971e;text-align:center;"></p>
+            <p class="note">Vật phẩm sẽ được cập nhật vào tài khoản trong vòng 24h</p>
+            <button class="btn-success" id="confirmPaymentBtn" style="width:100%;padding:10px;border-radius:10px;border:none;font-weight:600;cursor:pointer;margin-top:12px;">Đã thanh toán</button>
+        </div>
+        
+        <div class="friend-list-container" id="friendListContainer" style="display:none;">
+            <p>Chọn bạn bè để tặng:</p>
+            <div class="friend-list" id="friendList"></div>
+        </div>
+        
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('storeModal')">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Gift Modal -->
+<div class="modal" id="giftModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-gift" style="color:#f7971e;"></i> Tặng quà</h3>
+        <p id="giftDesc">Chọn bạn bè để tặng</p>
+        <div class="friend-list" id="giftFriendList"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('giftModal')">Hủy</button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Modal -->
+<div class="modal" id="adminModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-cog" style="color:#e74c3c;"></i> Quản lý người dùng</h3>
+        <p>Danh sách tất cả người dùng</p>
+        <div id="userList" style="max-height:300px;overflow-y:auto;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('adminModal')">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Downgrade Modal -->
+<div class="modal" id="downgradeSelectModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-arrow-down" style="color:#e74c3c;"></i> Hạ cấp</h3>
+        <p id="downgradeTargetInfo">Chọn cấp hạ cho <span id="downgradeTargetName"></span></p>
+        <div id="downgradeOptions" style="display:flex;flex-direction:column;gap:10px;margin:12px 0;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('downgradeSelectModal')">Hủy</button>
+        </div>
+    </div>
+</div>
+
+<!-- Effect Modal -->
+<div class="modal" id="effectModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-magic" style="color:#9b59b6;"></i> Chọn hiệu ứng tin nhắn</h3>
+        <p id="effectDesc">Chọn hiệu ứng cho tin nhắn</p>
+        <div id="effectList" style="display:flex;flex-direction:column;gap:6px;margin:12px 0;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('effectModal')">Đóng</button>
+            <button class="btn-danger" id="effectOffBtn">Tắt hiệu ứng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Change Display Name Modal -->
+<div class="modal" id="changeDisplayNameModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-edit" style="color:#6C2BD9;"></i> Đổi tên hiển thị</h3>
+        <p>Nhập tên hiển thị mới (không ảnh hưởng đến tên đăng nhập)</p>
+        <input type="text" id="newDisplayName" placeholder="Tên hiển thị mới" maxlength="20">
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('changeDisplayNameModal')">Hủy</button>
+            <button class="btn-primary" id="confirmDisplayNameBtn">Cập nhật</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// 1. DATABASE (Local Storage)
+// ============================================================
+const DB = {
+    getUsers() {
+        try { return JSON.parse(localStorage.getItem('chat_users')) || []; } catch { return []; }
+    },
+    saveUsers(users) {
+        localStorage.setItem('chat_users', JSON.stringify(users));
+    },
+    findUser(username) {
+        if (!username) return null;
+        return this.getUsers().find(u => u.username.toLowerCase() === username.toLowerCase().trim());
+    },
+    findUserByEmail(email) {
+        if (!email) return null;
+        return this.getUsers().find(u => u.email.toLowerCase().trim() === email.toLowerCase().trim());
+    },
+    updateUser(username, data) {
+        const users = this.getUsers();
+        const idx = users.findIndex(u => u.username.toLowerCase() === username.toLowerCase().trim());
+        if (idx !== -1) { 
+            users[idx] = { ...users[idx], ...data }; 
+            this.saveUsers(users); 
+            return users[idx]; 
+        }
+        return null;
+    },
+    getFriendships() {
+        try { return JSON.parse(localStorage.getItem('friendships')) || []; } catch { return []; }
+    },
+    saveFriendships(f) {
+        localStorage.setItem('friendships', JSON.stringify(f));
+    },
+    getFriendRequests() {
+        try { return JSON.parse(localStorage.getItem('friend_requests')) || []; } catch { return []; }
+    },
+    saveFriendRequests(r) {
+        localStorage.setItem('friend_requests', JSON.stringify(r));
+    },
+    getGroups() {
+        try { return JSON.parse(localStorage.getItem('groups')) || []; } catch { return []; }
+    },
+    saveGroups(g) {
+        localStorage.setItem('groups', JSON.stringify(g));
+    },
+    getGroupMembers() {
+        try { return JSON.parse(localStorage.getItem('group_members')) || []; } catch { return []; }
+    },
+    saveGroupMembers(m) {
+        localStorage.setItem('group_members', JSON.stringify(m));
+    },
+    getSettings() {
+        try {
+            return JSON.parse(localStorage.getItem('chat_settings')) || { bgColor: '#0d0d1a', msgColor: '#6C2BD9', effect: 'none' };
+        } catch { return { bgColor: '#0d0d1a', msgColor: '#6C2BD9', effect: 'none' }; }
+    },
+    saveSettings(s) {
+        localStorage.setItem('chat_settings', JSON.stringify(s));
+    }
+};
+
+// ============================================================
+// 2. CONSTANTS
+// ============================================================
+const TIER = { USER: 'user', PRO: 'pro', PROMAX: 'promax' };
+const ADMIN_EMAIL = 'nguyenvietnamtthsp@gmail.com';
+const EFFECTS = {
+    'none': { label: 'Không', icon: '⛔', tier: 'all' },
+    'twinkle': { label: 'Lấp lánh', icon: '✨', tier: 'pro' },
+    'shimmer': { label: 'Sáng bóng', icon: '💫', tier: 'pro' },
+    'glow': { label: 'Chói lóa', icon: '🌟', tier: 'pro' },
+    'bubble': { label: 'Bong bóng', icon: '🫧', tier: 'promax' },
+    'explode': { label: 'Nổ', icon: '💥', tier: 'promax' },
+    'rainbow': { label: 'Cầu vồng', icon: '🌈', tier: 'promax' },
+    'fire': { label: 'Lửa', icon: '🔥', tier: 'promax' },
+    'dragon': { label: 'Rồng cuộn', icon: '🐉', tier: 'promax' }
+};
+
+const EFFECT_PRICES = {
+    'twinkle': 5000,
+    'shimmer': 5000,
+    'glow': 5000,
+    'bubble': 5000,
+    'explode': 5000,
+    'rainbow': 5000,
+    'fire': 5000,
+    'dragon': 8000
+};
+
+let currentUser = null;
+let currentChat = null;
+let currentEffect = 'none';
+let socket = null;
+let socketConnected = false;
+let pendingGift = null;
+
+function getTime() { return new Date().toISOString(); }
+function formatTime(iso) { const d = new Date(iso); return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }); }
+function addDays(date, days) { const d = new Date(date); d.setDate(d.getDate() + days); return d.toISOString(); }
+function isExpired(expiry) { return new Date() > new Date(expiry); }
+
+function isAdmin(user) { return user && user.email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim(); }
+function isSpecialUser(user) { return user && user.email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim(); }
+
+function getTierInfo(user) {
+    if (!user) return { tier: TIER.USER, expiry: null };
+    if (isSpecialUser(user)) return { tier: TIER.PROMAX, expiry: null, special: true };
+    if (user.tier && user.tier !== TIER.USER && user.tierExpiry) {
+        if (!isExpired(user.tierExpiry)) return { tier: user.tier, expiry: user.tierExpiry };
+        else {
+            DB.updateUser(user.username, { tier: TIER.USER, tierExpiry: null });
+            return { tier: TIER.USER, expiry: null };
+        }
+    }
+    return { tier: TIER.USER, expiry: null };
+}
+
+function getDisplayName(user) {
+    if (!user) return '';
+    return user.displayName || user.username;
+}
+
+// ============================================================
+// 3. FRIENDS FUNCTIONS
+// ============================================================
+function getFriends(username) {
+    const friendships = DB.getFriendships();
+    return friendships
+        .filter(f => f.status === 'accepted' && (f.user1 === username || f.user2 === username))
+        .map(f => f.user1 === username ? f.user2 : f.user1);
+}
+
+function getPendingRequests(username) {
+    return DB.getFriendRequests().filter(r => r.to === username && r.status === 'pending');
+}
+
+function sendFriendRequest(from, to) {
+    if (from === to) return { success: false, msg: 'Không thể kết bạn với chính mình.' };
+    if (!DB.findUser(to)) return { success: false, msg: 'Người dùng không tồn tại.' };
+    if (getFriends(from).includes(to)) return { success: false, msg: 'Đã là bạn bè.' };
+    const requests = DB.getFriendRequests();
+    if (requests.some(r => r.from === from && r.to === to && r.status === 'pending')) {
+        return { success: false, msg: 'Đã gửi lời mời trước đó.' };
+    }
+    requests.push({ from, to, status: 'pending', time: getTime() });
+    DB.saveFriendRequests(requests);
+    return { success: true, msg: 'Đã gửi lời mời kết bạn.' };
+}
+
+function acceptFriendRequest(from, to) {
+    const requests = DB.getFriendRequests();
+    const idx = requests.findIndex(r => r.from === from && r.to === to && r.status === 'pending');
+    if (idx === -1) return { success: false, msg: 'Không tìm thấy lời mời.' };
+    requests[idx].status = 'accepted';
+    DB.saveFriendRequests(requests);
+    const friendships = DB.getFriendships();
+    friendships.push({ user1: from, user2: to, status: 'accepted', time: getTime() });
+    DB.saveFriendships(friendships);
+    return { success: true, msg: 'Đã chấp nhận lời mời.' };
+}
+
+function removeFriend(username, friend) {
+    let friendships = DB.getFriendships();
+    friendships = friendships.filter(f => !(f.user1 === username && f.user2 === friend) && !(f.user1 === friend && f.user2 === username));
+    DB.saveFriendships(friendships);
+    const chatId = `private_${[username, friend].sort().join('_')}`;
+    fetch(`/api/messages/${chatId}`, { method: 'DELETE' });
+    return { success: true };
+}
+
+// ============================================================
+// 4. GROUPS FUNCTIONS
+// ============================================================
+function getUserGroups(username) {
+    const members = DB.getGroupMembers().filter(m => m.userId === username);
+    return members.map(m => DB.getGroups().find(g => g.id === m.groupId)).filter(g => g);
+}
+
+function createGroup(creator, name) {
+    const groups = DB.getGroups();
+    const newGroup = { id: 'g_' + Date.now(), name: name || 'Nhóm mới', createdBy: creator, createdAt: getTime(), avatar: '👥' };
+    groups.push(newGroup);
+    DB.saveGroups(groups);
+    const members = DB.getGroupMembers();
+    members.push({ groupId: newGroup.id, userId: creator, role: 'admin', joinedAt: getTime() });
+    DB.saveGroupMembers(members);
+    return { success: true, group: newGroup };
+}
+
+function getGroupMembers(groupId) {
+    return DB.getGroupMembers().filter(m => m.groupId === groupId);
+}
+
+function removeMemberFromGroup(groupId, userId) {
+    let members = DB.getGroupMembers();
+    members = members.filter(m => !(m.groupId === groupId && m.userId === userId));
+    DB.saveGroupMembers(members);
+    return { success: true };
+}
+
+// ============================================================
+// 5. CHAT CORE
+// ============================================================
+function getChatId(type, id) {
+    if (type === 'friend') {
+        if (id === 'ai') return 'ai';
+        return `private_${[currentUser.username, id].sort().join('_')}`;
+    }
+    return `group_${id}`;
+}
+
+async function loadMessagesFromServer(chatId) {
+    try {
+        const response = await fetch(`/api/messages/${chatId}`);
+        if (response.ok) {
+            return await response.json();
+        }
+        return [];
+    } catch (error) {
+        console.error('Lỗi load messages:', error);
+        return [];
+    }
+}
+
+function getAIResponse(text) {
+    const replies = [
+        'Chào bạn! Mình là AI. 😊', 'Ồ, thú vị đấy! Kể thêm đi.', 'Mình cũng nghĩ vậy!',
+        'Hmm, để mình suy nghĩ...', 'Bạn thật hài hước! 🤣', 'Cảm ơn bạn đã chia sẻ!',
+        'Bạn có thể giải thích rõ hơn không?', 'Wow, tuyệt vời!', 'Mình sẽ nhớ điều này.',
+        'Hôm nay của bạn thế nào?'
+    ];
+    return replies[Math.floor(Math.random() * replies.length)];
+}
+
+// ============================================================
+// 6. STORE FUNCTIONS
+// ============================================================
+function canBuyRank(user, targetTier) {
+    if (!user) return { can: false, msg: 'Chưa đăng nhập.' };
+    if (isSpecialUser(user)) return { can: false, msg: 'Bạn đã có ProMax miễn phí!' };
+    const current = getTierInfo(user).tier;
+    if (targetTier === TIER.PRO) {
+        if (current === TIER.PROMAX) return { can: false, msg: 'Đã là ProMax.' };
+        if (current === TIER.PRO) return { can: false, msg: 'Đã là Pro.' };
+        return { can: true, price: 10000 };
+    }
+    if (targetTier === TIER.PROMAX) {
+        if (current === TIER.PROMAX) return { can: false, msg: 'Đã là ProMax.' };
+        if (current === TIER.PRO) return { can: true, price: 10000 };
+        return { can: true, price: 20000 };
+    }
+    return { can: false, msg: 'Không hỗ trợ.' };
+}
+
+function buyRankAction(user, targetTier) {
+    if (isSpecialUser(user)) return { success: false, msg: 'Đã có ProMax miễn phí!' };
+    const info = canBuyRank(user, targetTier);
+    if (!info.can) return { success: false, msg: info.msg };
+    const expiry = addDays(new Date(), 7);
+    const updated = DB.updateUser(user.username, { tier: targetTier, tierExpiry: expiry });
+    if (updated) return { success: true, msg: `Nâng cấp lên ${targetTier.toUpperCase()} thành công!` };
+    return { success: false, msg: 'Lỗi cập nhật.' };
+}
+
+function buyEffectAction(user, effectName) {
+    if (!user) return { success: false, msg: 'Chưa đăng nhập.' };
+    
+    // Kiểm tra user có đủ tier để sử dụng effect này không
+    const effect = EFFECTS[effectName];
+    if (!effect) return { success: false, msg: 'Hiệu ứng không tồn tại.' };
+    
+    const tierInfo = getTierInfo(user);
+    let canUse = false;
+    if (effect.tier === 'all') canUse = true;
+    else if (effect.tier === 'pro' && (tierInfo.tier === TIER.PRO || tierInfo.tier === TIER.PROMAX)) canUse = true;
+    else if (effect.tier === 'promax' && tierInfo.tier === TIER.PROMAX) canUse = true;
+    
+    if (!canUse) {
+        return { success: false, msg: `Cần rank ${effect.tier.toUpperCase()} để sử dụng hiệu ứng này.` };
+    }
+    
+    // Kiểm tra đã mua chưa
+    const userEffects = user.effects || [];
+    if (userEffects.includes(effectName)) {
+        return { success: false, msg: 'Bạn đã sở hữu hiệu ứng này.' };
+    }
+    
+    const price = EFFECT_PRICES[effectName] || 5000;
+    userEffects.push(effectName);
+    const updated = DB.updateUser(user.username, { effects: userEffects });
+    if (updated) return { success: true, msg: `Mua hiệu ứng ${effect.label} thành công! Giá: ${price.toLocaleString()} VND` };
+    return { success: false, msg: 'Lỗi cập nhật.' };
+}
+
+function giftEffectAction(fromUser, toUsername, effectName) {
+    const toUser = DB.findUser(toUsername);
+    if (!toUser) return { success: false, msg: 'Người dùng không tồn tại.' };
+    
+    // Kiểm tra người nhận đã có hiệu ứng chưa
+    const toEffects = toUser.effects || [];
+    if (toEffects.includes(effectName)) {
+        return { success: false, msg: `${getDisplayName(toUser)} đã sở hữu hiệu ứng này.` };
+    }
+    
+    // Kiểm tra người tặng có đủ điều kiện không (chỉ Pro mới được tặng)
+    const fromTier = getTierInfo(fromUser).tier;
+    if (fromTier === TIER.USER) {
+        return { success: false, msg: 'Chỉ Pro và ProMax mới có thể tặng quà.' };
+    }
+    
+    toEffects.push(effectName);
+    DB.updateUser(toUser.username, { effects: toEffects });
+    return { success: true, msg: `Đã tặng hiệu ứng ${EFFECTS[effectName].label} cho ${getDisplayName(toUser)}!` };
+}
+
+function giftRankAction(fromUser, toUsername, rank) {
+    const toUser = DB.findUser(toUsername);
+    if (!toUser) return { success: false, msg: 'Người dùng không tồn tại.' };
+    
+    // Kiểm tra người tặng có đủ điều kiện không (chỉ Pro mới được tặng)
+    const fromTier = getTierInfo(fromUser).tier;
+    if (fromTier === TIER.USER) {
+        return { success: false, msg: 'Chỉ Pro và ProMax mới có thể tặng quà.' };
+    }
+    
+    // Kiểm tra rank hiện tại của người nhận
+    const toTier = getTierInfo(toUser).tier;
+    if (rank === TIER.PRO && toTier !== TIER.USER) {
+        return { success: false, msg: `${getDisplayName(toUser)} đã có rank cao hơn hoặc bằng.` };
+    }
+    if (rank === TIER.PROMAX && (toTier === TIER.PROMAX || toTier === TIER.PRO)) {
+        return { success: false, msg: `${getDisplayName(toUser)} đã có rank ProMax.` };
+    }
+    
+    const expiry = addDays(new Date(), 7);
+    DB.updateUser(toUser.username, { tier: rank, tierExpiry: expiry });
+    return { success: true, msg: `Đã tặng rank ${rank.toUpperCase()} cho ${getDisplayName(toUser)}!` };
+}
+
+// ============================================================
+// 7. RENDER FUNCTIONS
+// ============================================================
+function getRoleDisplay(user) {
+    if (!user) return { label: 'User', className: 'user' };
+    const isAdminUser = isAdmin(user);
+    if (isAdminUser) return { label: 'Admin', className: 'admin' };
+    const tierInfo = getTierInfo(user);
+    if (tierInfo.tier === TIER.PROMAX) return { label: 'ProMax', className: 'promax' };
+    if (tierInfo.tier === TIER.PRO) return { label: 'Pro', className: 'pro' };
+    return { label: 'User', className: 'user' };
+}
+
+function renderSidebar(tab = 'friends') {
+    const list = document.getElementById('sidebarList');
+    if (!list) return;
+    list.innerHTML = '';
+    
+    if (tab === 'friends') {
+        const requests = getPendingRequests(currentUser.username);
+        requests.forEach(req => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.style.borderLeft = '3px solid #f7971e';
+            div.innerHTML = `
+                <div class="avatar">👤</div>
+                <div class="info">
+                    <div class="name">${req.from} <span style="font-size:0.55rem;color:#f7971e;">(đang chờ)</span></div>
+                    <div class="status">Muốn kết bạn</div>
+                </div>
+                <button onclick="acceptFriend('${req.from}')" style="margin-left:auto;background:#2ecc71;border:none;color:#fff;padding:2px 10px;border-radius:50px;font-size:0.65rem;cursor:pointer;">Chấp nhận</button>
+            `;
+            list.appendChild(div);
+        });
+        
+        const friends = getFriends(currentUser.username);
+        if (friends.length === 0 && requests.length === 0) {
+            list.innerHTML += `<div style="color:rgba(255,255,255,0.3);text-align:center;padding:30px 0;">Chưa có bạn bè. Hãy kết bạn!</div>`;
+        }
+        friends.forEach(f => {
+            const user = DB.findUser(f);
+            const role = getRoleDisplay(user);
+            const displayName = user ? getDisplayName(user) : f;
+            const div = document.createElement('div');
+            div.className = 'item';
+            if (currentChat && currentChat.type === 'friend' && currentChat.id === f) div.classList.add('active');
+            div.innerHTML = `
+                <div class="avatar">${displayName.charAt(0).toUpperCase()}</div>
+                <div class="info">
+                    <div class="name">
+                        ${displayName}
+                        <span class="role-badge ${role.className}">${role.label}</span>
+                    </div>
+                    <div class="status online">● Online</div>
+                </div>
+                <div class="actions">
+                    <button onclick="removeFriendAction('${f}')" title="Xóa bạn"><i class="fas fa-times"></i></button>
+                </div>
+            `;
+            div.addEventListener('click', () => openChat('friend', f));
+            list.appendChild(div);
+        });
+    } else {
+        const groups = getUserGroups(currentUser.username);
+        if (groups.length === 0) {
+            list.innerHTML += `<div style="color:rgba(255,255,255,0.3);text-align:center;padding:30px 0;">Chưa có nhóm nào. Tạo nhóm mới!</div>`;
+        }
+        groups.forEach(g => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            if (currentChat && currentChat.type === 'group' && currentChat.id === g.id) div.classList.add('active');
+            const memberCount = getGroupMembers(g.id).length;
+            div.innerHTML = `
+                <div class="avatar">${g.avatar || '👥'}</div>
+                <div class="info">
+                    <div class="name">${g.name}</div>
+                    <div class="status">${memberCount} thành viên</div>
+                </div>
+                ${g.createdBy === currentUser.username ? `<span style="font-size:0.55rem;color:rgba(255,255,255,0.2);margin-left:auto;">admin</span>` : ''}
+            `;
+            div.addEventListener('click', () => openChat('group', g.id));
+            list.appendChild(div);
+        });
+    }
+}
+
+async function openChat(type, id) {
+    currentChat = { type, id };
+    let title = type === 'friend' ? (id === 'ai' ? 'AI Assistant' : getDisplayName(DB.findUser(id)) || id) :
+                  DB.getGroups().find(g => g.id === id)?.name || 'Nhóm';
+    let roleHtml = '';
+    if (type === 'friend' && id !== 'ai') {
+        const user = DB.findUser(id);
+        if (user) {
+            const role = getRoleDisplay(user);
+            roleHtml = `<span class="role-badge ${role.className}">${role.label}</span>`;
+        }
+    }
+    document.getElementById('chatTitle').innerHTML = title + ' ' + roleHtml;
+    document.getElementById('chatSub').textContent = type === 'friend' ? (id === 'ai' ? 'Trò chuyện với AI' : 'Nhắn tin riêng') : 'Nhóm chat';
+    document.getElementById('chatAvatar').textContent = type === 'friend' ? (id === 'ai' ? '🤖' : (getDisplayName(DB.findUser(id)) || id).charAt(0).toUpperCase()) : '👥';
+    document.getElementById('leaveGroupBtn').style.display = type === 'group' ? 'inline-block' : 'none';
+
+    const chatId = getChatId(type, id);
+    if (socket && socketConnected) {
+        socket.emit('join-room', chatId);
+    }
+
+    await renderMessages(type, id);
+    renderSidebar(document.querySelector('.tabs .active')?.id === 'tabFriends' ? 'friends' : 'groups');
+    document.getElementById('msgInput').focus();
+}
+
+async function renderMessages(type, id) {
+    const container = document.getElementById('messages');
+    if (!container) return;
+    const chatId = getChatId(type, id);
+    
+    const messages = await loadMessagesFromServer(chatId);
+    
+    container.innerHTML = '';
+    if (messages.length === 0) {
+        if (type === 'friend' && id === 'ai') {
+            const welcome = '👋 Chào bạn! Mình là AI trợ lý. Hãy hỏi bất cứ điều gì nhé!';
+            const aiMsg = { from: 'AI', text: welcome, time: getTime(), effect: 'none' };
+            if (socket && socketConnected) {
+                socket.emit('chat-message', {
+                    chatId: chatId,
+                    from: 'AI',
+                    message: welcome,
+                    effect: 'none'
+                });
+            }
+            const div = document.createElement('div');
+            div.className = 'msg other';
+            div.innerHTML = `<div class="sender">AI</div><div>${welcome}</div><div class="time">${formatTime(getTime())}</div>`;
+            container.appendChild(div);
+        } else {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-comment-dots"></i>Chưa có tin nhắn. Hãy bắt đầu trò chuyện!</div>`;
+        }
+        return;
+    }
+    messages.forEach(msg => {
+        const div = document.createElement('div');
+        const sender = msg.from === currentUser.username ? 'me' : 'other';
+        div.className = `msg ${sender}`;
+        if (sender === 'me' && msg.effect && msg.effect !== 'none') {
+            div.classList.add(`effect-${msg.effect}`);
+        }
+        let displayFrom = msg.from;
+        if (msg.from !== 'AI') {
+            const user = DB.findUser(msg.from);
+            if (user) displayFrom = getDisplayName(user);
+        }
+        div.innerHTML = `<div class="sender">${displayFrom}</div><div>${msg.text}</div><div class="time">${formatTime(msg.time)}</div>`;
+        if (sender === 'me') {
+            const settings = DB.getSettings();
+            div.style.background = settings.msgColor || '#6C2BD9';
+        }
+        container.appendChild(div);
+    });
+    container.scrollTop = container.scrollHeight;
+}
+
+// ============================================================
+// 8. SEND MESSAGE
+// ============================================================
+function sendMessage() {
+    const input = document.getElementById('msgInput');
+    const text = input.value.trim();
+    if (!text || !currentChat || !currentUser) {
+        if (!currentChat) alert('Vui lòng chọn bạn bè hoặc nhóm để chat');
+        return;
+    }
+    const chatType = currentChat.type;
+    const chatId = getChatId(chatType, currentChat.id);
+    const effect = currentEffect || 'none';
+
+    if (socket && socketConnected) {
+        socket.emit('chat-message', {
+            chatId: chatId,
+            from: currentUser.username,
+            message: text,
+            effect: effect
+        });
+        input.value = '';
+        input.focus();
+    } else {
+        alert('Mất kết nối server! Vui lòng tải lại trang.');
+    }
+
+    if (chatType === 'friend' && currentChat.id === 'ai') {
+        setTimeout(() => {
+            const aiReply = getAIResponse(text);
+            if (socket && socketConnected) {
+                socket.emit('chat-message', {
+                    chatId: chatId,
+                    from: 'AI',
+                    message: aiReply,
+                    effect: 'none'
+                });
+            }
+        }, 600 + Math.random() * 900);
+    }
+}
+
+// ============================================================
+// 9. FRIEND ACTIONS
+// ============================================================
+function acceptFriend(from) {
+    const result = acceptFriendRequest(from, currentUser.username);
+    alert(result.msg);
+    if (result.success) renderSidebar('friends');
+}
+
+function removeFriendAction(friend) {
+    if (confirm(`Xóa bạn bè "${friend}"?`)) {
+        removeFriend(currentUser.username, friend);
+        if (currentChat && currentChat.type === 'friend' && currentChat.id === friend) {
+            currentChat = null;
+            document.getElementById('chatTitle').textContent = 'Chat Pro';
+            document.getElementById('chatSub').textContent = 'Chọn bạn bè hoặc nhóm để trò chuyện';
+            document.getElementById('messages').innerHTML = `<div class="empty-state"><i class="fas fa-comments"></i>Chọn một cuộc trò chuyện để bắt đầu</div>`;
+        }
+        renderSidebar('friends');
+    }
+}
+
+// ============================================================
+// 10. MODAL HELPERS
+// ============================================================
+function openModal(id) { 
+    const el = document.getElementById(id);
+    if (el) el.classList.add('show');
+}
+function closeModal(id) { 
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+}
+
+// ============================================================
+// 11. STORE UI FUNCTIONS
+// ============================================================
+function openStore() {
+    // Cập nhật trạng thái sở hữu
+    const userEffects = currentUser.effects || [];
+    
+    // Cập nhật rank
+    const tierInfo = getTierInfo(currentUser);
+    const rankPro = document.getElementById('rankPro');
+    const rankProMax = document.getElementById('rankProMax');
+    
+    // Xóa badge cũ
+    rankPro.querySelectorAll('.owned-badge, .locked-badge').forEach(el => el.remove());
+    rankProMax.querySelectorAll('.owned-badge, .locked-badge').forEach(el => el.remove());
+    
+    if (tierInfo.tier === TIER.PRO || tierInfo.tier === TIER.PROMAX) {
+        const badge = document.createElement('span');
+        badge.className = 'owned-badge';
+        badge.textContent = 'Đã sở hữu';
+        rankPro.querySelector('.item-info').appendChild(badge);
+    }
+    if (tierInfo.tier === TIER.PROMAX) {
+        const badge = document.createElement('span');
+        badge.className = 'owned-badge';
+        badge.textContent = 'Đã sở hữu';
+        rankProMax.querySelector('.item-info').appendChild(badge);
+    }
+    
+    // Cập nhật hiệu ứng
+    Object.keys(EFFECT_PRICES).forEach(effectName => {
+        const item = document.getElementById(`effect-${effectName}`);
+        if (!item) return;
+        item.querySelectorAll('.owned-badge, .locked-badge').forEach(el => el.remove());
+        
+        if (userEffects.includes(effectName)) {
+            const badge = document.createElement('span');
+            badge.className = 'owned-badge';
+            badge.textContent = 'Đã sở hữu';
+            item.querySelector('.item-info').appendChild(badge);
+        } else {
+            // Kiểm tra tier
+            const effect = EFFECTS[effectName];
+            const tierInfo2 = getTierInfo(currentUser);
+            let canUse = false;
+            if (effect.tier === 'all') canUse = true;
+            else if (effect.tier === 'pro' && (tierInfo2.tier === TIER.PRO || tierInfo2.tier === TIER.PROMAX)) canUse = true;
+            else if (effect.tier === 'promax' && tierInfo2.tier === TIER.PROMAX) canUse = true;
+            
+            if (!canUse) {
+                const badge = document.createElement('span');
+                badge.className = 'locked-badge';
+                badge.textContent = `Cần ${effect.tier.toUpperCase()}`;
+                item.querySelector('.item-info').appendChild(badge);
+            }
+        }
+    });
+    
+    // Ẩn QR và friend list
+    document.getElementById('qrSection').classList.remove('show');
+    document.getElementById('friendListContainer').style.display = 'none';
+    
+    openModal('storeModal');
+}
+
+function buyRank(rank) {
+    const price = rank === 'pro' ? 10000 : 20000;
+    const label = rank === 'pro' ? 'Pro' : 'ProMax';
+    
+    // Kiểm tra đã có chưa
+    const tierInfo = getTierInfo(currentUser);
+    if (rank === 'pro' && (tierInfo.tier === TIER.PRO || tierInfo.tier === TIER.PROMAX)) {
+        alert('Bạn đã có rank này!');
+        return;
+    }
+    if (rank === 'promax' && tierInfo.tier === TIER.PROMAX) {
+        alert('Bạn đã có rank ProMax!');
+        return;
+    }
+    
+    // Hiển thị QR
+    showQR(`Mua rank ${label} - ${price.toLocaleString()} VND`, () => {
+        const result = buyRankAction(currentUser, rank);
+        alert(result.msg);
+        if (result.success) {
+            currentUser = DB.findUser(currentUser.username);
+            updateUI();
+            renderSidebar(document.querySelector('.tabs .active')?.id === 'tabFriends' ? 'friends' : 'groups');
+            closeModal('storeModal');
+            openStore();
+        }
+    });
+}
+
+function buyEffect(effectName) {
+    const effect = EFFECTS[effectName];
+    const price = EFFECT_PRICES[effectName] || 5000;
+    
+    // Kiểm tra đã có chưa
+    const userEffects = currentUser.effects || [];
+    if (userEffects.includes(effectName)) {
+        alert('Bạn đã sở hữu hiệu ứng này!');
+        return;
+    }
+    
+    // Kiểm tra tier
+    const tierInfo = getTierInfo(currentUser);
+    let canUse = false;
+    if (effect.tier === 'all') canUse = true;
+    else if (effect.tier === 'pro' && (tierInfo.tier === TIER.PRO || tierInfo.tier === TIER.PROMAX)) canUse = true;
+    else if (effect.tier === 'promax' && tierInfo.tier === TIER.PROMAX) canUse = true;
+    
+    if (!canUse) {
+        alert(`Cần rank ${effect.tier.toUpperCase()} để mua hiệu ứng này.`);
+        return;
+    }
+    
+    // Hiển thị QR
+    showQR(`Mua hiệu ứng ${effect.label} - ${price.toLocaleString()} VND`, () => {
+        const result = buyEffectAction(currentUser, effectName);
+        alert(result.msg);
+        if (result.success) {
+            currentUser = DB.findUser(currentUser.username);
+            updateUI();
+            closeModal('storeModal');
+            openStore();
+        }
+    });
+}
+
+function showGiftFriends(item) {
+    const friends = getFriends(currentUser.username);
+    if (friends.length === 0) {
+        alert('Bạn chưa có bạn bè để tặng. Hãy kết bạn trước!');
+        return;
+    }
+    
+    // Kiểm tra người tặng có đủ điều kiện không
+    const tierInfo = getTierInfo(currentUser);
+    if (tierInfo.tier === TIER.USER) {
+        alert('Chỉ Pro và ProMax mới có thể tặng quà. Vui lòng nâng cấp!');
+        return;
+    }
+    
+    pendingGift = item;
+    const container = document.getElementById('giftFriendList');
+    container.innerHTML = '';
+    
+    // Xác định loại item
+    const isRank = item === 'pro' || item === 'promax';
+    const label = isRank ? (item === 'pro' ? 'Pro' : 'ProMax') : EFFECTS[item]?.label || item;
+    document.getElementById('giftDesc').textContent = `Chọn bạn bè để tặng ${label}`;
+    
+    friends.forEach(f => {
+        const user = DB.findUser(f);
+        if (!user) return;
+        
+        // Kiểm tra người nhận đã có item chưa
+        let hasItem = false;
+        if (isRank) {
+            const targetTier = getTierInfo(user).tier;
+            if (item === 'pro' && (targetTier === TIER.PRO || targetTier === TIER.PROMAX)) hasItem = true;
+            if (item === 'promax' && targetTier === TIER.PROMAX) hasItem = true;
+        } else {
+            const userEffects = user.effects || [];
+            if (userEffects.includes(item)) hasItem = true;
+        }
+        
+        const div = document.createElement('div');
+        div.className = 'friend-item';
+        div.innerHTML = `
+            <span class="name">${getDisplayName(user)} ${hasItem ? '✅' : ''}</span>
+            <button class="select-btn" onclick="confirmGift('${user.username}')" ${hasItem ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''}>
+                ${hasItem ? 'Đã có' : 'Tặng'}
+            </button>
+        `;
+        container.appendChild(div);
+    });
+    
+    closeModal('storeModal');
+    openModal('giftModal');
+}
+
+function confirmGift(toUsername) {
+    if (!pendingGift) return;
+    
+    // Xác định loại item
+    const isRank = pendingGift === 'pro' || pendingGift === 'promax';
+    let result;
+    
+    if (isRank) {
+        result = giftRankAction(currentUser, toUsername, pendingGift);
+    } else {
+        result = giftEffectAction(currentUser, toUsername, pendingGift);
+    }
+    
+    alert(result.msg);
+    if (result.success) {
+        closeModal('giftModal');
+        // Hiển thị QR thanh toán
+        const label = isRank ? (pendingGift === 'pro' ? 'Pro' : 'ProMax') : EFFECTS[pendingGift]?.label || pendingGift;
+        const price = isRank ? (pendingGift === 'pro' ? 10000 : 20000) : (EFFECT_PRICES[pendingGift] || 5000);
+        showQR(`Tặng ${label} cho ${toUsername} - ${price.toLocaleString()} VND`, () => {
+            alert('Cảm ơn bạn đã thanh toán! Quà sẽ được gửi trong vòng 24h.');
+            closeModal('storeModal');
+            pendingGift = null;
+        });
+    }
+}
+
+function showQR(title, onConfirm) {
+    const qrSection = document.getElementById('qrSection');
+    document.getElementById('qrPrice').textContent = title;
+    qrSection.classList.add('show');
+    
+    const confirmBtn = document.getElementById('confirmPaymentBtn');
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    
+    newConfirmBtn.addEventListener('click', function() {
+        if (onConfirm) onConfirm();
+        qrSection.classList.remove('show');
+    });
+    
+    // Ẩn friend list nếu đang hiển thị
+    document.getElementById('friendListContainer').style.display = 'none';
+}
+
+// ============================================================
+// 12. EFFECTS
+// ============================================================
+function renderEffects() {
+    const container = document.getElementById('effectList');
+    if (!container) return;
+    container.innerHTML = '';
+    const tierInfo = getTierInfo(currentUser);
+    const userTier = tierInfo.tier;
+    
+    // Chỉ hiển thị effects user đã mua
+    const userEffects = currentUser.effects || [];
+    
+    Object.keys(EFFECTS).forEach(key => {
+        const effect = EFFECTS[key];
+        let accessible = false;
+        if (effect.tier === 'all') accessible = true;
+        else if (effect.tier === 'pro' && (userTier === TIER.PRO || userTier === TIER.PROMAX)) accessible = true;
+        else if (effect.tier === 'promax' && userTier === TIER.PROMAX) accessible = true;
+        
+        // Chỉ hiển thị effect đã mua hoặc effect free (none)
+        if (key === 'none' || userEffects.includes(key)) {
+            if (accessible) {
+                const div = document.createElement('div');
+                div.className = 'effect-option' + (currentEffect === key ? ' active' : '');
+                div.innerHTML = `<div class="preview">${effect.icon}</div><span>${effect.label}</span>`;
+                div.onclick = () => {
+                    currentEffect = key;
+                    const settings = DB.getSettings();
+                    settings.effect = key;
+                    DB.saveSettings(settings);
+                    document.getElementById('currentEffectLabel').textContent = effect.label;
+                    closeModal('effectModal');
+                    document.querySelectorAll('.effect-option').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                };
+                container.appendChild(div);
+            }
+        }
+    });
+}
+
+// ============================================================
+// 13. UPDATE UI & LOGOUT
+// ============================================================
+function updateUI() {
+    if (!currentUser) return;
+    const role = getRoleDisplay(currentUser);
+    const displayName = getDisplayName(currentUser);
+    document.getElementById('sidebarName').textContent = displayName;
+    document.getElementById('sidebarAvatar').textContent = displayName.charAt(0).toUpperCase();
+    const tierEl = document.getElementById('sidebarTier');
+    tierEl.textContent = role.label;
+    tierEl.className = 'role-badge ' + role.className;
+
+    const adminBtn = document.getElementById('adminBtn');
+    if (isAdmin(currentUser)) adminBtn.classList.remove('hidden');
+    else adminBtn.classList.add('hidden');
+
+    const settings = DB.getSettings();
+    document.body.style.background = settings.bgColor || '#0d0d1a';
+    document.getElementById('messages').style.background = settings.bgColor || '#0d0d1a';
+    document.getElementById('bgColorPicker').value = settings.bgColor || '#0d0d1a';
+    document.getElementById('msgColorPicker').value = settings.msgColor || '#6C2BD9';
+    currentEffect = settings.effect || 'none';
+    document.getElementById('currentEffectLabel').textContent = EFFECTS[currentEffect] ? EFFECTS[currentEffect].label : 'Off';
+}
+
+function logout() {
+    if (confirm('Đăng xuất?')) {
+        sessionStorage.removeItem('chat_user');
+        if (socket) {
+            socket.disconnect();
+            socket = null;
+            socketConnected = false;
+        }
+        window.location.href = '/login';
+    }
+}
+
+// ============================================================
+// 14. CHANGE DISPLAY NAME
+// ============================================================
+function changeDisplayName(newName) {
+    if (!currentUser) return { success: false, msg: 'Chưa đăng nhập.' };
+    if (!newName || newName.trim().length === 0) return { success: false, msg: 'Tên không được để trống.' };
+    if (newName.trim().length > 20) return { success: false, msg: 'Tên tối đa 20 ký tự.' };
+    
+    const updated = DB.updateUser(currentUser.username, { displayName: newName.trim() });
+    if (updated) {
+        currentUser.displayName = newName.trim();
+        const sessionData = JSON.parse(sessionStorage.getItem('chat_user') || '{}');
+        sessionData.displayName = newName.trim();
+        sessionStorage.setItem('chat_user', JSON.stringify(sessionData));
+        updateUI();
+        renderSidebar(document.querySelector('.tabs .active')?.id === 'tabFriends' ? 'friends' : 'groups');
+        if (currentChat) {
+            renderMessages(currentChat.type, currentChat.id);
+        }
+        return { success: true, msg: 'Đổi tên hiển thị thành công!' };
+    }
+    return { success: false, msg: 'Lỗi cập nhật.' };
+}
+
+// ============================================================
+// 15. ADMIN FUNCTIONS
+// ============================================================
+function openAdminModal() {
+    const list = document.getElementById('userList');
+    if (!list) return;
+    list.innerHTML = '';
+    const users = DB.getUsers();
+    users.forEach(u => {
+        const tierInfo = getTierInfo(u);
+        const tierDisplay = tierInfo.tier === TIER.PROMAX ? 'ProMax' : tierInfo.tier === TIER.PRO ? 'Pro' : 'User';
+        const isTargetAdmin = isAdmin(u);
+        const displayName = getDisplayName(u);
+        const div = document.createElement('div');
+        div.className = 'user-list-item';
+        div.innerHTML = `
+            <div class="info">
+                <span class="username">${displayName} ${isTargetAdmin ? '👑' : ''}</span>
+                <span class="email">${u.email}</span>
+                <span class="tier">${tierDisplay} ${tierInfo.special ? '(Đặc biệt)' : ''}</span>
+                <span style="font-size:0.6rem;color:rgba(255,255,255,0.3);">(@${u.username})</span>
+            </div>
+            ${!isTargetAdmin && u.username !== currentUser.username ? `<button class="btn-danger" onclick="openDowngradeSelect('${u.username}')">Hạ cấp</button>` : ''}
+            ${u.username === currentUser.username ? `<span style="color:rgba(255,255,255,0.3);font-size:0.7rem;">(Bạn)</span>` : ''}
+        `;
+        list.appendChild(div);
+    });
+    openModal('adminModal');
+}
+
+function openDowngradeSelect(username) {
+    const targetUser = DB.findUser(username);
+    if (!targetUser) { alert('Không tìm thấy user.'); return; }
+    if (isAdmin(targetUser) && targetUser.email === ADMIN_EMAIL) {
+        alert('Không thể hạ cấp Admin.');
+        return;
+    }
+    document.getElementById('downgradeTargetName').textContent = getDisplayName(targetUser);
+    const container = document.getElementById('downgradeOptions');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    const tierInfo = getTierInfo(targetUser);
+    const currentTier = tierInfo.tier;
+    let options = [];
+    if (currentTier === TIER.PROMAX) options = [TIER.PRO, TIER.USER];
+    else if (currentTier === TIER.PRO) options = [TIER.USER];
+    
+    options.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-primary';
+        btn.style.width = '100%';
+        btn.textContent = `Hạ xuống ${t.toUpperCase()}`;
+        btn.onclick = () => {
+            const result = performDowngrade(currentUser, targetUser, t);
+            alert(result.msg);
+            if (result.success) {
+                if (targetUser.username === currentUser.username) currentUser = DB.findUser(currentUser.username);
+                updateUI();
+                renderSidebar(document.querySelector('.tabs .active')?.id === 'tabFriends' ? 'friends' : 'groups');
+                closeModal('downgradeSelectModal');
+                closeModal('adminModal');
+            }
+        };
+        container.appendChild(btn);
+    });
+    if (options.length === 0) container.innerHTML = `<p style="color:rgba(255,255,255,0.5);">Không có cấp nào để hạ.</p>`;
+    openModal('downgradeSelectModal');
+}
+
+function canDowngrade(user, targetUser) {
+    if (!user || !targetUser) return { can: false, msg: 'Thông tin không hợp lệ.' };
+    if (isAdmin(user) && user.username !== targetUser.username) {
+        const tierInfo = getTierInfo(targetUser);
+        if (tierInfo.tier === TIER.USER) return { can: false, msg: 'Đã ở cấp thấp nhất.' };
+        if (tierInfo.special) return { can: false, msg: 'Không thể hạ cấp tài khoản đặc biệt.' };
+        return { can: true, current: tierInfo.tier };
+    }
+    if (user.username === targetUser.username) {
+        if (isSpecialUser(user)) return { can: false, msg: 'Không thể hạ cấp tài khoản đặc biệt.' };
+        const tierInfo = getTierInfo(user);
+        if (tierInfo.tier === TIER.USER) return { can: false, msg: 'Đã ở cấp thấp nhất.' };
+        return { can: true, current: tierInfo.tier };
+    }
+    return { can: false, msg: 'Bạn không có quyền hạ cấp người này.' };
+}
+
+function performDowngrade(user, targetUser, targetTier) {
+    const info = canDowngrade(user, targetUser);
+    if (!info.can) return { success: false, msg: info.msg };
+    if (info.current === targetTier) return { success: false, msg: 'Đã ở cấp này.' };
+    if (info.current === TIER.PROMAX && targetTier !== TIER.PRO && targetTier !== TIER.USER) {
+        return { success: false, msg: 'Chỉ hạ xuống Pro hoặc User.' };
+    }
+    if (info.current === TIER.PRO && targetTier !== TIER.USER) {
+        return { success: false, msg: 'Chỉ hạ xuống User.' };
+    }
+    const updated = DB.updateUser(targetUser.username, { tier: targetTier, tierExpiry: null });
+    if (updated) return { success: true, msg: `Hạ cấp ${targetUser.username} xuống ${targetTier.toUpperCase()} thành công!` };
+    return { success: false, msg: 'Lỗi cập nhật.' };
+}
+
+// ============================================================
+// 16. INIT
+// ============================================================
+(async function init() {
+    // Check session
+    let userData = null;
+    try {
+        const response = await fetch('/api/session');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.loggedIn && data.user) {
+                userData = data.user;
+            }
+        }
+    } catch (e) {}
+
+    if (!userData) {
+        try {
+            const raw = sessionStorage.getItem('chat_user');
+            if (raw) userData = JSON.parse(raw);
+        } catch (e) {}
+    }
+
+    if (!userData) {
+        window.location.href = '/login';
+        return;
+    }
+
+    // Tìm hoặc tạo user trong DB
+    let user = DB.findUser(userData.username);
+    if (!user) {
+        const users = DB.getUsers();
+        const newUser = {
+            username: userData.username,
+            email: userData.email,
+            password: 'session_' + Date.now(),
+            tier: userData.tier || 'user',
+            tierExpiry: userData.tierExpiry || null,
+            displayName: userData.displayName || userData.username,
+            effects: userData.effects || []
+        };
+        users.push(newUser);
+        DB.saveUsers(users);
+        user = newUser;
+    }
+
+    currentUser = user;
+    if (!currentUser.displayName) {
+        currentUser.displayName = currentUser.username;
+        DB.updateUser(currentUser.username, { displayName: currentUser.username });
+    }
+    
+    // Đồng bộ effects
+    if (!currentUser.effects) {
+        currentUser.effects = [];
+        DB.updateUser(currentUser.username, { effects: [] });
+    }
+
+    document.getElementById('chatLayout').style.display = 'flex';
+    updateUI();
+    renderSidebar('friends');
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById('sendBtn').addEventListener('click', sendMessage);
+    document.getElementById('msgInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    document.getElementById('tabFriends').addEventListener('click', function() {
+        document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderSidebar('friends');
+    });
+    document.getElementById('tabGroups').addEventListener('click', function() {
+        document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderSidebar('groups');
+    });
+
+    // Emoji
+    const emojis = ['😀','😂','😍','🥰','😎','🤔','😭','😡','👍','👎','❤️','💀','🔥','⭐','🌈','🎉','💯','🤣','😊','😘','🥺','😅','😆','🤩','😱','🤯','💪','👏','🙌','🤝','✌️'];
+    const emojiPicker = document.getElementById('emojiPicker');
+    emojis.forEach(e => {
+        const span = document.createElement('span');
+        span.textContent = e;
+        span.addEventListener('click', () => {
+            document.getElementById('msgInput').value += e;
+            emojiPicker.classList.remove('show');
+            document.getElementById('msgInput').focus();
+        });
+        emojiPicker.appendChild(span);
+    });
+    document.getElementById('emojiBtn').addEventListener('click', () => emojiPicker.classList.toggle('show'));
+    document.addEventListener('click', (e) => {
+        if (!emojiPicker.contains(e.target) && e.target !== document.getElementById('emojiBtn')) {
+            emojiPicker.classList.remove('show');
+        }
+    });
+
+    // Effect
+    document.getElementById('effectBtn').addEventListener('click', function() {
+        renderEffects();
+        openModal('effectModal');
+    });
+    document.getElementById('effectOffBtn').addEventListener('click', function() {
+        currentEffect = 'none';
+        const settings = DB.getSettings();
+        settings.effect = 'none';
+        DB.saveSettings(settings);
+        document.getElementById('currentEffectLabel').textContent = 'Off';
+        closeModal('effectModal');
+    });
+
+    // Color pickers
+    document.getElementById('bgColorPicker').addEventListener('input', function() {
+        const settings = DB.getSettings();
+        settings.bgColor = this.value;
+        DB.saveSettings(settings);
+        document.body.style.background = this.value;
+        document.getElementById('messages').style.background = this.value;
+    });
+    document.getElementById('msgColorPicker').addEventListener('input', function() {
+        const settings = DB.getSettings();
+        settings.msgColor = this.value;
+        DB.saveSettings(settings);
+        document.querySelectorAll('.msg.me').forEach(el => el.style.background = this.value);
+    });
+
+    // Clear chat
+    document.getElementById('clearChatBtn').addEventListener('click', function() {
+        if (!currentChat) return;
+        if (confirm('Xóa toàn bộ tin nhắn trong cuộc trò chuyện này?')) {
+            const chatId = getChatId(currentChat.type, currentChat.id);
+            fetch(`/api/messages/${chatId}`, { method: 'DELETE' })
+                .then(() => {
+                    renderMessages(currentChat.type, currentChat.id);
+                })
+                .catch(err => console.error('Lỗi xóa tin nhắn:', err));
+        }
+    });
+
+    // Leave group
+    document.getElementById('leaveGroupBtn').addEventListener('click', function() {
+        if (!currentChat || currentChat.type !== 'group') return;
+        if (confirm('Rời nhóm này?')) {
+            removeMemberFromGroup(currentChat.id, currentUser.username);
+            currentChat = null;
+            document.getElementById('chatTitle').textContent = 'Chat Pro';
+            document.getElementById('chatSub').textContent = 'Chọn bạn bè hoặc nhóm để trò chuyện';
+            document.getElementById('messages').innerHTML = `<div class="empty-state"><i class="fas fa-comments"></i>Chọn một cuộc trò chuyện để bắt đầu</div>`;
+            renderSidebar('groups');
+        }
+    });
+
+    // Add friend
+    document.getElementById('addFriendBtn').addEventListener('click', () => openModal('addFriendModal'));
+    document.getElementById('sendFriendRequestBtn').addEventListener('click', function() {
+        const username = document.getElementById('friendUsername').value.trim();
+        if (!username) return alert('Vui lòng nhập tên đăng nhập.');
+        const result = sendFriendRequest(currentUser.username, username);
+        alert(result.msg);
+        if (result.success) {
+            document.getElementById('friendUsername').value = '';
+            closeModal('addFriendModal');
+            renderSidebar('friends');
+        }
+    });
+
+    // Create group
+    document.getElementById('createGroupBtn').addEventListener('click', () => openModal('createGroupModal'));
+    document.getElementById('createGroupConfirmBtn').addEventListener('click', function() {
+        const name = document.getElementById('groupNameInput').value.trim() || 'Nhóm mới';
+        const result = createGroup(currentUser.username, name);
+        if (result.success) {
+            alert('Tạo nhóm thành công!');
+            document.getElementById('groupNameInput').value = '';
+            closeModal('createGroupModal');
+            renderSidebar('groups');
+            openChat('group', result.group.id);
+        } else {
+            alert(result.msg);
+        }
+    });
+
+    // Store
+    document.getElementById('storeBtn').addEventListener('click', openStore);
+
+    // Upgrade (chuyển đến store)
+    document.getElementById('upgradeBtn').addEventListener('click', openStore);
+
+    // Downgrade
+    document.getElementById('downgradeBtn').addEventListener('click', function() {
+        if (isSpecialUser(currentUser)) {
+            alert('Bạn đang có ProMax miễn phí, không thể hạ cấp.');
+            return;
+        }
+        const info = canDowngrade(currentUser, currentUser);
+        if (!info.can) return alert(info.msg);
+        if (confirm(`Hạ cấp từ ${getTierInfo(currentUser).tier.toUpperCase()} xuống ${info.current === TIER.PROMAX ? 'Pro' : 'User'}?`)) {
+            const target = info.current === TIER.PROMAX ? TIER.PRO : TIER.USER;
+            const result = performDowngrade(currentUser, currentUser, target);
+            alert(result.msg);
+            if (result.success) {
+                currentUser = DB.findUser(currentUser.username);
+                updateUI();
+                renderSidebar(document.querySelector('.tabs .active')?.id === 'tabFriends' ? 'friends' : 'groups');
+            }
+        }
+    });
+
+    // Admin
+    document.getElementById('adminBtn').addEventListener('click', openAdminModal);
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+
+    // Change display name
+    document.getElementById('changeDisplayNameBtn').addEventListener('click', function() {
+        document.getElementById('newDisplayName').value = getDisplayName(currentUser);
+        openModal('changeDisplayNameModal');
+    });
+    document.getElementById('confirmDisplayNameBtn').addEventListener('click', function() {
+        const newName = document.getElementById('newDisplayName').value.trim();
+        const result = changeDisplayName(newName);
+        alert(result.msg);
+        if (result.success) {
+            closeModal('changeDisplayNameModal');
+        }
+    });
+    document.getElementById('newDisplayName').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.getElementById('confirmDisplayNameBtn').click();
+        }
+    });
+
+    // ===== SOCKET.IO =====
+    socket = io();
+    socketConnected = true;
+
+    socket.on('connect', () => {
+        console.log('✅ Socket.IO connected');
+        socket.emit('user-online', currentUser.username);
+        socketConnected = true;
+    });
+
+    socket.on('disconnect', () => {
+        console.log('❌ Socket.IO disconnected');
+        socketConnected = false;
+    });
+
+    socket.on('new-message', (data) => {
+        const { from, text, time, effect } = data;
+        if (!from || !text || !currentChat) return;
+        renderMessages(currentChat.type, currentChat.id);
+    });
+
+    socket.on('chat-history', (data) => {
+        const { chatId, messages } = data;
+        if (messages && messages.length > 0 && currentChat) {
+            renderMessages(currentChat.type, currentChat.id);
+        }
+    });
+
+    socket.on('online-users', (users) => {
+        console.log('👥 Online users:', users);
+    });
+
+    // Open AI chat by default
+    setTimeout(() => openChat('friend', 'ai'), 500);
+
+    // Close modals on outside click
+    document.querySelectorAll('.modal').forEach(m => {
+        m.addEventListener('click', function(e) {
+            if (e.target === this) closeModal(this.id);
+        });
+    });
+})();
+</script>
+</body>
+</html>

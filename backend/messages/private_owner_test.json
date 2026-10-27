@@ -1,0 +1,28 @@
+[
+  {
+    "from": "test",
+    "text": "hi",
+    "image": "",
+    "time": "2026-10-27T11:30:18.171Z",
+    "effect": "fire",
+    "mentions": [],
+    "frame": "default",
+    "avatarFrame": "default",
+    "gradient": false,
+    "typing": false,
+    "highlight": false
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-10-27T11:30:23.019Z",
+    "effect": "dragon",
+    "mentions": [],
+    "frame": "frame5",
+    "avatarFrame": "avtframe6",
+    "gradient": true,
+    "typing": true,
+    "highlight": true
+  }
+]

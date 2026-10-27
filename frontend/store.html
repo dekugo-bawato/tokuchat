@@ -1,0 +1,4147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store - Chat Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
+        body {
+            min-height:100vh;
+            background: #0d0d1a;
+            padding: 20px;
+            color: #fff;
+        }
+        .store-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .store-header h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .store-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .store-header .user-info .cash {
+            background: rgba(46,204,113,0.15);
+            padding: 8px 16px;
+            border-radius: 50px;
+            color: #2ecc71;
+            border: 1px solid rgba(46,204,113,0.2);
+        }
+        .store-header .user-info .refresh-token {
+            background: rgba(52,152,219,0.15);
+            padding: 8px 16px;
+            border-radius: 50px;
+            color: #3498db;
+            border: 1px solid rgba(52,152,219,0.2);
+        }
+        .store-header .user-info .rank-display {
+            background: rgba(247,151,30,0.15);
+            padding: 8px 16px;
+            border-radius: 50px;
+            color: #f7971e;
+            border: 1px solid rgba(247,151,30,0.2);
+        }
+        .store-header .user-info .vip-badge {
+            background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(247,151,30,0.2));
+            padding: 8px 16px;
+            border-radius: 50px;
+            color: #ffd700;
+            border: 1px solid rgba(255,215,0,0.3);
+            display: none;
+        }
+        .store-header .user-info .vip-badge.active { display: inline-block; }
+        .store-header .user-info .lang-display {
+            background: rgba(255,255,255,0.06);
+            padding: 8px 14px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .store-header .user-info .lang-display:hover { background: rgba(255,255,255,0.12); }
+        .back-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.6);
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+        .store-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .store-tabs button {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            position: relative;
+            white-space: nowrap;
+        }
+        .store-tabs button:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.03); }
+        .store-tabs button.active { color: #fff; background: rgba(108,43,217,0.15); }
+        .store-tabs button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: #6C2BD9;
+            border-radius: 3px;
+        }
+        .store-tabs button.flash-sale-tab {
+            background: linear-gradient(135deg, rgba(231,76,60,0.3), rgba(241,196,15,0.2));
+            border: 1px solid rgba(231,76,60,0.3);
+            color: #e74c3c;
+        }
+        .store-tabs button.owner-tab {
+            background: linear-gradient(135deg, rgba(46,204,113,0.2), rgba(52,152,219,0.1));
+            border: 1px solid rgba(46,204,113,0.2);
+            color: #2ecc71;
+        }
+        .store-tabs button.season-tab {
+            background: linear-gradient(135deg, rgba(247,151,30,0.2), rgba(255,210,0,0.1));
+            border: 1px solid rgba(247,151,30,0.2);
+            color: #f7971e;
+        }
+        .store-tabs button.vip-tab {
+            background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(247,151,30,0.1));
+            border: 1px solid rgba(255,215,0,0.2);
+            color: #ffd700;
+        }
+        .store-tabs button.ach-tab {
+            background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(241,196,15,0.1));
+            border: 1px solid rgba(46,204,113,0.15);
+            color: #2ecc71;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .store-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .store-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(108,43,217,0.3);
+            background: rgba(255,255,255,0.06);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .store-item .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+        .store-item .name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+        .store-item .tier { font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-bottom: 8px; }
+        .store-item .price { font-size: 1.1rem; color: #f7971e; font-weight: 600; }
+        .store-item .price .original {
+            text-decoration: line-through;
+            color: rgba(255,255,255,0.2);
+            font-size: 0.8rem;
+            margin-right: 6px;
+        }
+        .store-item .price.free { color: #2ecc71; }
+        .store-item .discount-badge {
+            background: #e74c3c;
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 10px;
+            margin-left: 4px;
+        }
+        .store-item .flash-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.55rem;
+            font-weight: 700;
+        }
+        .store-item .owned { color: #2ecc71; font-size: 0.8rem; margin-top: 8px; }
+        .store-item .buy-btn {
+            margin-top: 12px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.8rem;
+        }
+        .buy-btn.buy { background: #6C2BD9; color: #fff; }
+        .buy-btn.buy:hover { background: #5A1FB0; transform: scale(1.05); }
+        .buy-btn.buy:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        .buy-btn.owned-btn { background: rgba(46,204,113,0.15); color: #2ecc71; cursor: default; }
+        .buy-btn.sell-btn { background: rgba(231,76,60,0.15); color: #e74c3c; }
+        .buy-btn.sell-btn:hover { background: rgba(231,76,60,0.25); }
+        .buy-btn.gift-btn { background: rgba(247,151,30,0.15); color: #f7971e; }
+        .buy-btn.gift-btn:hover { background: rgba(247,151,30,0.25); }
+        .buy-btn.vip-locked {
+            background: rgba(255,215,0,0.1);
+            color: #ffd700;
+            cursor: not-allowed;
+            opacity: 0.6;
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+        .random-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #6C2BD9, #2E86DE);
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.55rem;
+            font-weight: 700;
+        }
+        .vip-only {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #ffd700, #f7971e);
+            color: #222;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 0.55rem;
+            font-weight: 700;
+        }
+
+        /* ===== THEME PREVIEW ===== */
+        .theme-preview {
+            width: 100%;
+            height: 120px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid rgba(255,255,255,0.06);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .theme-preview:hover { border-color: rgba(108,43,217,0.4); transform: scale(1.02); }
+        .theme-preview .theme-label {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            color: #fff;
+            backdrop-filter: blur(4px);
+        }
+        .theme-preview.default-preview {
+            background: linear-gradient(135deg, #0d0d1a, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* ===== FRAME PREVIEW ===== */
+        .frame-preview {
+            width: 100%;
+            height: 60px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.02);
+            border: 3px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .frame-preview.frame1 { border-color: #ffd700; box-shadow: 0 0 20px rgba(255,215,0,0.15); }
+        .frame-preview.frame2 { border-color: #c0c0c0; box-shadow: 0 0 20px rgba(192,192,192,0.15); }
+        .frame-preview.frame3 { border-color: #ff6b9d; box-shadow: 0 0 20px rgba(255,107,157,0.15); }
+        .frame-preview.frame4 { border-color: #ff6b6b; border-style: dashed; box-shadow: 0 0 20px rgba(255,107,107,0.15); }
+        .frame-preview.frame5 { border-color: #00d2ff; box-shadow: 0 0 30px rgba(0,210,255,0.2); animation: neonGlow 2s ease-in-out infinite; }
+        .frame-preview.frame6 { border-color: #6c5ce7; box-shadow: 0 0 30px rgba(108,92,231,0.2); animation: cosmicGlow 2s ease-in-out infinite; }
+        .frame-preview.frame7 { border-color: #f7971e; box-shadow: 0 0 30px rgba(247,151,30,0.2); animation: infernoGlow 2s ease-in-out infinite; }
+        .frame-preview.default-preview { border: 2px solid rgba(255,255,255,0.1); }
+        @keyframes neonGlow { 0%,100%{box-shadow:0 0 20px rgba(0,210,255,0.2)} 50%{box-shadow:0 0 50px rgba(0,210,255,0.5)} }
+        @keyframes cosmicGlow { 0%,100%{box-shadow:0 0 20px rgba(108,92,231,0.2)} 50%{box-shadow:0 0 50px rgba(108,92,231,0.5)} }
+        @keyframes infernoGlow { 0%,100%{box-shadow:0 0 20px rgba(247,151,30,0.2)} 50%{box-shadow:0 0 50px rgba(247,151,30,0.5)} }
+
+        /* ===== AVATAR FRAME PREVIEW ===== */
+        .avatar-frame-preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .avatar-frame-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, #2d2d4a, #1a1a2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            position: relative;
+            border: 3px solid rgba(255,255,255,0.1);
+        }
+        .avatar-frame-preview .avt-frame {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .avatar-frame-preview .avt-frame.gold-frame { 
+            border-color: #ffd700; 
+            box-shadow: 0 0 20px rgba(255,215,0,0.3);
+            animation: goldPulse 1.5s ease-in-out infinite;
+        }
+        .avatar-frame-preview .avt-frame.platinum-frame { 
+            border-color: #c0c0c0; 
+            box-shadow: 0 0 20px rgba(192,192,192,0.3);
+            animation: platinumPulse 1.5s ease-in-out infinite;
+        }
+        .avatar-frame-preview .avt-frame.diamond-frame { 
+            border-color: #00d4ff; 
+            box-shadow: 0 0 20px rgba(0,212,255,0.3);
+            animation: diamondPulse 1.5s ease-in-out infinite;
+        }
+        .avatar-frame-preview .avt-frame.rainbow-frame { 
+            border-color: #ff6b6b; 
+            box-shadow: 0 0 20px rgba(255,107,107,0.3);
+            animation: rainbowPulse 2s ease-in-out infinite;
+        }
+        .avatar-frame-preview .avt-frame.cosmic-frame { 
+            border-color: #6c5ce7; 
+            box-shadow: 0 0 20px rgba(108,92,231,0.3);
+            animation: cosmicPulse 1.5s ease-in-out infinite;
+        }
+        .avatar-frame-preview .avt-frame.inferno-frame { 
+            border-color: #f7971e; 
+            box-shadow: 0 0 20px rgba(247,151,30,0.3);
+            animation: infernoPulse 1.5s ease-in-out infinite;
+        }
+        .avatar-frame-preview .avt-frame.default-frame { border-color: rgba(255,255,255,0.1); }
+
+        @keyframes goldPulse { 0%,100%{box-shadow:0 0 20px rgba(255,215,0,0.3)} 50%{box-shadow:0 0 40px rgba(255,215,0,0.6)} }
+        @keyframes platinumPulse { 0%,100%{box-shadow:0 0 20px rgba(192,192,192,0.3)} 50%{box-shadow:0 0 40px rgba(192,192,192,0.6)} }
+        @keyframes diamondPulse { 0%,100%{box-shadow:0 0 20px rgba(0,212,255,0.3)} 50%{box-shadow:0 0 40px rgba(0,212,255,0.6)} }
+        @keyframes rainbowPulse { 0%,100%{box-shadow:0 0 20px rgba(255,107,107,0.3)} 50%{box-shadow:0 0 40px rgba(255,107,107,0.6)} }
+        @keyframes cosmicPulse { 0%,100%{box-shadow:0 0 20px rgba(108,92,231,0.3)} 50%{box-shadow:0 0 40px rgba(108,92,231,0.6)} }
+        @keyframes infernoPulse { 0%,100%{box-shadow:0 0 20px rgba(247,151,30,0.3)} 50%{box-shadow:0 0 40px rgba(247,151,30,0.6)} }
+
+        /* ===== FLASH SALE MANAGER ===== */
+        .flash-manager-container {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .flash-manager-container.active { display: block; }
+
+        .flash-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+        }
+        .flash-status-bar .status-text { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+        .flash-status-bar .status-text .active { color: #2ecc71; font-weight: 600; }
+        .flash-status-bar .status-text .inactive { color: rgba(255,255,255,0.3); }
+        .flash-status-bar .timer { font-size: 0.9rem; color: #f7971e; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+        .flash-items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .flash-manager-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.06);
+            transition: 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        .flash-manager-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(108,43,217,0.3);
+            background: rgba(255,255,255,0.06);
+        }
+        .flash-manager-item.selected {
+            border-color: #2ecc71;
+            background: rgba(46,204,113,0.08);
+        }
+        .flash-manager-item .item-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+        .flash-manager-item .item-name { font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: 500; }
+        .flash-manager-item .item-price { font-size: 0.75rem; color: #f7971e; margin: 4px 0; }
+        .flash-manager-item .select-check {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+        .flash-manager-item.selected .select-check {
+            background: #2ecc71;
+            border-color: #2ecc71;
+            color: #fff;
+        }
+        .flash-manager-item .config-panel {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .flash-manager-item.selected .config-panel { display: block; }
+        .flash-manager-item .config-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+        }
+        .flash-manager-item .config-row label { min-width: 50px; text-align: left; }
+        .flash-manager-item .config-row select,
+        .flash-manager-item .config-row input {
+            flex: 1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 0.7rem;
+            outline: none;
+        }
+        .flash-manager-item .config-row select:focus,
+        .flash-manager-item .config-row input:focus { border-color: #6C2BD9; }
+        .flash-manager-item .config-row select option { background: #1a1a2e; color: #fff; }
+        .flash-manager-item .config-row input[type="number"] { width: 60px; flex: none; }
+
+        .flash-start-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .flash-start-section .selected-info {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.8rem;
+        }
+        .flash-start-section .selected-info strong { color: #2ecc71; }
+        .flash-start-section .btn-start-flash {
+            padding: 12px 32px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .flash-start-section .btn-start-flash:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(231,76,60,0.4); }
+        .flash-start-section .btn-start-flash:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+        .flash-start-section .btn-clear-flash {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(231,76,60,0.15);
+            color: #e74c3c;
+            border: 1px solid rgba(231,76,60,0.2);
+        }
+        .flash-start-section .btn-clear-flash:hover { background: rgba(231,76,60,0.25); }
+
+        /* ===== SEASON PASS ===== */
+        .season-pass-container { display: none; }
+        .season-pass-container.active { display: block; animation: fadeIn 0.3s ease; }
+        .missions-container { display: none; }
+        .missions-container.active { display: block; animation: fadeIn 0.3s ease; }
+        .vip-section { display: none; }
+        .vip-section.active { display: block; animation: fadeIn 0.3s ease; }
+        .achievement-container { display: none; }
+        .achievement-container.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== VIP ===== */
+        .vip-section {
+            background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(247,151,30,0.05));
+            border-radius: 16px;
+            padding: 25px 30px;
+            border: 1px solid rgba(255,215,0,0.15);
+            margin-bottom: 20px;
+        }
+        .vip-section .vip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .vip-section .vip-header h3 { font-size: 1.3rem; color: #ffd700; display: flex; align-items: center; gap: 10px; }
+        .vip-section .vip-header .vip-status {
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .vip-section .vip-header .vip-status.active { background: rgba(46,204,113,0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .vip-section .vip-header .vip-status.inactive { background: rgba(231,76,60,0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+        .vip-section .vip-benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .vip-section .vip-benefits .benefit-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.08);
+        }
+        .vip-section .vip-benefits .benefit-item .benefit-icon { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+        .vip-section .vip-benefits .benefit-item .benefit-name { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+        .vip-section .vip-benefits .benefit-item .benefit-desc { font-size: 0.6rem; color: #ffd700; margin-top: 4px; }
+        .vip-section .vip-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .vip-section .vip-actions button {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .vip-section .vip-actions .vip-claim-btn {
+            background: linear-gradient(135deg, #ffd700, #f7971e);
+            color: #222;
+        }
+        .vip-section .vip-actions .vip-claim-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,215,0,0.3); }
+        .vip-section .vip-actions .vip-claim-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+        .vip-section .vip-actions .vip-buy-btn {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            color: #fff;
+        }
+        .vip-section .vip-actions .vip-buy-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(231,76,60,0.3); }
+
+        /* ===== ACHIEVEMENTS ===== */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .achievement-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .achievement-item:hover { transform: translateY(-3px); border-color: rgba(108,43,217,0.2); }
+        .achievement-item.unlocked { border-color: rgba(46,204,113,0.3); background: rgba(46,204,113,0.05); }
+        .achievement-item .ach-icon { font-size: 2.5rem; display: block; margin-bottom: 8px; filter: grayscale(1); opacity: 0.5; transition: 0.3s; }
+        .achievement-item.unlocked .ach-icon { filter: grayscale(0); opacity: 1; }
+        .achievement-item .ach-name { font-size: 0.85rem; font-weight: 600; color: rgba(255,255,255,0.7); }
+        .achievement-item .ach-desc { font-size: 0.65rem; color: rgba(255,255,255,0.3); margin-top: 4px; }
+        .achievement-item .ach-status {
+            font-size: 0.6rem;
+            margin-top: 6px;
+            padding: 2px 10px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        .achievement-item .ach-status.locked { color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+        .achievement-item .ach-status.unlocked { color: #2ecc71; background: rgba(46,204,113,0.15); }
+
+        .season-header {
+            background: linear-gradient(135deg, rgba(247,151,30,0.15), rgba(255,210,0,0.05));
+            border-radius: 16px;
+            padding: 25px 30px;
+            border: 1px solid rgba(247,151,30,0.15);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .season-header .season-title h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .season-header .season-level .level-badge {
+            background: linear-gradient(135deg, #6C2BD9, #2E86DE);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        .season-header .season-level .level-badge span { font-size: 0.7rem; font-weight: 400; opacity: 0.7; }
+
+        .season-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .season-buttons button {
+            padding: 10px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .season-buttons button:hover { transform: scale(1.05); }
+        .season-buttons .free-pass-btn {
+            background: rgba(46,204,113,0.2);
+            color: #2ecc71;
+            border: 2px solid #2ecc71;
+        }
+        .season-buttons .free-pass-btn.active { background: #2ecc71; color: #fff; }
+        .season-buttons .elite-pass-btn {
+            background: rgba(247,151,30,0.2);
+            color: #f7971e;
+            border: 2px solid #f7971e;
+        }
+        .season-buttons .elite-pass-btn.active { background: #f7971e; color: #222; }
+        .season-buttons .missions-btn {
+            background: rgba(108,43,217,0.2);
+            color: #6C2BD9;
+            border: 2px solid #6C2BD9;
+        }
+        .season-buttons .missions-btn.active { background: #6C2BD9; color: #fff; }
+        .season-buttons .upgrade-btn {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #222;
+            border: none;
+            font-weight: 800;
+        }
+        .season-buttons .upgrade-btn:hover { box-shadow: 0 0 30px rgba(247,151,30,0.3); }
+        .season-buttons .upgrade-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+        .season-buttons .buy-elite-btn {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            color: #fff;
+            border: none;
+            font-weight: 800;
+        }
+        .season-buttons .buy-elite-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(247,151,30,0.5); }
+        .season-buttons .buy-elite-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+        .season-progress {
+            margin-bottom: 25px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .season-progress .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+        .season-progress .progress-header .level-text { color: rgba(255,255,255,0.6); }
+        .season-progress .progress-header .level-text strong { color: #fff; }
+        .season-progress .progress-header .exp-text { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+        .season-progress .progress-bar {
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            overflow: hidden;
+        }
+        .season-progress .progress-bar .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #6C2BD9, #2ecc71);
+            transition: width 0.5s ease;
+        }
+
+        .season-rewards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+        .season-rewards::-webkit-scrollbar { width: 4px; }
+        .season-rewards::-webkit-scrollbar-track { background: transparent; }
+        .season-rewards::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .reward-item {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+            position: relative;
+        }
+        .reward-item:hover { transform: translateY(-3px); border-color: rgba(108,43,217,0.3); }
+        .reward-item.locked { opacity: 0.4; filter: grayscale(0.6); }
+        .reward-item.unlocked { border-color: rgba(46,204,113,0.3); background: rgba(46,204,113,0.05); }
+        .reward-item.claimed { border-color: rgba(247,151,30,0.3); background: rgba(247,151,30,0.05); }
+        .reward-item .reward-level {
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.2);
+            font-weight: 700;
+        }
+        .reward-item .reward-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+        .reward-item .reward-name { font-size: 0.75rem; color: rgba(255,255,255,0.7); font-weight: 500; }
+        .reward-item .reward-status {
+            font-size: 0.6rem;
+            margin-top: 6px;
+            padding: 2px 10px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        .reward-item .reward-status.locked-status { color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+        .reward-item .reward-status.unlocked-status { color: #2ecc71; background: rgba(46,204,113,0.15); }
+        .reward-item .reward-status.claimed-status { color: #f7971e; background: rgba(247,151,30,0.15); }
+        .reward-item .claim-btn {
+            margin-top: 8px;
+            padding: 4px 14px;
+            border-radius: 50px;
+            border: none;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #2ecc71;
+            color: #fff;
+        }
+        .reward-item .claim-btn:hover { transform: scale(1.05); background: #27ae60; }
+        .reward-item .claim-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+        .reward-item .claim-btn.claimed-btn { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+
+        .mission-group { margin-bottom: 24px; }
+        .mission-group .group-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mission-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.3s;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .mission-item:hover { background: rgba(255,255,255,0.06); }
+        .mission-item.completed { border-color: rgba(46,204,113,0.2); background: rgba(46,204,113,0.05); }
+        .mission-item .mission-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 150px;
+        }
+        .mission-item .mission-icon { font-size: 1.4rem; width: 36px; text-align: center; }
+        .mission-item .mission-details .mission-name { color: #fff; font-weight: 500; font-size: 0.85rem; }
+        .mission-item .mission-details .mission-progress { font-size: 0.7rem; color: rgba(255,255,255,0.3); }
+        .mission-item .mission-reward { color: #f7971e; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+        .mission-item .mission-btn {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #2ecc71;
+            color: #fff;
+            white-space: nowrap;
+        }
+        .mission-item .mission-btn:hover { transform: scale(1.05); background: #27ae60; }
+        .mission-item .mission-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+        .mission-item .mission-btn.claimed-btn { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+        .mission-item .mission-btn.in-progress { background: rgba(108,43,217,0.2); color: #6C2BD9; cursor: default; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.show { display: flex; }
+        .modal .modal-content {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 92%;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.05);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal .modal-content h3 { margin-bottom: 12px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .modal .modal-content p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 16px; }
+        .modal .modal-content .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .modal .modal-content .btn-group button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-primary { background: #6C2BD9; color: #fff; }
+        .btn-primary:hover { background: #5A1FB0; }
+        .btn-secondary { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+        .btn-success { background: #2ecc71; color: #fff; }
+        .btn-success:hover { background: #27ae60; }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 90%;
+        }
+        .toast.success { background: #2ecc71; }
+        .toast.error { background: #e74c3c; }
+        .toast.info { background: #3498db; }
+        .toast.warning { background: #f39c12; }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #6C2BD9;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .hidden { display: none !important; }
+
+        .qr-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 25px 30px;
+            border: 1px solid rgba(255,255,255,0.06);
+            margin-top: 10px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .qr-section h3 { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; justify-content: center; }
+        .qr-section h3 i { color: #f7971e; }
+        .qr-content { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .exchange-rate-box {
+            background: linear-gradient(135deg, rgba(247,151,30,0.15), rgba(255,210,0,0.05));
+            border: 2px solid #f7971e;
+            border-radius: 12px;
+            padding: 12px 24px;
+            text-align: center;
+            width: 100%;
+        }
+        .exchange-rate-box .rate-text { font-size: 1.2rem; font-weight: 800; color: #ffd700; }
+        .exchange-rate-box .rate-text .vnd { color: #f7971e; }
+        .exchange-rate-box .rate-text .coin { color: #ffd700; }
+        .exchange-rate-box .rate-text .usd { color: #2ecc71; }
+        .exchange-rate-box .rate-text .rate-divider { color: rgba(255,255,255,0.1); margin: 0 8px; }
+        .exchange-rate-box .rate-sub { font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+        .qr-image-container {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-image-container img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 4px; }
+        .qr-info { width: 100%; text-align: center; }
+        .qr-info .bank-name { font-size: 1.2rem; font-weight: 700; color: #1a8c4a; margin-bottom: 8px; }
+        .qr-info .bank-name i { margin-right: 8px; }
+        .qr-info .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+        }
+        .qr-info .detail-row .label { color: rgba(255,255,255,0.4); }
+        .qr-info .detail-row .value { color: #fff; font-weight: 500; }
+        .qr-info .detail-row .value.highlight { color: #f7971e; font-weight: 600; }
+        .qr-info .copy-btn {
+            margin-top: 10px;
+            padding: 8px 24px;
+            border-radius: 8px;
+            border: none;
+            background: #6C2BD9;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+            width: 100%;
+        }
+        .qr-info .copy-btn:hover { background: #5A1FB0; }
+        .qr-info .note { font-size: 0.75rem; color: rgba(255,255,255,0.3); margin-top: 8px; line-height: 1.5; }
+        .qr-info .note strong { color: #f7971e; }
+        .qr-info .note .waiting-text { color: #f39c12; font-weight: 600; }
+
+        .admin-contact {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .admin-contact h3 { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; justify-content: center; }
+        .admin-contact h3 i { color: #e74c3c; }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .contact-card {
+            padding: 16px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .contact-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .contact-card .contact-icon { font-size: 1.8rem; flex-shrink: 0; }
+        .contact-card .contact-info { flex: 1; min-width: 0; }
+        .contact-card .contact-info .contact-label { font-size: 0.65rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .contact-card .contact-info .contact-value { font-size: 0.9rem; font-weight: 500; word-break: break-all; margin-top: 2px; }
+        .contact-card.discord-server { cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .store-container { padding: 20px; }
+            .store-header h1 { font-size: 1.5rem; }
+            .store-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+            .store-tabs button { padding: 6px 12px; font-size: 0.75rem; }
+            .season-header { flex-direction: column; text-align: center; }
+            .season-buttons { justify-content: center; }
+            .season-buttons button { font-size: 0.75rem; padding: 8px 16px; }
+            .season-rewards { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); max-height: 300px; }
+            .mission-item { flex-direction: column; align-items: stretch; gap: 8px; }
+            .qr-section { max-width: 100%; padding: 20px; }
+            .qr-image-container { width: 160px; height: 160px; }
+            .vip-section .vip-benefits { grid-template-columns: 1fr 1fr; }
+            .achievement-grid { grid-template-columns: 1fr 1fr; }
+            .flash-items-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
+        @media (max-width: 480px) {
+            .store-container { padding: 12px; }
+            .store-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .store-item { padding: 14px; }
+            .store-item .icon { font-size: 2rem; }
+            .season-rewards { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+            .qr-image-container { width: 140px; height: 140px; }
+            .store-tabs { gap: 4px; }
+            .store-tabs button { padding: 4px 8px; font-size: 0.65rem; }
+            .vip-section .vip-benefits { grid-template-columns: 1fr; }
+            .achievement-grid { grid-template-columns: 1fr; }
+            .flash-items-grid { grid-template-columns: 1fr 1fr; }
+            .flash-manager-item .config-row { flex-wrap: wrap; }
+            .flash-start-section { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<div class="store-container">
+    <!-- HEADER -->
+    <div class="store-header">
+        <div>
+            <h1><i class="fas fa-store"></i> <span id="storeTitle">Cửa hàng</span></h1>
+        </div>
+        <div class="user-info">
+            <span><i class="fas fa-user"></i> <span id="userName">Loading...</span></span>
+            <span class="cash" id="cashDisplay"><i class="fas fa-coins"></i> <span id="userCash">0</span> 💵</span>
+            <span class="rank-display"><i class="fas fa-crown"></i> Rank: <span id="userRank">User</span></span>
+            <span class="vip-badge" id="vipBadge"><i class="fas fa-crown"></i> VIP</span>
+            <span class="refresh-token"><i class="fas fa-sync-alt"></i> <span id="userRefreshTokens">0</span></span>
+            <span class="lang-display" id="langBtn">
+                <span class="lang-flag" id="langFlag">🇻🇳</span>
+                <span class="lang-label" id="langLabel">VI</span>
+            </span>
+            <a href="/chat" class="back-btn"><i class="fas fa-arrow-left"></i> <span id="backLabel">Quay lại</span></a>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="store-tabs" id="storeTabs">
+        <button class="active" data-tab="ranks"><i class="fas fa-crown"></i> <span id="tabRank">Rank</span></button>
+        <button data-tab="effects"><i class="fas fa-magic"></i> <span id="tabEffects">Effects</span></button>
+        <button data-tab="themes"><i class="fas fa-palette"></i> <span id="tabTheme">Theme</span></button>
+        <button data-tab="frames"><i class="fas fa-border-all"></i> <span id="tabFrame">Frame</span></button>
+        <button data-tab="avatarframes"><i class="fas fa-user-circle"></i> <span id="tabAvatarFrame">Avatar Frame</span></button>
+        <button data-tab="gradients"><i class="fas fa-fill-drip"></i> <span id="tabGradient">Gradient</span></button>
+        <button data-tab="typings"><i class="fas fa-keyboard"></i> <span id="tabTyping">Typing</span></button>
+        <button data-tab="highlights"><i class="fas fa-star"></i> <span id="tabHighlight">Highlight</span></button>
+        <button class="vip-tab" data-tab="vip" id="vipTabBtn"><i class="fas fa-crown"></i> <span id="tabVip">VIP</span></button>
+        <button class="ach-tab" data-tab="achievements" id="achTabBtn"><i class="fas fa-trophy"></i> <span id="tabAchievements">Thành tựu</span></button>
+        <button class="flash-sale-tab" data-tab="flashsale" id="flashSaleTabBtn"><i class="fas fa-bolt"></i> <span id="tabFlashSale">Flash Sale</span></button>
+        <button class="owner-tab" data-tab="ownerflash" id="ownerFlashTabBtn" style="display:none;"><i class="fas fa-cog"></i> <span id="tabOwnerFlash">Quản lý Flash</span></button>
+        <button class="season-tab" data-tab="season" id="seasonTabBtn"><i class="fas fa-fire"></i> <span id="tabSeason">Season Pass</span></button>
+    </div>
+
+    <!-- STORE ITEMS -->
+    <div id="storeItems" class="store-grid"></div>
+
+    <!-- VIP SECTION -->
+    <div class="vip-section" id="vipSection">
+        <div class="vip-header">
+            <h3><i class="fas fa-crown" style="color:#ffd700;"></i> <span id="vipTitle">Gói VIP Subscription</span></h3>
+            <span class="vip-status" id="vipStatus">Chưa kích hoạt</span>
+        </div>
+        <div class="vip-benefits">
+            <div class="benefit-item">
+                <span class="benefit-icon">💰</span>
+                <div class="benefit-name">Nhận 2.000 💵 mỗi ngày</div>
+                <div class="benefit-desc">⭐ Tự động cộng khi đăng nhập</div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">🎁</span>
+                <div class="benefit-name">Giảm 20% cửa hàng</div>
+                <div class="benefit-desc">🛒 Áp dụng cho mọi item</div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">👑</span>
+                <div class="benefit-name">Item độc quyền</div>
+                <div class="benefit-desc">✨ Mở khóa VIP Items</div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">🎯</span>
+                <div class="benefit-name">Huy hiệu VIP</div>
+                <div class="benefit-desc">🌟 Hiển thị cạnh tên</div>
+            </div>
+        </div>
+        <div class="vip-actions">
+            <button class="vip-claim-btn" id="vipClaimBtn"><i class="fas fa-gift"></i> Nhận thưởng VIP</button>
+            <button class="vip-buy-btn" id="vipBuyBtn"><i class="fas fa-crown"></i> Đăng ký VIP (200.000 💵/tháng)</button>
+        </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="season-pass-container achievement-container" id="achievementContainer">
+        <div class="season-header" style="background:linear-gradient(135deg, rgba(46,204,113,0.15), rgba(241,196,15,0.05)); border-color: rgba(46,204,113,0.15);">
+            <div class="season-title">
+                <h2 style="background:linear-gradient(135deg, #2ecc71, #f1c40f); -webkit-background-clip:text; -webkit-text-fill-color:transparent;"><i class="fas fa-trophy"></i> <span id="achTitle">Thành tựu</span></h2>
+                <span class="days-left" id="achProgress"><span id="achCount">0</span>/<span id="achTotal">26</span></span>
+            </div>
+            <div class="season-level">
+                <span class="level-badge" id="achBadge">⭐</span>
+            </div>
+        </div>
+        <div class="achievement-grid" id="achievementGrid"></div>
+    </div>
+
+    <!-- FLASH SALE MANAGER -->
+    <div class="flash-manager-container" id="flashManagerContainer">
+        <div class="flash-status-bar">
+            <span class="status-text" id="flashStatusText">Trạng thái: <span class="inactive">Chưa có Flash Sale</span></span>
+            <span class="timer" id="flashTimer">--:--:--</span>
+        </div>
+
+        <div class="flash-items-grid" id="flashItemsGrid"></div>
+
+        <div class="flash-start-section">
+            <span class="selected-info">Đã chọn: <strong id="selectedCount">0</strong> item</span>
+            <button class="btn-start-flash" id="startFlashBtn"><i class="fas fa-play"></i> <span id="startFlashLabel">Bắt đầu Flash Sale</span></button>
+            <button class="btn-clear-flash" id="clearFlashBtn"><i class="fas fa-trash"></i> <span id="clearFlashLabel">Xóa tất cả</span></button>
+        </div>
+    </div>
+
+    <!-- SEASON PASS -->
+    <div class="season-pass-container" id="seasonPassContainer">
+        <div class="season-header">
+            <div class="season-title">
+                <h2 id="seasonName">🔥 MÙA 1 - HUYỀN THOẠI</h2>
+                <span class="days-left" id="daysLeft"><i class="far fa-clock"></i> <span id="daysLeftText">25 ngày</span></span>
+            </div>
+            <div class="season-level">
+                <span style="color:rgba(255,255,255,0.4); font-size:0.8rem;" id="atualLabel">Hiện tại:</span>
+                <span class="level-badge" id="currentLevel">0 <span>/ 50</span></span>
+            </div>
+        </div>
+
+        <div class="season-buttons">
+            <button class="free-pass-btn active" id="freePassBtn"><i class="fas fa-gift"></i> <span id="freePassLabel">FREE PASS</span></button>
+            <button class="elite-pass-btn" id="elitePassBtn"><i class="fas fa-crown"></i> <span id="elitePassLabel">ELITE PASS</span></button>
+            <button class="missions-btn" id="missionsTabBtn"><i class="fas fa-tasks"></i> <span id="missionsBtnLabel">NHIỆM VỤ</span></button>
+            <button class="upgrade-btn" id="upgradePassBtn"><i class="fas fa-arrow-up"></i> <span id="upgradeBtnLabel">NÂNG CẤP PASSE</span></button>
+            <button class="buy-elite-btn" id="buyElitePassBtn"><i class="fas fa-crown"></i> <span id="buyEliteLabel">MUA ELITE PASS</span></button>
+        </div>
+
+        <div class="season-progress">
+            <div class="progress-header">
+                <span class="level-text"><span id="levelLabel">Cấp</span> <strong id="progressLevel">0</strong>/50</span>
+                <span class="exp-text"><span id="currentExp">0</span> / <span id="maxExp">100</span> EXP</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width:0%;"></div>
+            </div>
+        </div>
+
+        <div class="season-rewards" id="seasonRewards"></div>
+
+        <div class="missions-container" id="missionsContainer">
+            <div class="missions-header">
+                <h3><i class="fas fa-list-check"></i> <span id="missionsTitle">Nhiệm vụ</span></h3>
+                <span class="mission-reset">🔄 <span id="resetLabel">Làm mới sau</span>: <span id="resetTimer">23:59:59</span></span>
+            </div>
+            <div id="missionsList"></div>
+        </div>
+    </div>
+
+    <!-- REFRESH BUTTON -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button id="refreshStoreBtn" class="back-btn" style="background: rgba(52,152,219,0.15); border-color: #3498db; color: #3498db; padding: 10px 30px;">
+            <i class="fas fa-sync-alt"></i> <span id="refreshLabel">Refresh cửa hàng (1 token)</span>
+        </button>
+        <p style="font-size: 0.7rem; color: rgba(255,255,255,0.3); margin-top: 6px;"><span id="refreshNote">Cửa hàng sẽ tự động refresh sau 3 giờ</span></p>
+    </div>
+
+    <!-- QR SECTION -->
+    <div class="qr-section">
+        <h3><i class="fas fa-qrcode"></i> <span id="qrTitle">Nạp tiền qua QR Code</span></h3>
+        <div class="qr-content">
+            <div class="exchange-rate-box">
+                <div class="rate-text">
+                    <span class="vnd">10.000 VND</span>
+                    <span class="rate-divider">=</span>
+                    <span class="coin">50.000 💵</span>
+                </div>
+                <div class="rate-text" style="font-size:0.9rem; margin-top:4px; border-top:1px solid rgba(255,255,255,0.05); padding-top:4px;">
+                    <span class="usd">1 USD</span>
+                    <span class="rate-divider">≈</span>
+                    <span class="coin-usd">150.000 💵</span>
+                </div>
+                <div class="rate-sub">Tỷ lệ quy đổi: 1 VND = 5 💵 | 1 USD ≈ 150.000 💵</div>
+            </div>
+
+            <div class="qr-image-container">
+                <img src="/vietcombank_qr.png" alt="QR Code Vietcombank" id="qrImage" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect width=%22300%22 height=%22300%22 fill=%22%23222%22/%3E%3Ctext x=%2250%22 y=%22150%22 fill=%22%23aaa%22 font-size=%2220%22 font-family=%22Arial%22%3EQR Code%3C/text%3E%3Ctext x=%2235%22 y=%22180%22 fill=%22%23888%22 font-size=%2214%22 font-family=%22Arial%22%3EVietcombank%3C/text%3E%3C/svg%3E'">
+            </div>
+            <div class="qr-info">
+                <div class="bank-name"><i class="fas fa-university"></i> Vietcombank</div>
+                <div class="detail-row"><span class="label">Chủ tài khoản</span><span class="value">NGUYEN THI THU NGA</span></div>
+                <div class="detail-row"><span class="label">Số tài khoản</span><span class="value highlight">1901971628</span></div>
+                <div class="detail-row"><span class="label">Ngân hàng</span><span class="value">Vietcombank - CN Hội An</span></div>
+                <div class="detail-row"><span class="label">Nội dung</span><span class="value" style="font-size:0.8rem; color: #f7971e;">NAP + Tên đăng nhập</span></div>
+                <button class="copy-btn" id="copyInfoBtn"><i class="fas fa-copy"></i> <span id="copyLabel">Sao chép thông tin</span></button>
+                <div class="note">
+                    <i class="fas fa-info-circle"></i> 
+                    Quét mã QR hoặc chuyển khoản với nội dung: <strong>NAP + Tên đăng nhập</strong><br>
+                    <span class="waiting-text">⏳ Tiền sẽ được cập nhật trong vòng 12 giờ sau khi chuyển khoản. Vui lòng chờ!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="admin-contact">
+        <h3><i class="fas fa-headset"></i> <span id="contactTitle">Liên hệ Admin</span></h3>
+        <div class="contact-grid">
+            <div class="contact-card discord">
+                <div class="contact-icon"><i class="fab fa-discord"></i></div>
+                <div class="contact-info"><div class="contact-label">Discord</div><div class="contact-value">nvi3tn4m_</div></div>
+            </div>
+            <div class="contact-card gmail">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div class="contact-info"><div class="contact-label">Gmail</div><div class="contact-value">nguyenvietnamtthsp@gmail.com</div></div>
+            </div>
+            <div class="contact-card discord-server" onclick="window.open('https://discord.gg/QhADtrdfP', '_blank')">
+                <div class="contact-icon"><i class="fas fa-users"></i></div>
+                <div class="contact-info"><div class="contact-label">Discord Server</div><div class="contact-value" style="font-size:0.8rem;"><span id="joinLabel">Tham gia ngay →</span></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="giftModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-gift" style="color:#f7971e;"></i> <span id="giftTitle">Tặng quà</span></h3>
+        <p id="giftSub">Chọn bạn bè để tặng</p>
+        <select id="giftFriendSelect" style="width:100%; padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.04); color:#fff; font-size:0.85rem; outline:none; margin-bottom:10px;"></select>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('giftModal')"><span id="giftCancel">Hủy</span></button>
+            <button class="btn-primary" id="confirmGiftBtn"><span id="giftSend">Tặng</span></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="upgradeModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-crown" style="color:#f7971e;"></i> Nâng cấp Elite Pass</h3>
+        <p>Mở khóa tất cả phần thưởng VIP (Vẫn phải làm nhiệm vụ để nhận thưởng)</p>
+        <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; margin:12px 0;">
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Giá</span>
+                <span style="color:#f7971e; font-weight:700;">250,000 💵</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Phần thưởng</span>
+                <span style="color:#2ecc71;">Mở khóa Elite Pass</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Yêu cầu</span>
+                <span style="color:#f7971e;">Phải làm nhiệm vụ để nhận thưởng</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('upgradeModal')">Hủy</button>
+            <button class="btn-success" id="confirmUpgradeBtn">Nâng cấp ngay</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="buyEliteModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-crown" style="color:#f7971e;"></i> Mua Elite Pass</h3>
+        <p>Nhận toàn bộ phần thưởng FREE + ELITE mà KHÔNG cần làm nhiệm vụ</p>
+        <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; margin:12px 0;">
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Giá</span>
+                <span style="color:#f7971e; font-weight:700;">400,000 💵</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Phần thưởng</span>
+                <span style="color:#2ecc71;">Tất cả 50 cấp FREE + ELITE</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Đặc biệt</span>
+                <span style="color:#f7971e;">🔥 Không cần làm nhiệm vụ</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('buyEliteModal')">Hủy</button>
+            <button class="btn-success" id="confirmBuyEliteBtn">Mua ngay</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="vipModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-crown" style="color:#ffd700;"></i> Đăng ký VIP</h3>
+        <p>Nhận nhiều ưu đãi đặc biệt mỗi ngày</p>
+        <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; margin:12px 0;">
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Giá</span>
+                <span style="color:#ffd700; font-weight:700;">200,000 💵 / tháng</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Thưởng hàng ngày</span>
+                <span style="color:#2ecc71;">2,000 💵</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Giảm giá</span>
+                <span style="color:#f7971e;">20%</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Item độc quyền</span>
+                <span style="color:#e74c3c;">✨ 5 item VIP</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('vipModal')">Hủy</button>
+            <button class="btn-success" id="confirmVipBtn">Đăng ký ngay</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="birthdayModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-birthday-cake" style="color:#ff6b6b;"></i> 🎂 Sinh nhật vui vẻ!</h3>
+        <p>Hôm nay là sinh nhật của bạn! Nhận quà đặc biệt từ cửa hàng</p>
+        <div style="background:rgba(255,107,107,0.1); border-radius:12px; padding:16px; margin:12px 0; border: 1px solid rgba(255,107,107,0.2);">
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Quà tặng</span>
+                <span style="color:#ff6b6b; font-weight:700;">🎁 5,000 💵 + Hiệu ứng Bong bóng</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('birthdayModal')">Đóng</button>
+            <button class="btn-success" id="claimBirthdayBtn">Nhận quà</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// LANGUAGE SYSTEM (Đã rút gọn để tiết kiệm)
+// ============================================================
+const LANG = {
+    vi: {
+        flag:'🇻🇳',label:'VI',
+        'store.title':'Cửa hàng','store.back':'Quay lại',
+        'store.rank':'Rank','store.effects':'Effects','store.theme':'Theme',
+        'store.frame':'Frame','store.avatarframe':'Avatar Frame',
+        'store.gradient':'Gradient','store.typing':'Typing','store.highlight':'Highlight',
+        'store.vip':'VIP','store.achievements':'Thành tựu',
+        'store.flashsale':'Flash Sale','store.ownerflash':'Quản lý Flash',
+        'store.season':'Season Pass',
+        'store.refresh':'Refresh cửa hàng (1 token)',
+        'store.refresh_note':'Cửa hàng sẽ tự động refresh sau 3 giờ',
+        'store.qr_title':'Nạp tiền qua QR Code',
+        'store.copy':'Sao chép thông tin',
+        'store.contact':'Liên hệ Admin','store.join':'Tham gia ngay →',
+        'store.gift_title':'Tặng quà','store.gift_sub':'Chọn bạn bè để tặng',
+        'store.gift_cancel':'Hủy','store.gift_send':'Tặng',
+        'store.atual':'Hiện tại:',
+        'store.free_pass':'FREE PASS','store.elite_pass':'ELITE PASS',
+        'store.missions_btn':'NHIỆM VỤ','store.upgrade_btn':'NÂNG CẤP PASSE',
+        'store.buy_elite_btn':'MUA ELITE PASS',
+        'store.level':'Cấp','store.reset_label':'Làm mới sau',
+        'store.missions_title':'Nhiệm vụ',
+        'store.vip_title':'Gói VIP Subscription',
+        'store.flash_status':'Trạng thái',
+        'store.flash_active':'Đang diễn ra',
+        'store.flash_inactive':'Chưa có Flash Sale',
+        'store.flash_selected':'Đã chọn',
+        'store.flash_start':'Bắt đầu Flash Sale',
+        'store.flash_clear':'Xóa tất cả',
+        'store.flash_time':'Thời gian',
+        'store.flash_discount':'Giảm giá',
+        'store.flash_quantity':'Số lượng',
+        'rank.bronze':'Đồng','rank.silver':'Bạc','rank.gold':'Vàng',
+        'rank.platinum':'Bạch kim','rank.diamond':'Kim cương',
+        'rank.vip':'VIP','rank.legend':'Huyền thoại',
+        'effect.twinkle':'Lấp lánh','effect.shimmer':'Sáng bóng',
+        'effect.glow':'Chói lóa','effect.bubble':'Bong bóng',
+        'effect.explode':'Nổ','effect.rainbow':'Cầu vồng',
+        'effect.fire':'Lửa','effect.dragon':'Rồng cuộn',
+        'effect.aurora':'Cực quang','effect.starlight':'Ánh sao',
+        'effect.galaxy':'Thiên hà',
+        'theme.default':'Mặc định','theme.theme1':'Theme 1',
+        'theme.theme2':'Theme 2','theme.theme3':'Theme 3',
+        'theme.theme4':'Theme 4','theme.theme5':'Theme 5',
+        'theme.theme6':'Theme 6 (Bạch kim)','theme.theme7':'Theme 7 (Miễn phí)',
+        'frame.default':'Mặc định','frame.frame1':'Khung Vàng',
+        'frame.frame2':'Khung Bạc','frame.frame3':'Khung Kim Cương',
+        'frame.frame4':'Khung Hoa','frame.frame5':'Khung Neon',
+        'frame.frame6':'Khung Vũ trụ','frame.frame7':'Khung Lửa',
+        'avtframe.default':'Mặc định','avtframe.avtframe1':'Khung Vàng',
+        'avtframe.avtframe2':'Khung Bạch kim','avtframe.avtframe3':'Khung Kim cương',
+        'avtframe.avtframe4':'Khung Cầu vồng','avtframe.avtframe5':'Khung Vũ trụ',
+        'avtframe.avtframe6':'Khung Lửa',
+        'btn.buy':'Mua','btn.owned':'Đã sở hữu',
+        'btn.sell':'Bán','btn.gift':'Tặng',
+        'btn.using':'Đang dùng','btn.free':'Nhận',
+        'btn.vip_locked':'👑 VIP',
+        'toast.buy_success':'Mua thành công!',
+        'toast.buy_error':'Lỗi khi mua',
+        'toast.not_enough_money':'Không đủ tiền! Cần {price} 💵',
+        'toast.already_owned':'Bạn đã sở hữu vật phẩm này.',
+        'toast.sell_success':'Bán thành công! Nhận {price} 💵',
+        'toast.sell_error':'Lỗi khi bán',
+        'toast.gift_success':'Đã tặng {item} cho {name}!',
+        'toast.gift_error':'Lỗi khi tặng',
+        'toast.refresh_success':'Đã refresh cửa hàng!',
+        'toast.refresh_error':'Lỗi khi refresh',
+        'toast.no_refresh_token':'Bạn không có token refresh.',
+        'toast.account_updated':'Tài khoản đã được cập nhật!',
+        'toast.loading_error':'Lỗi tải dữ liệu: ',
+        'toast.season_claimed':'Đã nhận thưởng!',
+        'toast.season_upgraded':'Nâng cấp Elite Pass thành công!',
+        'toast.season_bought':'Mua Elite Pass thành công!',
+        'toast.season_already_elite':'Bạn đã có Elite Pass!',
+        'toast.mission_claimed':'Đã nhận thưởng nhiệm vụ! +{exp} EXP',
+        'toast.mission_already_claimed':'Nhiệm vụ đã được nhận thưởng.',
+        'toast.cash_received':'💰 Đã nhận {amount} 💵!',
+        'toast.vip_activated':'👑 Đã kích hoạt VIP!',
+        'toast.vip_claimed':'💰 Đã nhận 2.000 💵 VIP!',
+        'toast.vip_already_claimed':'Bạn đã nhận thưởng VIP hôm nay!',
+        'toast.vip_required':'👑 Vật phẩm này chỉ dành cho VIP!',
+        'toast.birthday_claimed':'🎂 Chúc mừng sinh nhật!',
+        'toast.achievement_unlocked':'🏆 Đã mở khóa thành tựu: {name}!',
+        'toast.flash_sale_started':'⚡ Flash Sale đã bắt đầu!',
+        'toast.flash_no_items':'Vui lòng chọn ít nhất 1 item!',
+        'toast.flash_cleared':'Đã xóa tất cả!',
+        'toast.flash_config_incomplete':'Vui lòng cấu hình đầy đủ!'
+    },
+    en: {
+        flag:'🇬🇧',label:'EN',
+        'store.title':'Store','store.back':'Back',
+        'store.rank':'Rank','store.effects':'Effects','store.theme':'Theme',
+        'store.frame':'Frame','store.avatarframe':'Avatar Frame',
+        'store.gradient':'Gradient','store.typing':'Typing','store.highlight':'Highlight',
+        'store.vip':'VIP','store.achievements':'Achievements',
+        'store.flashsale':'Flash Sale','store.ownerflash':'Flash Manager',
+        'store.season':'Season Pass',
+        'store.refresh':'Refresh store (1 token)',
+        'store.refresh_note':'Store auto-refresh after 3 hours',
+        'store.qr_title':'Top up via QR Code',
+        'store.copy':'Copy information',
+        'store.contact':'Contact Admin','store.join':'Join now →',
+        'store.gift_title':'Gift','store.gift_sub':'Select friend to gift',
+        'store.gift_cancel':'Cancel','store.gift_send':'Send',
+        'store.atual':'Current:',
+        'store.free_pass':'FREE PASS','store.elite_pass':'ELITE PASS',
+        'store.missions_btn':'MISSIONS','store.upgrade_btn':'UPGRADE PASS',
+        'store.buy_elite_btn':'BUY ELITE PASS',
+        'store.level':'Level','store.reset_label':'Reset in',
+        'store.missions_title':'Missions',
+        'store.vip_title':'VIP Subscription',
+        'store.flash_status':'Status',
+        'store.flash_active':'Active',
+        'store.flash_inactive':'Inactive',
+        'store.flash_selected':'Selected',
+        'store.flash_start':'Start Flash Sale',
+        'store.flash_clear':'Clear All',
+        'store.flash_time':'Time',
+        'store.flash_discount':'Discount',
+        'store.flash_quantity':'Quantity',
+        'rank.bronze':'Bronze','rank.silver':'Silver','rank.gold':'Gold',
+        'rank.platinum':'Platinum','rank.diamond':'Diamond',
+        'rank.vip':'VIP','rank.legend':'Legend',
+        'effect.twinkle':'Twinkle','effect.shimmer':'Shimmer',
+        'effect.glow':'Glow','effect.bubble':'Bubble',
+        'effect.explode':'Explode','effect.rainbow':'Rainbow',
+        'effect.fire':'Fire','effect.dragon':'Dragon',
+        'effect.aurora':'Aurora','effect.starlight':'Starlight',
+        'effect.galaxy':'Galaxy',
+        'theme.default':'Default','theme.theme1':'Theme 1',
+        'theme.theme2':'Theme 2','theme.theme3':'Theme 3',
+        'theme.theme4':'Theme 4','theme.theme5':'Theme 5',
+        'theme.theme6':'Theme 6 (Platinum)','theme.theme7':'Theme 7 (Free)',
+        'frame.default':'Default','frame.frame1':'Gold Frame',
+        'frame.frame2':'Silver Frame','frame.frame3':'Diamond Frame',
+        'frame.frame4':'Flower Frame','frame.frame5':'Neon Frame',
+        'frame.frame6':'Cosmic Frame','frame.frame7':'Inferno Frame',
+        'avtframe.default':'Default','avtframe.avtframe1':'Gold Frame',
+        'avtframe.avtframe2':'Platinum Frame','avtframe.avtframe3':'Diamond Frame',
+        'avtframe.avtframe4':'Rainbow Frame','avtframe.avtframe5':'Cosmic Frame',
+        'avtframe.avtframe6':'Inferno Frame',
+        'btn.buy':'Buy','btn.owned':'Owned',
+        'btn.sell':'Sell','btn.gift':'Gift',
+        'btn.using':'Using','btn.free':'Get',
+        'btn.vip_locked':'👑 VIP',
+        'toast.buy_success':'Purchase successful!',
+        'toast.buy_error':'Error purchasing',
+        'toast.not_enough_money':'Not enough money! Need {price} 💵',
+        'toast.already_owned':'You already own this item.',
+        'toast.sell_success':'Sold successfully! Received {price} 💵',
+        'toast.sell_error':'Error selling',
+        'toast.gift_success':'Gifted {item} to {name}!',
+        'toast.gift_error':'Error gifting',
+        'toast.refresh_success':'Store refreshed!',
+        'toast.refresh_error':'Error refreshing',
+        'toast.no_refresh_token':'You have no refresh token.',
+        'toast.account_updated':'Account updated!',
+        'toast.loading_error':'Error loading data: ',
+        'toast.season_claimed':'Reward claimed!',
+        'toast.season_upgraded':'Elite Pass upgraded!',
+        'toast.season_bought':'Elite Pass bought!',
+        'toast.season_already_elite':'You already have Elite Pass!',
+        'toast.mission_claimed':'Mission reward claimed! +{exp} EXP',
+        'toast.mission_already_claimed':'Mission already claimed.',
+        'toast.cash_received':'💰 Received {amount} 💵!',
+        'toast.vip_activated':'👑 VIP activated!',
+        'toast.vip_claimed':'💰 Claimed 2,000 💵 VIP!',
+        'toast.vip_already_claimed':'You already claimed VIP today!',
+        'toast.vip_required':'👑 This item is VIP only!',
+        'toast.birthday_claimed':'🎂 Happy Birthday!',
+        'toast.achievement_unlocked':'🏆 Unlocked achievement: {name}!',
+        'toast.flash_sale_started':'⚡ Flash Sale started!',
+        'toast.flash_no_items':'Please select at least 1 item!',
+        'toast.flash_cleared':'Cleared all!',
+        'toast.flash_config_incomplete':'Please configure all items!'
+    }
+};
+
+let currentLang = 'vi';
+let langData = LANG.vi;
+
+function t(key, replacements = {}) {
+    let text = langData[key] || key;
+    for (const [k, v] of Object.entries(replacements)) {
+        text = text.replace(`{${k}}`, v);
+    }
+    return text;
+}
+
+function setLanguage(lang) {
+    if (lang === 'en') {
+        currentLang = 'en';
+        langData = LANG.en;
+        document.documentElement.lang = 'en';
+    } else {
+        currentLang = 'vi';
+        langData = LANG.vi;
+        document.documentElement.lang = 'vi';
+    }
+    localStorage.setItem('chat_lang', currentLang);
+    updateLanguageUI();
+    const langFlag = document.getElementById('langFlag');
+    const langLabel = document.getElementById('langLabel');
+    if (langFlag) langFlag.textContent = langData.flag;
+    if (langLabel) langLabel.textContent = langData.label;
+}
+
+function loadLanguage() {
+    const saved = localStorage.getItem('chat_lang') || 'vi';
+    setLanguage(saved);
+}
+
+function safeText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+
+function updateLanguageUI() {
+    safeText('storeTitle', t('store.title'));
+    safeText('backLabel', t('store.back'));
+    safeText('tabRank', t('store.rank'));
+    safeText('tabEffects', t('store.effects'));
+    safeText('tabTheme', t('store.theme'));
+    safeText('tabFrame', t('store.frame'));
+    safeText('tabAvatarFrame', t('store.avatarframe'));
+    safeText('tabGradient', t('store.gradient'));
+    safeText('tabTyping', t('store.typing'));
+    safeText('tabHighlight', t('store.highlight'));
+    safeText('tabVip', t('store.vip'));
+    safeText('tabAchievements', t('store.achievements'));
+    safeText('tabFlashSale', t('store.flashsale'));
+    safeText('tabOwnerFlash', t('store.ownerflash'));
+    safeText('tabSeason', t('store.season'));
+    safeText('refreshLabel', t('store.refresh'));
+    safeText('refreshNote', t('store.refresh_note'));
+    safeText('qrTitle', t('store.qr_title'));
+    safeText('copyLabel', t('store.copy'));
+    safeText('contactTitle', t('store.contact'));
+    safeText('joinLabel', t('store.join'));
+    safeText('giftTitle', t('store.gift_title'));
+    safeText('giftSub', t('store.gift_sub'));
+    safeText('giftCancel', t('store.gift_cancel'));
+    safeText('giftSend', t('store.gift_send'));
+    safeText('atualLabel', t('store.atual'));
+    safeText('freePassLabel', t('store.free_pass'));
+    safeText('elitePassLabel', t('store.elite_pass'));
+    safeText('missionsBtnLabel', t('store.missions_btn'));
+    safeText('upgradeBtnLabel', t('store.upgrade_btn'));
+    safeText('buyEliteLabel', t('store.buy_elite_btn'));
+    safeText('levelLabel', t('store.level'));
+    safeText('resetLabel', t('store.reset_label'));
+    safeText('missionsTitle', t('store.missions_title'));
+    safeText('vipTitle', t('store.vip_title'));
+    safeText('achTitle', t('store.achievements'));
+    safeText('startFlashLabel', t('store.flash_start'));
+    safeText('clearFlashLabel', t('store.flash_clear'));
+}
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+const ALL_RANKS = [
+    { key: 'bronze', label: 'rank.bronze', icon: '🥉', price: 20000 },
+    { key: 'silver', label: 'rank.silver', icon: '🥈', price: 35000 },
+    { key: 'gold', label: 'rank.gold', icon: '🥇', price: 60000 },
+    { key: 'platinum', label: 'rank.platinum', icon: '💎', price: 80000 },
+    { key: 'diamond', label: 'rank.diamond', icon: '💠', price: 120000 },
+    { key: 'vip', label: 'rank.vip', icon: '👑', price: 200000 },
+    { key: 'legend', label: 'rank.legend', icon: '🌟', price: 500000 }
+];
+
+const ALL_THEMES = [
+    { key: 'default', label: 'theme.default', icon: '🌑', price: 0, file: '' },
+    { key: 'theme1', label: 'theme.theme1', icon: '🎨', price: 20000, file: 'theme1.png' },
+    { key: 'theme2', label: 'theme.theme2', icon: '🎨', price: 20000, file: 'theme2.png' },
+    { key: 'theme3', label: 'theme.theme3', icon: '🎨', price: 20000, file: 'theme3.png' },
+    { key: 'theme4', label: 'theme.theme4', icon: '🎨', price: 20000, file: 'theme4.png' },
+    { key: 'theme5', label: 'theme.theme5', icon: '🎨', price: 20000, file: 'theme5.png' },
+    { key: 'theme6', label: 'theme.theme6', icon: '💎', price: 0, file: 'theme6.png' },
+    { key: 'theme7', label: 'theme.theme7', icon: '🌄', price: 0, file: 'theme7.png' }
+];
+
+const ALL_FRAMES = [
+    { key: 'default', label: 'frame.default', icon: '🖼️', price: 0 },
+    { key: 'frame1', label: 'frame.frame1', icon: '🖼️', price: 15000 },
+    { key: 'frame2', label: 'frame.frame2', icon: '🖼️', price: 15000 },
+    { key: 'frame3', label: 'frame.frame3', icon: '🖼️', price: 20000 },
+    { key: 'frame4', label: 'frame.frame4', icon: '🖼️', price: 15000 },
+    { key: 'frame5', label: 'frame.frame5', icon: '🖼️', price: 18000 },
+    { key: 'frame6', label: 'frame.frame6', icon: '🖼️', price: 25000 },
+    { key: 'frame7', label: 'frame.frame7', icon: '🖼️', price: 30000 }
+];
+
+const ALL_AVATAR_FRAMES = [
+    { key: 'default', label: 'avtframe.default', icon: '👤', price: 0, className: 'default-frame' },
+    { key: 'avtframe1', label: 'avtframe.avtframe1', icon: '👑', price: 12000, className: 'gold-frame' },
+    { key: 'avtframe2', label: 'avtframe.avtframe2', icon: '👑', price: 15000, className: 'platinum-frame' },
+    { key: 'avtframe3', label: 'avtframe.avtframe3', icon: '💎', price: 18000, className: 'diamond-frame' },
+    { key: 'avtframe4', label: 'avtframe.avtframe4', icon: '🌈', price: 22000, className: 'rainbow-frame' },
+    { key: 'avtframe5', label: 'avtframe.avtframe5', icon: '🌌', price: 28000, className: 'cosmic-frame' },
+    { key: 'avtframe6', label: 'avtframe.avtframe6', icon: '🔥', price: 35000, className: 'inferno-frame' }
+];
+
+const ALL_GRADIENTS = [{ key: 'gradient1', label: 'Gradient Text', icon: '🌈', price: 20000 }];
+const ALL_TYPINGS = [{ key: 'typing1', label: 'Typing Effect', icon: '✨', price: 8000 }];
+const ALL_HIGHLIGHTS = [{ key: 'highlight1', label: 'Highlight Name', icon: '🌟', price: 18000 }];
+
+const EFFECT_ITEMS = {
+    'twinkle': { label: 'effect.twinkle', icon: '✨', price: 25000, vip: false },
+    'shimmer': { label: 'effect.shimmer', icon: '💫', price: 28000, vip: false },
+    'glow': { label: 'effect.glow', icon: '🌟', price: 30000, vip: false },
+    'bubble': { label: 'effect.bubble', icon: '🫧', price: 25000, vip: false },
+    'explode': { label: 'effect.explode', icon: '💥', price: 35000, vip: false },
+    'rainbow': { label: 'effect.rainbow', icon: '🌈', price: 35000, vip: false },
+    'fire': { label: 'effect.fire', icon: '🔥', price: 30000, vip: false },
+    'dragon': { label: 'effect.dragon', icon: '🐉', price: 40000, vip: false },
+    'aurora': { label: 'effect.aurora', icon: '🌌', price: 45000, vip: true },
+    'starlight': { label: 'effect.starlight', icon: '⭐', price: 40000, vip: true },
+    'galaxy': { label: 'effect.galaxy', icon: '🌠', price: 50000, vip: true }
+};
+
+// ============================================================
+// SEASON PASS
+// ============================================================
+const SEASON_REWARDS = [];
+for (let i = 1; i <= 50; i++) {
+    let reward = { level: i, free: null, elite: null };
+    if (i % 2 === 1) {
+        reward.free = { type: 'cash', amount: i * 500, icon: '💵', name: `${i * 500} 💵` };
+    } else if (i % 4 === 0 && i <= 40) {
+        const effects = ['twinkle','shimmer','glow','bubble','explode','rainbow','fire','dragon'];
+        const names = ['Lấp lánh','Sáng bóng','Chói lóa','Bong bóng','Nổ','Cầu vồng','Lửa','Rồng cuộn'];
+        reward.free = { type: 'effect', key: effects[(i/4 - 1) % 8], icon: '✨', name: names[(i/4 - 1) % 8] };
+    } else if (i === 10) {
+        reward.free = { type: 'badge', name: 'Chiến binh mùa', icon: '🏅' };
+    } else if (i === 20) {
+        reward.free = { type: 'badge', name: 'Thợ săn', icon: '🏅' };
+    } else if (i === 30) {
+        reward.free = { type: 'badge', name: 'Huyền thoại', icon: '🏅' };
+    } else if (i === 50) {
+        reward.free = { type: 'rank', key: 'legend', icon: '🌟', name: 'Rank Huyền thoại (7 ngày)' };
+    } else {
+        reward.free = { type: 'cash', amount: i * 300, icon: '💵', name: `${i * 300} 💵` };
+    }
+    if (i === 5) {
+        reward.elite = { type: 'effect', key: 'shimmer', icon: '💫', name: 'Hiệu ứng Sáng bóng' };
+    } else if (i === 10) {
+        reward.elite = { type: 'avatarframe', key: 'avtframe1', icon: '👑', name: 'Khung Avatar Vàng' };
+    } else if (i === 15) {
+        reward.elite = { type: 'effect', key: 'glow', icon: '🌟', name: 'Hiệu ứng Chói lóa' };
+    } else if (i === 20) {
+        reward.elite = { type: 'frame', key: 'frame1', icon: '🖼️', name: 'Khung Vàng' };
+    } else if (i === 25) {
+        reward.elite = { type: 'effect', key: 'bubble', icon: '🫧', name: 'Hiệu ứng Bong bóng' };
+    } else if (i === 30) {
+        reward.elite = { type: 'avatarframe', key: 'avtframe2', icon: '👑', name: 'Khung Avatar Bạch kim' };
+    } else if (i === 35) {
+        reward.elite = { type: 'effect', key: 'explode', icon: '💥', name: 'Hiệu ứng Nổ' };
+    } else if (i === 40) {
+        reward.elite = { type: 'frame', key: 'frame3', icon: '🖼️', name: 'Khung Kim Cương' };
+    } else if (i === 45) {
+        reward.elite = { type: 'effect', key: 'dragon', icon: '🐉', name: 'Hiệu ứng Rồng cuộn' };
+    } else if (i === 50) {
+        reward.elite = { type: 'rank', key: 'vip', icon: '👑', name: 'Rank VIP (7 ngày)' };
+    } else if (i % 3 === 0) {
+        reward.elite = { type: 'cash', amount: i * 800, icon: '💵', name: `${i * 800} 💵` };
+    } else {
+        reward.elite = { type: 'cash', amount: i * 500, icon: '💵', name: `${i * 500} 💵` };
+    }
+    SEASON_REWARDS.push(reward);
+}
+
+const MISSIONS_DEF = {
+    daily: [
+        { id: 'daily_login', name: 'Đăng nhập hôm nay', icon: '✅', exp: 10, target: 1 },
+        { id: 'daily_messages_10', name: 'Gửi 10 tin nhắn', icon: '💬', exp: 15, target: 10 },
+        { id: 'daily_messages_30', name: 'Gửi 30 tin nhắn', icon: '💬', exp: 25, target: 30 },
+        { id: 'daily_chat_3', name: 'Chat với 3 người khác', icon: '👥', exp: 20, target: 3 },
+        { id: 'daily_friend', name: 'Kết bạn mới', icon: '🤝', exp: 30, target: 1 }
+    ],
+    weekly: [
+        { id: 'weekly_messages_100', name: 'Gửi 100 tin nhắn', icon: '💬', exp: 50, target: 100 },
+        { id: 'weekly_chat_10', name: 'Chat với 10 người khác', icon: '👥', exp: 60, target: 10 },
+        { id: 'weekly_friends_3', name: 'Kết bạn 3 người', icon: '🤝', exp: 80, target: 3 }
+    ],
+    special: [
+        { id: 'special_effects_5', name: 'Sở hữu 5 hiệu ứng', icon: '✨', exp: 120, target: 5 },
+        { id: 'special_rank_gold', name: 'Đạt rank Vàng', icon: '🥇', exp: 150, target: 1 },
+        { id: 'special_refer_3', name: 'Mời 3 bạn bè tham gia', icon: '📨', exp: 200, target: 3 }
+    ]
+};
+
+const ACHIEVEMENTS_LIST = [
+    { id: 'first_purchase', name: 'Người mua đầu tiên', desc: 'Mua item đầu tiên', icon: '🛒' },
+    { id: 'collector_5', name: 'Nhà sưu tập cấp 1', desc: 'Sở hữu 5 item', icon: '📦' },
+    { id: 'collector_10', name: 'Nhà sưu tập cấp 2', desc: 'Sở hữu 10 item', icon: '📦' },
+    { id: 'collector_20', name: 'Nhà sưu tập cấp 3', desc: 'Sở hữu 20 item', icon: '📦' },
+    { id: 'rich_100k', name: 'Nhà giàu', desc: 'Có 100,000 💵', icon: '💰' },
+    { id: 'rich_500k', name: 'Đại gia', desc: 'Có 500,000 💵', icon: '💰' },
+    { id: 'rich_1m', name: 'Tỷ phú', desc: 'Có 1,000,000 💵', icon: '💰' },
+    { id: 'rank_bronze', name: 'Rank Đồng', desc: 'Đạt rank Đồng', icon: '🥉' },
+    { id: 'rank_silver', name: 'Rank Bạc', desc: 'Đạt rank Bạc', icon: '🥈' },
+    { id: 'rank_gold', name: 'Rank Vàng', desc: 'Đạt rank Vàng', icon: '🥇' },
+    { id: 'rank_platinum', name: 'Rank Bạch kim', desc: 'Đạt rank Bạch kim', icon: '💎' },
+    { id: 'rank_diamond', name: 'Rank Kim cương', desc: 'Đạt rank Kim cương', icon: '💠' },
+    { id: 'rank_vip', name: 'Rank VIP', desc: 'Đạt rank VIP', icon: '👑' },
+    { id: 'rank_legend', name: 'Rank Huyền thoại', desc: 'Đạt rank Huyền thoại', icon: '🌟' },
+    { id: 'effects_3', name: 'Nhà ảo thuật', desc: 'Sở hữu 3 hiệu ứng', icon: '✨' },
+    { id: 'effects_5', name: 'Phù thủy', desc: 'Sở hữu 5 hiệu ứng', icon: '🧙' },
+    { id: 'frames_3', name: 'Người trang trí', desc: 'Sở hữu 3 frame', icon: '🖼️' },
+    { id: 'frames_5', name: 'Nhà thiết kế', desc: 'Sở hữu 5 frame', icon: '🎨' },
+    { id: 'avatar_frames_3', name: 'Người sành điệu', desc: 'Sở hữu 3 khung avatar', icon: '👤' },
+    { id: 'season_10', name: 'Chiến binh mùa', desc: 'Đạt cấp 10 Season Pass', icon: '⚔️' },
+    { id: 'season_25', name: 'Thợ săn', desc: 'Đạt cấp 25 Season Pass', icon: '🏹' },
+    { id: 'season_50', name: 'Huyền thoại mùa', desc: 'Đạt cấp 50 Season Pass', icon: '👑' },
+    { id: 'vip_subscriber', name: 'VIP', desc: 'Đăng ký VIP', icon: '👑' },
+    { id: 'birthday_claimed', name: '🎂 Sinh nhật', desc: 'Nhận quà sinh nhật', icon: '🎂' },
+    { id: 'friend_3', name: 'Người kết nối', desc: 'Có 3 bạn bè', icon: '🤝' },
+    { id: 'friend_10', name: 'Người nổi tiếng', desc: 'Có 10 bạn bè', icon: '🌟' }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentUser = null;
+let storeItems = [];
+let storeExpiry = 0;
+let friendsList = [];
+let currentTab = 'ranks';
+let socket = null;
+let socketConnected = false;
+let isProcessing = false;
+let randomEffects = [];
+let randomEffectsExpiry = 0;
+
+// Flash Sale State
+let selectedFlashItems = [];
+let isFlashActive = false;
+let flashSaleItems = [];
+let flashSaleExpiry = 0;
+
+let seasonData = {
+    tier: 0,
+    exp: 0,
+    maxExp: 100,
+    isElite: false,
+    claimedRewards: [],
+    claimedElite: [],
+    missions: {},
+    lastReset: new Date().toISOString()
+};
+
+let vipData = {
+    isActive: false,
+    expiry: null,
+    lastClaimDate: null,
+    dailyClaimed: false
+};
+
+let achievements = {};
+let achievementCount = 0;
+let birthdayClaimed = false;
+let isBirthday = false;
+let giftTarget = null;
+
+// ============================================================
+// API HELPERS
+// ============================================================
+const API = {
+    async getSession() {
+        const res = await fetch('/api/session');
+        return res.json();
+    },
+    async refreshSession() {
+        const res = await fetch('/api/refresh-session', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+        return res.json();
+    },
+    async getStoreItems() {
+        const res = await fetch('/api/store/items');
+        return res.json();
+    },
+    async refreshStore(username) {
+        const res = await fetch('/api/store/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async buyRank(username, rankKey) {
+        const res = await fetch('/api/store/buy-rank', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, rankKey })
+        });
+        return res.json();
+    },
+    async buyEffect(username, effectKey) {
+        const res = await fetch('/api/store/buy-effect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, effectKey })
+        });
+        return res.json();
+    },
+    async buyTheme(username, themeKey) {
+        const res = await fetch('/api/store/buy-theme', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, themeKey })
+        });
+        return res.json();
+    },
+    async buyFrame(username, frameKey) {
+        const res = await fetch('/api/store/buy-frame', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, frameKey })
+        });
+        return res.json();
+    },
+    async buyAvatarFrame(username, frameKey) {
+        const res = await fetch('/api/store/buy-avatarframe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, frameKey })
+        });
+        return res.json();
+    },
+    async buyGradient(username) {
+        const res = await fetch('/api/store/buy-gradient', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async buyTyping(username) {
+        const res = await fetch('/api/store/buy-typing', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async buyHighlight(username) {
+        const res = await fetch('/api/store/buy-highlight', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async sellEffect(username, itemKey) {
+        const res = await fetch('/api/store/sell', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, itemKey })
+        });
+        return res.json();
+    },
+    async sellTheme(username, themeKey) {
+        const res = await fetch('/api/store/sell-theme', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, themeKey })
+        });
+        return res.json();
+    },
+    async sellFrame(username, frameKey) {
+        const res = await fetch('/api/store/sell-frame', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, frameKey })
+        });
+        return res.json();
+    },
+    async sellAvatarFrame(username, frameKey) {
+        const res = await fetch('/api/store/sell-avatarframe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, frameKey })
+        });
+        return res.json();
+    },
+    async getFriends(username) {
+        const res = await fetch(`/api/friends/${username}`);
+        return res.json();
+    },
+    async giftItem(username, toUsername, type, itemKey) {
+        const res = await fetch('/api/store/gift', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, toUsername, type, itemKey })
+        });
+        return res.json();
+    },
+    async updateUser(username, data) {
+        const res = await fetch('/api/user/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, data })
+        });
+        return res.json();
+    },
+    async getSeasonData(username) {
+        const res = await fetch(`/api/season/${username}`);
+        return res.json();
+    },
+    async claimSeasonReward(username, level, isElite) {
+        const res = await fetch('/api/season/claim', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, level, isElite })
+        });
+        return res.json();
+    },
+    async upgradePass(username) {
+        const res = await fetch('/api/season/upgrade', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async buyElitePass(username) {
+        const res = await fetch('/api/season/buy-elite-pass', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async claimMission(username, missionId) {
+        const res = await fetch('/api/season/claim-mission', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, missionId })
+        });
+        return res.json();
+    },
+    async activateVIP(username) {
+        const res = await fetch('/api/vip/activate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async claimVIP(username) {
+        const res = await fetch('/api/vip/claim', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async getVIPData(username) {
+        const res = await fetch(`/api/vip/${username}`);
+        return res.json();
+    },
+    async claimBirthday(username) {
+        const res = await fetch('/api/user/birthday-claim', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async checkBirthday(username) {
+        const res = await fetch(`/api/user/birthday/${username}`);
+        return res.json();
+    },
+    async getFlashSale() {
+        const res = await fetch('/api/store/flash-sale');
+        return res.json();
+    },
+    async startFlashSale(username, items, duration) {
+        const res = await fetch('/api/store/flash-sale/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, items, duration })
+        });
+        return res.json();
+    },
+    async clearFlashSale(username) {
+        const res = await fetch('/api/store/flash-sale/clear', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        return res.json();
+    },
+    async getRandomEffects() {
+        const res = await fetch('/api/store/random-effects');
+        return res.json();
+    },
+    async getAchievements(username) {
+        const res = await fetch(`/api/achievements/${username}`);
+        return res.json();
+    }
+};
+
+// ============================================================
+// SOCKET.IO
+// ============================================================
+function initSocket() {
+    socket = io();
+    socket.on('connect', () => {
+        socketConnected = true;
+        console.log('🔌 Socket connected in Store');
+        if (currentUser) socket.emit('user-online', currentUser.username);
+    });
+    socket.on('disconnect', () => {
+        socketConnected = false;
+        console.log('🔌 Socket disconnected in Store');
+    });
+
+    socket.on('user-updated', (data) => {
+        if (data.username === currentUser?.username) {
+            if (data.fullUser) {
+                currentUser = data.fullUser;
+                refreshUI();
+            } else {
+                refreshUserData();
+            }
+        }
+    });
+
+    socket.on('cash-updated', (data) => {
+        if (data.username === currentUser?.username && data.newCash !== undefined) {
+            currentUser.cash = data.newCash;
+            refreshUI(true, t('toast.cash_received', { amount: data.amount?.toLocaleString() || '' }));
+        }
+    });
+
+    socket.on('season-updated', (data) => {
+        if (data.username === currentUser?.username && data.seasonData) {
+            seasonData = data.seasonData;
+            renderSeasonPass();
+            renderMissions();
+        }
+    });
+
+    socket.on('force-refresh-user', () => refreshUserData());
+    socket.on('vip-updated', (data) => {
+        if (data.username === currentUser?.username) {
+            vipData = data.vipData;
+            updateVIPUI();
+            if (currentTab === 'vip') renderVIP();
+        }
+    });
+
+    socket.on('achievement-unlocked', (data) => {
+        if (data.username === currentUser?.username) {
+            showToast('success', t('toast.achievement_unlocked', { name: data.name }));
+            achievements[data.id] = true;
+            achievementCount++;
+            if (currentTab === 'achievements') renderAchievements();
+            updateAchievementUI();
+        }
+    });
+
+    socket.on('flash-sale-start', (data) => {
+        flashSaleItems = data.items || [];
+        flashSaleExpiry = data.expiry || 0;
+        isFlashActive = true;
+        showToast('warning', t('toast.flash_sale_started'));
+        if (currentTab === 'flashsale') renderFlashSaleView();
+        if (currentTab === 'ownerflash') renderFlashManager();
+    });
+
+    socket.on('flash-sale-end', () => {
+        isFlashActive = false;
+        flashSaleItems = [];
+        flashSaleExpiry = 0;
+        if (currentTab === 'flashsale') renderFlashSaleView();
+        if (currentTab === 'ownerflash') renderFlashManager();
+    });
+
+    socket.on('random-effects-updated', (data) => {
+        randomEffects = data.effects || [];
+        randomEffectsExpiry = data.expiry || 0;
+        if (currentTab === 'effects') renderEffects();
+        showToast('info', t('toast.effects_updated'));
+    });
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function showToast(type, message) {
+    const existing = document.querySelector('.toast');
+    if (existing) { existing.classList.add('hide'); setTimeout(() => existing.remove(), 300); }
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
+function updateSessionStorage(user) {
+    if (!user) return;
+    try {
+        const sessionData = JSON.parse(sessionStorage.getItem('chat_user') || '{}');
+        sessionData.username = user.username;
+        sessionData.displayName = user.displayName;
+        sessionData.effects = user.effects || [];
+        sessionData.themes = user.themes || [];
+        sessionData.frames = user.frames || [];
+        sessionData.avatarFrames = user.avatarFrames || [];
+        sessionData.gradientText = user.gradientText || false;
+        sessionData.typingEffect = user.typingEffect || false;
+        sessionData.highlightedName = user.highlightedName || false;
+        sessionData.cash = user.cash || 0;
+        sessionData.tier = user.tier || 'user';
+        sessionData.currentFrame = user.currentFrame || 'default';
+        sessionData.currentAvatarFrame = user.currentAvatarFrame || 'default';
+        sessionData.currentTheme = user.currentTheme || 'default';
+        sessionData.refreshTokens = user.refreshTokens || 0;
+        sessionStorage.setItem('chat_user', JSON.stringify(sessionData));
+    } catch (e) {}
+}
+
+function updateUserUI(user) {
+    if (!user) return;
+    const el = (id) => document.getElementById(id);
+    if (el('userName')) el('userName').textContent = user.displayName || user.username;
+    if (el('userCash')) el('userCash').textContent = (user.cash || 0).toLocaleString();
+    if (el('userRefreshTokens')) el('userRefreshTokens').textContent = user.refreshTokens || 0;
+    if (el('userRank')) el('userRank').textContent = user.tier ? user.tier.toUpperCase() : 'User';
+    const cashEl = document.getElementById('cashDisplay');
+    if (cashEl) {
+        cashEl.classList.remove('updated');
+        void cashEl.offsetWidth;
+        cashEl.classList.add('updated');
+    }
+}
+
+function updateVIPUI() {
+    const badge = document.getElementById('vipBadge');
+    if (vipData.isActive) {
+        badge.classList.add('active');
+        badge.textContent = '👑 VIP';
+    } else {
+        badge.classList.remove('active');
+        badge.textContent = '';
+    }
+}
+
+function updateAchievementUI() {
+    const count = Object.keys(achievements).length;
+    const achCount = document.getElementById('achCount');
+    const achTotal = document.getElementById('achTotal');
+    const achBadge = document.getElementById('achBadge');
+    if (achCount) achCount.textContent = count;
+    if (achTotal) achTotal.textContent = 26;
+    if (achBadge) achBadge.textContent = count >= 26 ? '🏆' : '⭐';
+}
+
+function refreshUI(showToastMsg = false, toastMessage = '') {
+    if (!currentUser) return;
+    updateUserUI(currentUser);
+    updateSessionStorage(currentUser);
+    renderStore(currentTab);
+    if (currentTab === 'season' || currentTab === 'missions') {
+        renderSeasonPass();
+        renderMissions();
+    }
+    if (currentTab === 'vip') renderVIP();
+    if (currentTab === 'achievements') renderAchievements();
+    if (currentTab === 'ownerflash') renderFlashManager();
+    if (showToastMsg && toastMessage) showToast('success', toastMessage);
+}
+
+async function refreshUserData() {
+    try {
+        const result = await API.refreshSession();
+        if (result && result.success && result.user) {
+            currentUser = result.user;
+            updateUserUI(currentUser);
+            renderStore(currentTab);
+            updateSessionStorage(currentUser);
+            const seasonResult = await API.getSeasonData(currentUser.username);
+            if (seasonResult && seasonResult.success) seasonData = seasonResult.data;
+            await loadVIPData();
+            await loadAchievements();
+            await checkBirthday();
+            await loadFlashSale();
+            await loadRandomEffects();
+        } else {
+            const session = await API.getSession();
+            if (session && session.loggedIn) {
+                currentUser = session.user;
+                updateUserUI(currentUser);
+                renderStore(currentTab);
+                updateSessionStorage(currentUser);
+            }
+        }
+    } catch (e) {}
+}
+
+function formatTimeLeft(seconds) {
+    if (seconds <= 0) return '00:00:00';
+    const days = Math.floor(seconds / 86400);
+    const h = Math.floor((seconds % 86400) / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    if (days > 0) return `${days}d ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function getRankDiscount(tier) {
+    const discounts = {
+        'bronze': 5, 'silver': 10, 'gold': 15, 'platinum': 20,
+        'diamond': 20, 'vip': 25, 'legend': 35, 'user': 0
+    };
+    return discounts[tier] || 0;
+}
+
+// ============================================================
+// MODALS
+// ============================================================
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal').forEach(m => {
+    m.addEventListener('click', function(e) { if (e.target === this) closeModal(this.id); });
+});
+
+// ============================================================
+// LOAD FUNCTIONS
+// ============================================================
+async function loadVIPData() {
+    try {
+        const res = await fetch(`/api/vip/${currentUser.username}`);
+        const data = await res.json();
+        if (data.success) {
+            vipData = data.data;
+            updateVIPUI();
+        }
+    } catch (e) {}
+}
+
+async function loadAchievements() {
+    try {
+        const result = await API.getAchievements(currentUser.username);
+        if (result && result.success) {
+            achievements = result.achievements || {};
+            achievementCount = Object.keys(achievements).length;
+            updateAchievementUI();
+        }
+    } catch (e) {}
+}
+
+async function checkBirthday() {
+    try {
+        const result = await API.checkBirthday(currentUser.username);
+        if (result && result.success) {
+            isBirthday = result.isBirthday;
+            birthdayClaimed = result.claimed || false;
+            if (isBirthday && !birthdayClaimed) {
+                setTimeout(() => openModal('birthdayModal'), 1000);
+            }
+        }
+    } catch (e) {}
+}
+
+async function loadFlashSale() {
+    try {
+        const result = await API.getFlashSale();
+        if (result && result.success) {
+            flashSaleItems = result.items || [];
+            flashSaleExpiry = result.expiry || 0;
+            isFlashActive = result.active || false;
+        }
+    } catch (e) {}
+}
+
+async function loadRandomEffects() {
+    try {
+        const result = await API.getRandomEffects();
+        if (result && result.success) {
+            randomEffects = result.effects || [];
+            randomEffectsExpiry = result.expiry || 0;
+        }
+    } catch (e) {}
+}
+
+// ============================================================
+// VIP FUNCTIONS
+// ============================================================
+async function activateVIP() {
+    if (!currentUser || isProcessing) return;
+    const price = 200000;
+    if (currentUser.cash < price) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Đăng ký VIP với giá ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.activateVIP(currentUser.username);
+        if (result && result.success) {
+            showToast('success', t('toast.vip_activated'));
+            currentUser = result.user;
+            vipData = result.vipData;
+            updateUserUI(currentUser);
+            updateVIPUI();
+            if (currentTab === 'vip') renderVIP();
+            updateSessionStorage(currentUser);
+        } else {
+            showToast('error', result?.msg || 'Lỗi kích hoạt VIP');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi kích hoạt VIP: ' + e.message);
+    }
+    isProcessing = false;
+    closeModal('vipModal');
+}
+
+async function claimVIPReward() {
+    if (!currentUser || isProcessing) return;
+    if (!vipData.isActive) { showToast('error', 'Bạn chưa đăng ký VIP!'); return; }
+    if (vipData.dailyClaimed) { showToast('info', t('toast.vip_already_claimed')); return; }
+    isProcessing = true;
+    try {
+        const result = await API.claimVIP(currentUser.username);
+        if (result && result.success) {
+            showToast('success', t('toast.vip_claimed'));
+            currentUser = result.user;
+            vipData = result.vipData;
+            updateUserUI(currentUser);
+            updateVIPUI();
+            if (currentTab === 'vip') renderVIP();
+            updateSessionStorage(currentUser);
+        } else {
+            showToast('error', result?.msg || 'Lỗi nhận thưởng VIP');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi nhận thưởng VIP: ' + e.message);
+    }
+    isProcessing = false;
+}
+
+function renderVIP() {
+    const section = document.getElementById('vipSection');
+    section.classList.add('active');
+    const statusEl = document.getElementById('vipStatus');
+    if (vipData.isActive) {
+        statusEl.className = 'vip-status active';
+        statusEl.textContent = '✅ Đã kích hoạt' + (vipData.expiry ? ` (Hết hạn: ${new Date(vipData.expiry).toLocaleDateString()})` : '');
+    } else {
+        statusEl.className = 'vip-status inactive';
+        statusEl.textContent = '❌ Chưa kích hoạt';
+    }
+    const claimBtn = document.getElementById('vipClaimBtn');
+    if (vipData.isActive) {
+        claimBtn.disabled = vipData.dailyClaimed || false;
+        claimBtn.textContent = vipData.dailyClaimed ? '✅ Đã nhận hôm nay' : 'Nhận thưởng VIP';
+    } else {
+        claimBtn.disabled = true;
+        claimBtn.textContent = '🔒 Nhận thưởng VIP';
+    }
+}
+
+// ============================================================
+// ACHIEVEMENTS
+// ============================================================
+function renderAchievements() {
+    const container = document.getElementById('achievementGrid');
+    if (!container) return;
+    container.innerHTML = '';
+    document.getElementById('achievementContainer').classList.add('active');
+
+    ACHIEVEMENTS_LIST.forEach(ach => {
+        const div = document.createElement('div');
+        const unlocked = achievements[ach.id] || false;
+        div.className = `achievement-item ${unlocked ? 'unlocked' : ''}`;
+        div.innerHTML = `
+            <span class="ach-icon">${ach.icon}</span>
+            <div class="ach-name">${ach.name}</div>
+            <div class="ach-desc">${ach.desc}</div>
+            <span class="ach-status ${unlocked ? 'unlocked' : 'locked'}">${unlocked ? '✅ Đã mở' : '🔒 Chưa mở'}</span>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// ============================================================
+// BIRTHDAY
+// ============================================================
+async function claimBirthday() {
+    if (!currentUser || isProcessing) return;
+    isProcessing = true;
+    try {
+        const result = await API.claimBirthday(currentUser.username);
+        if (result && result.success) {
+            showToast('success', t('toast.birthday_claimed'));
+            currentUser = result.user;
+            birthdayClaimed = true;
+            updateUserUI(currentUser);
+            updateSessionStorage(currentUser);
+            closeModal('birthdayModal');
+        } else {
+            showToast('error', result?.msg || 'Lỗi nhận quà sinh nhật');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi nhận quà sinh nhật: ' + e.message);
+    }
+    isProcessing = false;
+}
+
+// ============================================================
+// RENDER EFFECTS
+// ============================================================
+function renderEffects() {
+    const container = document.getElementById('storeItems');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const userEffects = currentUser?.effects || [];
+    const isVIP = vipData.isActive;
+    const discountPercent = getRankDiscount(currentUser?.tier || 'user') + (isVIP ? 20 : 0);
+    const now = Date.now();
+
+    Object.entries(EFFECT_ITEMS).forEach(([key, info]) => {
+        const owned = userEffects.includes(key);
+        const div = document.createElement('div');
+        div.className = 'store-item';
+        
+        let finalPrice = info.price;
+        let discountAmount = 0, discountHtml = '';
+        if (discountPercent > 0 && !owned) {
+            discountAmount = Math.floor(info.price * discountPercent / 100);
+            finalPrice = info.price - discountAmount;
+            discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+        }
+        
+        let vipOnlyHtml = '';
+        if (info.vip && !isVIP) {
+            vipOnlyHtml = `<span class="vip-only">👑 VIP</span>`;
+        }
+        
+        const halfPrice = Math.floor(info.price * 0.5);
+
+        const isInRandom = randomEffects.some(r => r && r.key === key);
+        const randomBadge = isInRandom && randomEffectsExpiry > now ? 
+            `<span class="random-badge">🔄 ${Math.floor((randomEffectsExpiry - now) / 3600000)}h${Math.floor(((randomEffectsExpiry - now) % 3600000) / 60000)}m</span>` : '';
+
+        const effectLabel = t(info.label) || info.label;
+
+        if (info.vip && !isVIP) {
+            div.innerHTML = `
+                ${vipOnlyHtml}
+                ${randomBadge}
+                <span class="icon">${info.icon}</span>
+                <div class="name">${effectLabel}</div>
+                <div class="tier">Effects</div>
+                <div class="price">
+                    ${finalPrice.toLocaleString()} 💵 ${discountHtml}
+                </div>
+                <button class="buy-btn vip-locked" disabled>${t('btn.vip_locked')}</button>
+            `;
+        } else {
+            div.innerHTML = `
+                ${vipOnlyHtml}
+                ${randomBadge}
+                <span class="icon">${info.icon}</span>
+                <div class="name">${effectLabel}</div>
+                <div class="tier">Effects</div>
+                <div class="price">
+                    ${discountAmount > 0 ? `<span class="original">${info.price.toLocaleString()}</span>` : ''}
+                    ${finalPrice.toLocaleString()} 💵 ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">✅ Đã sở hữu</div>` : ''}
+                <div>
+                    ${owned ?
+                        `<button class="buy-btn sell-btn" onclick="sellEffect('${key}')">Bán (${halfPrice.toLocaleString()} 💵)</button>
+                         <button class="buy-btn gift-btn" onclick="openGiftModal('effect','${key}','${effectLabel}')"><i class="fas fa-gift"></i> Tặng</button>` :
+                        (isVIP || !info.vip ?
+                            `<button class="buy-btn buy" onclick="buyEffect('${key}','${effectLabel}',${finalPrice})">Mua ${finalPrice.toLocaleString()} 💵</button>` :
+                            `<button class="buy-btn vip-locked" disabled>${t('btn.vip_locked')}</button>`)
+                    }
+                </div>
+            `;
+        }
+        container.appendChild(div);
+    });
+}
+
+// ============================================================
+// RENDER STORE
+// ============================================================
+function renderStore(tab) {
+    const container = document.getElementById('storeItems');
+    if (!container) return;
+    const seasonContainer = document.getElementById('seasonPassContainer');
+    const missionsContainer = document.getElementById('missionsContainer');
+    const vipSection = document.getElementById('vipSection');
+    const achievementContainer = document.getElementById('achievementContainer');
+    const flashManager = document.getElementById('flashManagerContainer');
+
+    seasonContainer.classList.remove('active');
+    missionsContainer.classList.remove('active');
+    vipSection.classList.remove('active');
+    achievementContainer.classList.remove('active');
+    flashManager.classList.remove('active');
+
+    if (tab === 'season') {
+        container.style.display = 'none';
+        seasonContainer.classList.add('active');
+        renderSeasonPass();
+        return;
+    } else if (tab === 'missions') {
+        container.style.display = 'none';
+        seasonContainer.classList.add('active');
+        missionsContainer.classList.add('active');
+        renderMissions();
+        return;
+    } else if (tab === 'vip') {
+        container.style.display = 'none';
+        renderVIP();
+        return;
+    } else if (tab === 'achievements') {
+        container.style.display = 'none';
+        renderAchievements();
+        return;
+    } else if (tab === 'flashsale') {
+        renderFlashSaleView();
+        return;
+    } else if (tab === 'ownerflash') {
+        container.style.display = 'none';
+        renderFlashManager();
+        return;
+    } else {
+        container.style.display = 'grid';
+    }
+
+    container.innerHTML = '';
+    if (!currentUser) {
+        container.innerHTML = `<div style="color:rgba(255,255,255,0.3);text-align:center;padding:40px 0;">Đang tải...</div>`;
+        return;
+    }
+
+    const userTier = currentUser.tier || 'user';
+    const tierLevels = ['user','bronze','silver','gold','platinum','diamond','vip','legend'];
+    const currentLevel = tierLevels.indexOf(userTier);
+    const userThemes = currentUser.themes || ['default'];
+    const userEffects = currentUser.effects || [];
+    const userFrames = currentUser.frames || ['default'];
+    const userAvatarFrames = currentUser.avatarFrames || ['default'];
+    const userGradient = currentUser.gradientText || false;
+    const userTyping = currentUser.typingEffect || false;
+    const userHighlight = currentUser.highlightedName || false;
+    const discountPercent = getRankDiscount(userTier) + (vipData.isActive ? 20 : 0);
+    const currentAvatarFrame = currentUser.currentAvatarFrame || 'default';
+    const isVIP = vipData.isActive;
+
+    // ===== RANK =====
+    if (tab === 'ranks') {
+        ALL_RANKS.forEach(rank => {
+            const owned = currentLevel >= tierLevels.indexOf(rank.key);
+            const isCurrent = userTier === rank.key;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            let finalPrice = rank.price;
+            let discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned) {
+                discountAmount = Math.floor(rank.price * discountPercent / 100);
+                finalPrice = rank.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            div.innerHTML = `
+                <span class="icon">${rank.icon}</span>
+                <div class="name">${t(rank.label)}</div>
+                <div class="tier">Rank</div>
+                <div class="price">
+                    ${discountAmount > 0 ? `<span class="original">${rank.price.toLocaleString()}</span>` : ''}
+                    ${finalPrice.toLocaleString()} 💵 ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isCurrent ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? (isCurrent ? `<button class="buy-btn owned-btn" disabled>Đang dùng</button>` :
+                        `<button class="buy-btn sell-btn" onclick="sellRank('${rank.key}')">Bán (${Math.floor(rank.price*0.5).toLocaleString()} 💵)</button>`) :
+                        `<button class="buy-btn buy" onclick="buyRank('${rank.key}','${t(rank.label)}',${finalPrice})">Mua ${finalPrice.toLocaleString()} 💵</button>`}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+
+    // ===== EFFECTS =====
+    if (tab === 'effects') {
+        renderEffects();
+        return;
+    }
+
+    // ===== THEMES =====
+    if (tab === 'themes') {
+        ALL_THEMES.forEach(theme => {
+            const owned = userThemes.includes(theme.key);
+            const isActive = currentUser.currentTheme === theme.key;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            
+            // Theme preview
+            let previewHtml = '';
+            if (theme.key === 'default') {
+                previewHtml = `<div class="theme-preview default-preview">🌑 Mặc định</div>`;
+            } else {
+                const imagePath = '/' + theme.file;
+                previewHtml = `<div class="theme-preview" style="background-image: url('${imagePath}'); background-size: cover; background-position: center;">
+                    <div class="theme-label">${t(theme.label)}</div>
+                </div>`;
+            }
+            
+            let finalPrice = theme.price;
+            let discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned && theme.price > 0) {
+                discountAmount = Math.floor(theme.price * discountPercent / 100);
+                finalPrice = theme.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            
+            div.innerHTML = `
+                ${previewHtml}
+                <span class="icon" style="font-size:1.8rem;">${theme.icon}</span>
+                <div class="name">${t(theme.label)} ${isActive ? '✅' : ''}</div>
+                <div class="tier">Theme</div>
+                <div class="price ${theme.price === 0 ? 'free' : ''}">
+                    ${theme.price > 0 ? (discountAmount > 0 ? `<span class="original">${theme.price.toLocaleString()}</span>` : '') : ''}
+                    ${theme.price > 0 ? finalPrice.toLocaleString() + ' 💵' : 'Miễn phí'} ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isActive ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? (theme.key === 'default' ? `<button class="buy-btn owned-btn" disabled>Mặc định</button>` :
+                        `<button class="buy-btn sell-btn" onclick="sellTheme('${theme.key}')">Bán (${Math.floor(theme.price*0.5).toLocaleString()} 💵)</button>
+                         <button class="buy-btn gift-btn" onclick="openGiftModal('theme','${theme.key}','${t(theme.label)}')"><i class="fas fa-gift"></i> Tặng</button>`) :
+                        `<button class="buy-btn buy" onclick="buyTheme('${theme.key}','${t(theme.label)}',${finalPrice})">${theme.price > 0 ? `Mua ${finalPrice.toLocaleString()} 💵` : 'Nhận'}</button>`}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+
+    // ===== FRAMES =====
+    if (tab === 'frames') {
+        ALL_FRAMES.forEach(frame => {
+            const owned = userFrames.includes(frame.key);
+            const isActive = currentUser.currentFrame === frame.key;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            
+            // Frame preview
+            const frameClass = frame.key !== 'default' ? frame.key : 'default-preview';
+            const previewLabel = frame.key !== 'default' ? '📝 ' + t(frame.label) : '📄 Mặc định';
+            
+            let finalPrice = frame.price;
+            let discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned && frame.price > 0) {
+                discountAmount = Math.floor(frame.price * discountPercent / 100);
+                finalPrice = frame.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            
+            let vipOnlyHtml = '';
+            if (['frame6','frame7'].includes(frame.key) && !isVIP) {
+                vipOnlyHtml = `<span class="vip-only">👑 VIP</span>`;
+            }
+            
+            div.innerHTML = `
+                ${vipOnlyHtml}
+                <div class="frame-preview ${frameClass}">${previewLabel}</div>
+                <span class="icon" style="font-size:1.8rem;">${frame.icon}</span>
+                <div class="name">${t(frame.label)} ${isActive ? '✅' : ''}</div>
+                <div class="tier">Frame</div>
+                <div class="price ${frame.price === 0 ? 'free' : ''}">
+                    ${frame.price > 0 ? (discountAmount > 0 ? `<span class="original">${frame.price.toLocaleString()}</span>` : '') : ''}
+                    ${frame.price > 0 ? finalPrice.toLocaleString() + ' 💵' : 'Miễn phí'} ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isActive ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? (frame.key === 'default' ? `<button class="buy-btn owned-btn" disabled>Mặc định</button>` :
+                        `<button class="buy-btn sell-btn" onclick="sellFrame('${frame.key}')">Bán (${Math.floor(frame.price*0.5).toLocaleString()} 💵)</button>
+                         <button class="buy-btn gift-btn" onclick="openGiftModal('frame','${frame.key}','${t(frame.label)}')"><i class="fas fa-gift"></i> Tặng</button>`) :
+                        (['frame6','frame7'].includes(frame.key) && !isVIP ?
+                            `<button class="buy-btn vip-locked" disabled>${t('btn.vip_locked')}</button>` :
+                            `<button class="buy-btn buy" onclick="buyFrame('${frame.key}','${t(frame.label)}',${finalPrice})">${frame.price > 0 ? `Mua ${finalPrice.toLocaleString()} 💵` : 'Nhận'}</button>`)}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+
+    // ===== AVATAR FRAMES =====
+    if (tab === 'avatarframes') {
+        ALL_AVATAR_FRAMES.forEach(frame => {
+            const owned = userAvatarFrames.includes(frame.key);
+            const isActive = currentAvatarFrame === frame.key;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            
+            let finalPrice = frame.price;
+            let discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned && frame.price > 0) {
+                discountAmount = Math.floor(frame.price * discountPercent / 100);
+                finalPrice = frame.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            
+            let vipOnlyHtml = '';
+            if (['avtframe4','avtframe5','avtframe6'].includes(frame.key) && !isVIP) {
+                vipOnlyHtml = `<span class="vip-only">👑 VIP</span>`;
+            }
+            
+            // Avatar frame preview with animation
+            const frameClass = frame.className || 'default-frame';
+            
+            div.innerHTML = `
+                ${vipOnlyHtml}
+                <div class="avatar-frame-preview-container">
+                    <div class="avatar-frame-preview">
+                        <span>${frame.icon}</span>
+                        <div class="avt-frame ${frameClass}"></div>
+                    </div>
+                </div>
+                <div class="name">${t(frame.label)} ${isActive ? '✅' : ''}</div>
+                <div class="tier">Avatar Frame</div>
+                <div class="price ${frame.price === 0 ? 'free' : ''}">
+                    ${frame.price > 0 ? (discountAmount > 0 ? `<span class="original">${frame.price.toLocaleString()}</span>` : '') : ''}
+                    ${frame.price > 0 ? finalPrice.toLocaleString() + ' 💵' : 'Miễn phí'} ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isActive ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? (frame.key === 'default' ? `<button class="buy-btn owned-btn" disabled>Mặc định</button>` :
+                        `<button class="buy-btn sell-btn" onclick="sellAvatarFrame('${frame.key}')">Bán (${Math.floor(frame.price*0.5).toLocaleString()} 💵)</button>
+                         <button class="buy-btn gift-btn" onclick="openGiftModal('avatarframe','${frame.key}','${t(frame.label)}')"><i class="fas fa-gift"></i> Tặng</button>`) :
+                        (['avtframe4','avtframe5','avtframe6'].includes(frame.key) && !isVIP ?
+                            `<button class="buy-btn vip-locked" disabled>${t('btn.vip_locked')}</button>` :
+                            `<button class="buy-btn buy" onclick="buyAvatarFrame('${frame.key}','${t(frame.label)}',${finalPrice})">${frame.price > 0 ? `Mua ${finalPrice.toLocaleString()} 💵` : 'Nhận'}</button>`)}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+
+    // ===== GRADIENTS =====
+    if (tab === 'gradients') {
+        ALL_GRADIENTS.forEach(item => {
+            const owned = userGradient;
+            const isActive = userGradient;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            let finalPrice = item.price, discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned) {
+                discountAmount = Math.floor(item.price * discountPercent / 100);
+                finalPrice = item.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            div.innerHTML = `
+                <span class="icon">${item.icon}</span>
+                <div class="name">${item.label} ${isActive ? '✅' : ''}</div>
+                <div class="tier">Gradient</div>
+                <div class="price">
+                    ${discountAmount > 0 ? `<span class="original">${item.price.toLocaleString()}</span>` : ''}
+                    ${finalPrice.toLocaleString()} 💵 ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isActive ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? `<button class="buy-btn owned-btn" disabled>Đang dùng</button>` :
+                        `<button class="buy-btn buy" onclick="buyGradient(${finalPrice})">Mua ${finalPrice.toLocaleString()} 💵</button>`}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+
+    // ===== TYPINGS =====
+    if (tab === 'typings') {
+        ALL_TYPINGS.forEach(item => {
+            const owned = userTyping;
+            const isActive = userTyping;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            let finalPrice = item.price, discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned) {
+                discountAmount = Math.floor(item.price * discountPercent / 100);
+                finalPrice = item.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            div.innerHTML = `
+                <span class="icon">${item.icon}</span>
+                <div class="name">${item.label} ${isActive ? '✅' : ''}</div>
+                <div class="tier">Typing</div>
+                <div class="price">
+                    ${discountAmount > 0 ? `<span class="original">${item.price.toLocaleString()}</span>` : ''}
+                    ${finalPrice.toLocaleString()} 💵 ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isActive ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? `<button class="buy-btn owned-btn" disabled>Đang dùng</button>` :
+                        `<button class="buy-btn buy" onclick="buyTyping(${finalPrice})">Mua ${finalPrice.toLocaleString()} 💵</button>`}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+
+    // ===== HIGHLIGHTS =====
+    if (tab === 'highlights') {
+        ALL_HIGHLIGHTS.forEach(item => {
+            const owned = userHighlight;
+            const isActive = userHighlight;
+            const div = document.createElement('div');
+            div.className = 'store-item';
+            let finalPrice = item.price, discountAmount = 0, discountHtml = '';
+            if (discountPercent > 0 && !owned) {
+                discountAmount = Math.floor(item.price * discountPercent / 100);
+                finalPrice = item.price - discountAmount;
+                discountHtml = `<span class="discount-badge">-${discountPercent}%</span>`;
+            }
+            div.innerHTML = `
+                <span class="icon">${item.icon}</span>
+                <div class="name">${item.label} ${isActive ? '✅' : ''}</div>
+                <div class="tier">Highlight</div>
+                <div class="price">
+                    ${discountAmount > 0 ? `<span class="original">${item.price.toLocaleString()}</span>` : ''}
+                    ${finalPrice.toLocaleString()} 💵 ${discountHtml}
+                </div>
+                ${owned ? `<div class="owned">${isActive ? '✅ Đang dùng' : '✅ Đã sở hữu'}</div>` : ''}
+                <div>
+                    ${owned ? `<button class="buy-btn owned-btn" disabled>Đang dùng</button>` :
+                        `<button class="buy-btn buy" onclick="buyHighlight(${finalPrice})">Mua ${finalPrice.toLocaleString()} 💵</button>`}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        return;
+    }
+}
+
+// ============================================================
+// FLASH SALE - CUSTOMER VIEW
+// ============================================================
+function renderFlashSaleView() {
+    const container = document.getElementById('storeItems');
+    if (!container) return;
+    container.innerHTML = '';
+    container.style.display = 'grid';
+
+    if (!isFlashActive || flashSaleItems.length === 0) {
+        container.innerHTML = `<div style="color:rgba(255,255,255,0.3);text-align:center;padding:40px 0;">
+            <i class="fas fa-bolt" style="font-size:3rem;display:block;margin-bottom:16px;color:#f7971e;"></i>
+            Chưa có Flash Sale nào đang diễn ra.
+        </div>`;
+        return;
+    }
+
+    const userEffects = currentUser?.effects || [];
+    const userFrames = currentUser?.frames || ['default'];
+    const userAvatarFrames = currentUser?.avatarFrames || ['default'];
+    const userThemes = currentUser?.themes || ['default'];
+
+    flashSaleItems.forEach(item => {
+        let owned = false;
+        if (item.type === 'effect') owned = userEffects.includes(item.key);
+        else if (item.type === 'frame') owned = userFrames.includes(item.key);
+        else if (item.type === 'avatarframe') owned = userAvatarFrames.includes(item.key);
+        else if (item.type === 'theme') owned = userThemes.includes(item.key);
+        
+        const flashPrice = Math.round(item.originalPrice * (1 - item.discount / 100));
+        const div = document.createElement('div');
+        div.className = 'store-item flash-sale';
+        div.innerHTML = `
+            <span class="flash-badge">⚡ -${item.discount}%</span>
+            <span class="icon">${item.icon}</span>
+            <div class="name">${item.name || item.key}</div>
+            <div class="tier">Flash Sale</div>
+            <div class="price">
+                <span class="original">${item.originalPrice.toLocaleString()} 💵</span>
+                <span class="flash-price">${flashPrice.toLocaleString()} 💵</span>
+            </div>
+            ${owned ? `<div class="owned">✅ Đã sở hữu</div>` : ''}
+            <div>
+                ${owned ?
+                    `<button class="buy-btn owned-btn" disabled>Đã sở hữu</button>` :
+                    `<button class="buy-btn buy" onclick="buyFlashSaleItem('${item.key}','${item.type}',${flashPrice})">Mua ${flashPrice.toLocaleString()} 💵</button>`
+                }
+            </div>
+        `;
+        container.appendChild(div);
+    });
+}
+
+async function buyFlashSaleItem(key, type, price) {
+    if (!currentUser || isProcessing) return;
+    if (price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua ${key} với giá Flash Sale ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        let result;
+        if (type === 'effect') result = await API.buyEffect(currentUser.username, key);
+        else if (type === 'frame') result = await API.buyFrame(currentUser.username, key);
+        else if (type === 'avatarframe') result = await API.buyAvatarFrame(currentUser.username, key);
+        else if (type === 'theme') result = await API.buyTheme(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', t('toast.buy_success'));
+            await refreshUserData();
+            renderStore(currentTab);
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+// ============================================================
+// FLASH SALE MANAGER
+// ============================================================
+function renderFlashManager() {
+    const container = document.getElementById('flashManagerContainer');
+    if (!container) return;
+    container.classList.add('active');
+
+    if (!currentUser || currentUser.role !== 'owner') {
+        document.getElementById('flashItemsGrid').innerHTML = `
+            <div style="color:rgba(255,255,255,0.3);text-align:center;padding:40px 0;grid-column:1/-1;">
+                <i class="fas fa-lock" style="font-size:3rem;display:block;margin-bottom:16px;color:#e74c3c;"></i>
+                Chỉ Owner mới có quyền quản lý Flash Sale!
+            </div>
+        `;
+        return;
+    }
+
+    const statusText = document.getElementById('flashStatusText');
+    if (isFlashActive) {
+        statusText.innerHTML = `Trạng thái: <span class="active">Đang diễn ra</span>`;
+        document.getElementById('startFlashBtn').disabled = true;
+        document.getElementById('startFlashBtn').innerHTML = '<i class="fas fa-clock"></i> Đang diễn ra';
+    } else {
+        statusText.innerHTML = `Trạng thái: <span class="inactive">Chưa có Flash Sale</span>`;
+        document.getElementById('startFlashBtn').disabled = false;
+        document.getElementById('startFlashBtn').innerHTML = `<i class="fas fa-play"></i> <span id="startFlashLabel">${t('store.flash_start')}</span>`;
+    }
+
+    const timerEl = document.getElementById('flashTimer');
+    if (flashSaleExpiry > 0) {
+        const remaining = Math.max(0, Math.floor((flashSaleExpiry - Date.now()) / 1000));
+        timerEl.textContent = formatTimeLeft(remaining);
+    } else {
+        timerEl.textContent = '--:--:--';
+    }
+
+    document.getElementById('selectedCount').textContent = selectedFlashItems.length;
+
+    // Build all items
+    const allItems = [
+        ...Object.entries(EFFECT_ITEMS).map(([key, info]) => ({ 
+            key, type: 'effect', icon: info.icon, name: t(info.label), price: info.price 
+        })),
+        ...ALL_FRAMES.filter(f => f.key !== 'default').map(f => ({ 
+            key: f.key, type: 'frame', icon: f.icon, name: t(f.label), price: f.price 
+        })),
+        ...ALL_AVATAR_FRAMES.filter(f => f.key !== 'default').map(f => ({ 
+            key: f.key, type: 'avatarframe', icon: f.icon, name: t(f.label), price: f.price 
+        })),
+        ...ALL_THEMES.filter(t => t.key !== 'default' && t.price > 0).map(t => ({ 
+            key: t.key, type: 'theme', icon: t.icon, name: t(t.label), price: t.price 
+        }))
+    ];
+
+    const grid = document.getElementById('flashItemsGrid');
+    grid.innerHTML = '';
+
+    allItems.forEach(item => {
+        const idx = selectedFlashItems.findIndex(s => s.key === item.key && s.type === item.type);
+        const selected = idx !== -1;
+        const config = selected ? selectedFlashItems[idx] : null;
+
+        const div = document.createElement('div');
+        div.className = `flash-manager-item ${selected ? 'selected' : ''}`;
+        div.innerHTML = `
+            <span class="select-check">${selected ? '✓' : ''}</span>
+            <span class="item-icon">${item.icon}</span>
+            <div class="item-name">${item.name}</div>
+            <div class="item-price">${item.price.toLocaleString()} 💵</div>
+            <button class="f-select-btn" onclick="toggleFlashItem('${item.key}','${item.type}')">
+                ${selected ? 'Bỏ chọn' : 'Chọn'}
+            </button>
+            <div class="config-panel">
+                <div class="config-row">
+                    <label>${t('store.flash_time')}:</label>
+                    <select onchange="updateFlashConfig('${item.key}','${item.type}','duration',this.value)">
+                        <option value="1" ${config && config.duration === 1 ? 'selected' : ''}>1 giờ</option>
+                        <option value="2" ${config && config.duration === 2 ? 'selected' : ''}>2 giờ</option>
+                        <option value="3" ${config && config.duration === 3 ? 'selected' : ''}>3 giờ</option>
+                        <option value="4" ${config && config.duration === 4 ? 'selected' : ''}>4 giờ</option>
+                        <option value="6" ${config && config.duration === 6 ? 'selected' : ''}>6 giờ</option>
+                        <option value="8" ${config && config.duration === 8 ? 'selected' : ''}>8 giờ</option>
+                        <option value="12" ${config && config.duration === 12 ? 'selected' : ''}>12 giờ</option>
+                        <option value="24" ${config && config.duration === 24 ? 'selected' : ''}>24 giờ</option>
+                    </select>
+                </div>
+                <div class="config-row">
+                    <label>${t('store.flash_discount')}:</label>
+                    <select onchange="updateFlashConfig('${item.key}','${item.type}','discount',this.value)">
+                        <option value="10" ${config && config.discount === 10 ? 'selected' : ''}>10%</option>
+                        <option value="15" ${config && config.discount === 15 ? 'selected' : ''}>15%</option>
+                        <option value="25" ${config && config.discount === 25 ? 'selected' : ''}>25%</option>
+                        <option value="30" ${config && config.discount === 30 ? 'selected' : ''}>30%</option>
+                        <option value="50" ${config && config.discount === 50 ? 'selected' : ''}>50%</option>
+                        <option value="60" ${config && config.discount === 60 ? 'selected' : ''}>60%</option>
+                        <option value="75" ${config && config.discount === 75 ? 'selected' : ''}>75%</option>
+                        <option value="80" ${config && config.discount === 80 ? 'selected' : ''}>80%</option>
+                        <option value="99" ${config && config.discount === 99 ? 'selected' : ''}>99%</option>
+                    </select>
+                </div>
+                <div class="config-row">
+                    <label>${t('store.flash_quantity')}:</label>
+                    <input type="number" value="${config ? config.quantity : 1}" min="1" max="999" 
+                           onchange="updateFlashConfig('${item.key}','${item.type}','quantity',this.value)">
+                </div>
+                <div style="font-size:0.7rem;color:#f7971e;margin-top:4px;">
+                    Giá sau giảm: <strong id="preview_${item.key}_${item.type}">
+                        ${selected ? Math.round(item.price * (1 - (config?.discount || 30) / 100)).toLocaleString() : item.price.toLocaleString()} 💵
+                    </strong>
+                </div>
+            </div>
+        `;
+        grid.appendChild(div);
+    });
+}
+
+function toggleFlashItem(key, type) {
+    if (!currentUser || currentUser.role !== 'owner') return;
+    const idx = selectedFlashItems.findIndex(s => s.key === key && s.type === type);
+    if (idx !== -1) {
+        selectedFlashItems.splice(idx, 1);
+    } else {
+        if (selectedFlashItems.length >= 8) {
+            showToast('error', 'Chỉ được chọn tối đa 8 item!');
+            return;
+        }
+        // Find the item to get price and name
+        const allItems = [
+            ...Object.entries(EFFECT_ITEMS).map(([k, info]) => ({ key:k, type:'effect', name: t(info.label), price: info.price })),
+            ...ALL_FRAMES.filter(f => f.key !== 'default').map(f => ({ key:f.key, type:'frame', name: t(f.label), price: f.price })),
+            ...ALL_AVATAR_FRAMES.filter(f => f.key !== 'default').map(f => ({ key:f.key, type:'avatarframe', name: t(f.label), price: f.price })),
+            ...ALL_THEMES.filter(t => t.key !== 'default' && t.price > 0).map(t => ({ key:t.key, type:'theme', name: t(t.label), price: t.price }))
+        ];
+        const item = allItems.find(i => i.key === key && i.type === type);
+        if (item) {
+            selectedFlashItems.push({ 
+                key, type, 
+                name: item.name, 
+                price: item.price,
+                discount: 30, 
+                quantity: 1, 
+                duration: 2 
+            });
+        }
+    }
+    renderFlashManager();
+}
+
+function updateFlashConfig(key, type, field, value) {
+    const idx = selectedFlashItems.findIndex(s => s.key === key && s.type === type);
+    if (idx !== -1) {
+        if (field === 'discount') {
+            selectedFlashItems[idx].discount = parseInt(value) || 30;
+            const previewEl = document.getElementById(`preview_${key}_${type}`);
+            if (previewEl) {
+                const price = selectedFlashItems[idx].price || 25000;
+                const discount = selectedFlashItems[idx].discount || 30;
+                previewEl.textContent = Math.round(price * (1 - discount / 100)).toLocaleString() + ' 💵';
+            }
+        } else if (field === 'quantity') {
+            selectedFlashItems[idx].quantity = parseInt(value) || 1;
+        } else if (field === 'duration') {
+            selectedFlashItems[idx].duration = parseInt(value) || 2;
+        }
+    }
+}
+
+async function startFlashSale() {
+    if (!currentUser || currentUser.role !== 'owner') return;
+    if (selectedFlashItems.length === 0) {
+        showToast('error', t('toast.flash_no_items'));
+        return;
+    }
+    let incomplete = false;
+    for (const item of selectedFlashItems) {
+        if (!item.discount || !item.quantity || !item.duration) {
+            incomplete = true;
+            break;
+        }
+    }
+    if (incomplete) {
+        showToast('error', t('toast.flash_config_incomplete'));
+        return;
+    }
+    if (isFlashActive) {
+        showToast('info', 'Flash Sale đang diễn ra!');
+        return;
+    }
+    
+    // Get duration from first item or use default
+    const duration = selectedFlashItems[0]?.duration || 2;
+    
+    if (!confirm(`Bắt đầu Flash Sale với ${selectedFlashItems.length} item trong ${duration} giờ?`)) return;
+
+    isProcessing = true;
+    try {
+        const result = await API.startFlashSale(currentUser.username, selectedFlashItems, duration);
+        if (result && result.success) {
+            showToast('success', t('toast.flash_sale_started'));
+            flashSaleItems = result.items || [];
+            flashSaleExpiry = result.expiry || 0;
+            isFlashActive = true;
+            selectedFlashItems = [];
+            renderFlashManager();
+            if (currentTab === 'flashsale') renderFlashSaleView();
+        } else {
+            showToast('error', result?.msg || 'Lỗi bắt đầu Flash Sale');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi bắt đầu Flash Sale: ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function clearFlashSale() {
+    if (!currentUser || currentUser.role !== 'owner') return;
+    if (!confirm('Xóa tất cả item đã chọn?')) return;
+    isProcessing = true;
+    try {
+        const result = await API.clearFlashSale(currentUser.username);
+        if (result && result.success) {
+            showToast('success', t('toast.flash_cleared'));
+            selectedFlashItems = [];
+            if (isFlashActive) {
+                isFlashActive = false;
+                flashSaleItems = [];
+                flashSaleExpiry = 0;
+            }
+            renderFlashManager();
+            if (currentTab === 'flashsale') renderFlashSaleView();
+        } else {
+            showToast('error', result?.msg || 'Lỗi xóa Flash Sale');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi xóa Flash Sale: ' + e.message);
+    }
+    isProcessing = false;
+}
+
+// ============================================================
+// SEASON PASS
+// ============================================================
+function renderSeasonPass() {
+    const rewardsContainer = document.getElementById('seasonRewards');
+    if (!rewardsContainer) return;
+    rewardsContainer.innerHTML = '';
+
+    const tier = seasonData.tier || 0;
+    const maxExp = seasonData.maxExp || 100;
+    const exp = seasonData.exp || 0;
+    const isElite = seasonData.isElite || false;
+    const claimedRewards = seasonData.claimedRewards || [];
+    const claimedElite = seasonData.claimedElite || [];
+
+    const currentLevel = document.getElementById('currentLevel');
+    const progressLevel = document.getElementById('progressLevel');
+    const currentExp = document.getElementById('currentExp');
+    const maxExpEl = document.getElementById('maxExp');
+    const progressFill = document.getElementById('progressFill');
+
+    if (currentLevel) currentLevel.innerHTML = `${tier} <span>/ 50</span>`;
+    if (progressLevel) progressLevel.textContent = tier;
+    if (currentExp) currentExp.textContent = exp;
+    if (maxExpEl) maxExpEl.textContent = maxExp;
+    if (progressFill) progressFill.style.width = Math.min((exp / maxExp) * 100, 100) + '%';
+
+    const freeBtn = document.getElementById('freePassBtn');
+    const eliteBtn = document.getElementById('elitePassBtn');
+    const upgradeBtn = document.getElementById('upgradePassBtn');
+    const buyEliteBtn = document.getElementById('buyElitePassBtn');
+
+    if (isElite) {
+        if (eliteBtn) eliteBtn.classList.add('active');
+        if (freeBtn) freeBtn.classList.remove('active');
+        if (upgradeBtn) { upgradeBtn.disabled = true; upgradeBtn.innerHTML = '<i class="fas fa-check"></i> ELITE ĐÃ KÍCH HOẠT'; }
+        if (buyEliteBtn) { buyEliteBtn.disabled = true; buyEliteBtn.innerHTML = '<i class="fas fa-check"></i> ĐÃ MUA'; }
+    } else {
+        if (freeBtn) freeBtn.classList.add('active');
+        if (eliteBtn) eliteBtn.classList.remove('active');
+        if (upgradeBtn) { upgradeBtn.disabled = false; upgradeBtn.innerHTML = '<i class="fas fa-arrow-up"></i> NÂNG CẤP PASSE'; }
+        if (buyEliteBtn) { buyEliteBtn.disabled = false; buyEliteBtn.innerHTML = '<i class="fas fa-crown"></i> MUA ELITE PASS'; }
+    }
+
+    const daysLeft = 25 - Math.floor(tier / 2);
+    const daysLeftText = document.getElementById('daysLeftText');
+    if (daysLeftText) daysLeftText.textContent = `${daysLeft} ngày`;
+
+    SEASON_REWARDS.forEach(reward => {
+        const isUnlocked = reward.level <= tier;
+        const isClaimed = claimedRewards.includes(reward.level);
+        const isEliteClaimed = claimedElite.includes(reward.level);
+        const hasElite = isElite && reward.elite;
+        const isEliteUnlocked = hasElite && isUnlocked;
+
+        const div = document.createElement('div');
+        div.className = `reward-item ${isUnlocked ? 'unlocked' : 'locked'} ${isClaimed ? 'claimed' : ''}`;
+
+        let statusHtml = isClaimed ? `<span class="reward-status claimed-status">✅ Đã nhận</span>` :
+                         isUnlocked ? `<span class="reward-status unlocked-status">🎁 Sẵn sàng</span>` :
+                         `<span class="reward-status locked-status">🔒 Chưa mở</span>`;
+
+        let eliteHtml = '';
+        if (hasElite && isEliteUnlocked && !isEliteClaimed) eliteHtml = `<span class="reward-status elite-status">👑 Elite</span>`;
+        else if (hasElite && isEliteUnlocked && isEliteClaimed) eliteHtml = `<span class="reward-status claimed-status">👑 Đã nhận</span>`;
+        else if (hasElite && !isEliteUnlocked) eliteHtml = `<span class="reward-status locked-status">👑 Chưa mở</span>`;
+
+        let claimBtnHtml = (isUnlocked && !isClaimed) ?
+            `<button class="claim-btn" onclick="claimReward(${reward.level}, false)">Nhận</button>` :
+            (isClaimed ? `<button class="claim-btn claimed-btn" disabled>✅</button>` : '');
+
+        let eliteClaimBtnHtml = '';
+        if (hasElite && isEliteUnlocked && !isEliteClaimed && isElite) {
+            eliteClaimBtnHtml = `<button class="claim-btn" onclick="claimReward(${reward.level}, true)" style="background:#f7971e;">👑 Elite</button>`;
+        } else if (hasElite && isEliteUnlocked && isEliteClaimed) {
+            eliteClaimBtnHtml = `<button class="claim-btn claimed-btn" disabled>✅</button>`;
+        }
+
+        const freeIcon = reward.free ? reward.free.icon : '🎁';
+        const freeName = reward.free ? reward.free.name : 'Phần thưởng';
+
+        div.innerHTML = `
+            <span class="reward-level">Cấp ${reward.level}</span>
+            <div style="display:flex; flex-direction:column; gap:8px; width:100%;">
+                <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
+                    <span class="reward-icon">${freeIcon}</span>
+                    <span class="reward-name">${freeName}</span>
+                </div>
+                ${hasElite ? `
+                    <div style="display:flex; align-items:center; gap:8px; justify-content:center; border-top:1px solid rgba(255,255,255,0.05); padding-top:6px;">
+                        <span class="reward-icon" style="font-size:1.2rem;">${reward.elite.icon}</span>
+                        <span class="reward-name" style="font-size:0.7rem; color:#f7971e;">${reward.elite.name}</span>
+                    </div>
+                ` : ''}
+                <div style="display:flex; flex-direction:column; gap:4px; align-items:center; margin-top:4px;">
+                    ${statusHtml}
+                    ${hasElite ? eliteHtml : ''}
+                    ${claimBtnHtml}
+                    ${eliteClaimBtnHtml}
+                </div>
+            </div>
+        `;
+        rewardsContainer.appendChild(div);
+    });
+}
+
+// ============================================================
+// MISSIONS
+// ============================================================
+function renderMissions() {
+    const container = document.getElementById('missionsList');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const missions = seasonData.missions || {};
+    const lastReset = new Date(seasonData.lastReset || Date.now());
+    const now = new Date();
+
+    const dailyReset = new Date(lastReset); dailyReset.setDate(dailyReset.getDate() + 1);
+    const weeklyReset = new Date(lastReset); weeklyReset.setDate(weeklyReset.getDate() + 7);
+    const specialReset = new Date(lastReset); specialReset.setDate(specialReset.getDate() + 30);
+
+    const dailyResetTime = Math.max(0, Math.floor((dailyReset - now) / 1000));
+    const weeklyResetTime = Math.max(0, Math.floor((weeklyReset - now) / 1000));
+    const specialResetTime = Math.max(0, Math.floor((specialReset - now) / 1000));
+
+    const groups = [
+        { key: 'daily', title: 'Nhiệm vụ hàng ngày', icon: '☀️', resetTime: dailyResetTime, list: MISSIONS_DEF.daily },
+        { key: 'weekly', title: 'Nhiệm vụ hàng tuần', icon: '📅', resetTime: weeklyResetTime, list: MISSIONS_DEF.weekly },
+        { key: 'special', title: 'Nhiệm vụ đặc biệt', icon: '⭐', resetTime: specialResetTime, list: MISSIONS_DEF.special }
+    ];
+
+    groups.forEach(group => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'mission-group';
+        groupDiv.innerHTML = `
+            <div class="group-title">
+                <span class="group-icon">${group.icon}</span> 
+                <span>${group.title}</span>
+                <span class="group-reset">🔄 Làm mới sau: ${formatTimeLeft(group.resetTime)}</span>
+            </div>
+        `;
+        const listDiv = document.createElement('div');
+        group.list.forEach(mission => {
+            const missionData = missions[mission.id] || { current: 0, claimed: false };
+            const div = document.createElement('div');
+            const isCompleted = missionData.current >= mission.target;
+            const isClaimed = missionData.claimed || false;
+            div.className = `mission-item ${isCompleted ? 'completed' : ''}`;
+
+            let btnHtml = isClaimed ? `<button class="mission-btn claimed-btn" disabled>✅ Đã nhận</button>` :
+                          isCompleted ? `<button class="mission-btn" onclick="claimMission('${mission.id}')">🎁 Nhận</button>` :
+                          `<button class="mission-btn in-progress" disabled>${missionData.current}/${mission.target}</button>`;
+
+            div.innerHTML = `
+                <div class="mission-info">
+                    <span class="mission-icon">${mission.icon}</span>
+                    <div class="mission-details">
+                        <div class="mission-name">${mission.name}</div>
+                        <div class="mission-progress">Tiến độ: ${missionData.current}/${mission.target}</div>
+                    </div>
+                </div>
+                <div class="mission-reward"><i class="fas fa-star"></i> +${mission.exp} EXP</div>
+                ${btnHtml}
+            `;
+            listDiv.appendChild(div);
+        });
+        groupDiv.appendChild(listDiv);
+        container.appendChild(groupDiv);
+    });
+
+    updateResetTimer();
+}
+
+function updateResetTimer() {
+    const lastReset = new Date(seasonData.lastReset || Date.now());
+    const now = new Date();
+    const dailyReset = new Date(lastReset);
+    dailyReset.setDate(dailyReset.getDate() + 1);
+    const diff = Math.max(0, Math.floor((dailyReset - now) / 1000));
+    const resetTimer = document.getElementById('resetTimer');
+    if (resetTimer) resetTimer.textContent = formatTimeLeft(diff);
+}
+
+// ============================================================
+// SEASON PASS ACTIONS
+// ============================================================
+async function claimReward(level, isElite) {
+    if (!currentUser || isProcessing) return;
+    isProcessing = true;
+    try {
+        const result = await API.claimSeasonReward(currentUser.username, level, isElite);
+        if (result && result.success) {
+            showToast('success', t('toast.season_claimed'));
+            seasonData = result.data;
+            renderSeasonPass();
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || 'Lỗi nhận thưởng');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi nhận thưởng: ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function upgradePass() {
+    if (!currentUser || isProcessing) return;
+    if (seasonData.isElite) { showToast('info', t('toast.season_already_elite')); return; }
+    const price = 250000;
+    if (currentUser.cash < price) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Nâng cấp Elite Pass với giá ${price.toLocaleString()} 💵? (Vẫn phải làm nhiệm vụ)`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.upgradePass(currentUser.username);
+        if (result && result.success) {
+            showToast('success', t('toast.season_upgraded'));
+            currentUser = result.user;
+            seasonData = result.seasonData;
+            updateUserUI(currentUser);
+            renderSeasonPass();
+            updateSessionStorage(currentUser);
+        } else {
+            showToast('error', result?.msg || 'Lỗi nâng cấp');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi nâng cấp: ' + e.message);
+    }
+    isProcessing = false;
+    closeModal('upgradeModal');
+}
+
+async function buyElitePass() {
+    if (!currentUser || isProcessing) return;
+    if (seasonData.isElite) { showToast('info', t('toast.season_already_elite')); return; }
+    const price = 400000;
+    if (currentUser.cash < price) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua Elite Pass với giá ${price.toLocaleString()} 💵? (Nhận toàn bộ phần thưởng, không cần làm nhiệm vụ)`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyElitePass(currentUser.username);
+        if (result && result.success) {
+            const count = result.rewards ? result.rewards.length : 50;
+            showToast('success', t('toast.season_bought', { count: count }));
+            currentUser = result.user;
+            seasonData = result.seasonData;
+            updateUserUI(currentUser);
+            renderSeasonPass();
+            updateSessionStorage(currentUser);
+        } else {
+            showToast('error', result?.msg || 'Lỗi mua Elite Pass');
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi mua Elite Pass: ' + e.message);
+    }
+    isProcessing = false;
+    closeModal('buyEliteModal');
+}
+
+async function claimMission(missionId) {
+    if (!currentUser || isProcessing) return;
+    isProcessing = true;
+    try {
+        const result = await API.claimMission(currentUser.username, missionId);
+        if (result && result.success) {
+            showToast('success', t('toast.mission_claimed', { exp: result.exp }));
+            seasonData = result.data;
+            renderMissions();
+            renderSeasonPass();
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.mission_already_claimed'));
+        }
+    } catch (e) {
+        showToast('error', 'Lỗi nhận nhiệm vụ: ' + e.message);
+    }
+    isProcessing = false;
+}
+
+// ============================================================
+// BUY FUNCTIONS
+// ============================================================
+async function buyRank(key, label, price) {
+    if (!currentUser || isProcessing) return;
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua ${label} với giá ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyRank(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyEffect(key, label, price) {
+    if (!currentUser || isProcessing) return;
+    const effectInfo = EFFECT_ITEMS[key];
+    if (!effectInfo) { showToast('error', 'Hiệu ứng không tồn tại!'); return; }
+    if (effectInfo.vip && !vipData.isActive) { showToast('error', t('toast.vip_required')); return; }
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua ${label} với giá ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyEffect(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg || t('toast.buy_success'));
+            await refreshUserData();
+            renderStore(currentTab);
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        console.error('Buy effect error:', e);
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyTheme(key, label, price) {
+    if (!currentUser || isProcessing) return;
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua ${label} ${price > 0 ? 'với giá ' + price.toLocaleString() + ' 💵' : ''}?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyTheme(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyFrame(key, label, price) {
+    if (!currentUser || isProcessing) return;
+    if (['frame6','frame7'].includes(key) && !vipData.isActive) {
+        showToast('error', t('toast.vip_required'));
+        return;
+    }
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua ${label} ${price > 0 ? 'với giá ' + price.toLocaleString() + ' 💵' : ''}?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyFrame(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyAvatarFrame(key, label, price) {
+    if (!currentUser || isProcessing) return;
+    if (['avtframe4','avtframe5','avtframe6'].includes(key) && !vipData.isActive) {
+        showToast('error', t('toast.vip_required'));
+        return;
+    }
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua ${label} ${price > 0 ? 'với giá ' + price.toLocaleString() + ' 💵' : ''}?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyAvatarFrame(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyGradient(price) {
+    if (!currentUser || isProcessing) return;
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua Gradient Text với giá ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyGradient(currentUser.username);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyTyping(price) {
+    if (!currentUser || isProcessing) return;
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua Typing Effect với giá ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyTyping(currentUser.username);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function buyHighlight(price) {
+    if (!currentUser || isProcessing) return;
+    if (price > 0 && price > (currentUser.cash || 0)) {
+        showToast('error', t('toast.not_enough_money', { price: price.toLocaleString() }));
+        return;
+    }
+    if (!confirm(`Mua Highlighted Name với giá ${price.toLocaleString()} 💵?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.buyHighlight(currentUser.username);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.buy_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.buy_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+// ============================================================
+// SELL FUNCTIONS
+// ============================================================
+async function sellRank(key) {
+    showToast('info', '⚠️ Không thể bán rank.');
+}
+
+async function sellEffect(key) {
+    if (!currentUser || isProcessing) return;
+    if (!confirm(`Bán hiệu ứng này?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.sellEffect(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.sell_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.sell_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function sellTheme(key) {
+    if (!currentUser || isProcessing) return;
+    if (!confirm(`Bán theme này?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.sellTheme(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.sell_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.sell_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function sellFrame(key) {
+    if (!currentUser || isProcessing) return;
+    if (!confirm(`Bán frame này?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.sellFrame(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.sell_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.sell_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+async function sellAvatarFrame(key) {
+    if (!currentUser || isProcessing) return;
+    if (!confirm(`Bán khung avatar này?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.sellAvatarFrame(currentUser.username, key);
+        if (result && result.success) {
+            showToast('success', result.msg);
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.sell_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.sell_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+}
+
+// ============================================================
+// GIFT
+// ============================================================
+async function openGiftModal(type, key, label) {
+    if (!currentUser) return;
+    giftTarget = { type, key, label };
+    try {
+        const friends = await API.getFriends(currentUser.username);
+        const select = document.getElementById('giftFriendSelect');
+        select.innerHTML = '';
+        if (friends.length === 0) {
+            select.innerHTML = '<option value="">Không có bạn bè</option>';
+            showToast('info', 'Bạn chưa có bạn bè để tặng.');
+            return;
+        }
+        friends.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f;
+            opt.textContent = f;
+            select.appendChild(opt);
+        });
+        openModal('giftModal');
+    } catch (e) {
+        showToast('error', 'Lỗi tải danh sách bạn bè');
+    }
+}
+
+document.getElementById('confirmGiftBtn').addEventListener('click', async function() {
+    if (!giftTarget) return;
+    const toUser = document.getElementById('giftFriendSelect').value;
+    if (!toUser) {
+        showToast('error', 'Vui lòng chọn bạn bè.');
+        return;
+    }
+    if (!confirm(`Tặng ${giftTarget.label} cho ${toUser}?`)) return;
+    isProcessing = true;
+    try {
+        const result = await API.giftItem(currentUser.username, toUser, giftTarget.type, giftTarget.key);
+        if (result && result.success) {
+            showToast('success', t('toast.gift_success', { item: giftTarget.label, name: toUser }));
+            closeModal('giftModal');
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.gift_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.gift_error') + ': ' + e.message);
+    }
+    isProcessing = false;
+});
+
+// ============================================================
+// REFRESH STORE
+// ============================================================
+async function refreshStore() {
+    if (!currentUser) return;
+    if ((currentUser.refreshTokens || 0) <= 0) {
+        showToast('error', t('toast.no_refresh_token'));
+        return;
+    }
+    try {
+        const result = await API.refreshStore(currentUser.username);
+        if (result && result.success) {
+            showToast('success', t('toast.refresh_success'));
+            storeItems = result.store.items;
+            storeExpiry = result.store.expiry;
+            await refreshUserData();
+        } else {
+            showToast('error', result?.msg || t('toast.refresh_error'));
+        }
+    } catch (e) {
+        showToast('error', t('toast.refresh_error') + ': ' + e.message);
+    }
+}
+
+// ============================================================
+// COPY INFO
+// ============================================================
+document.getElementById('copyInfoBtn').addEventListener('click', function() {
+    const text = `Vietcombank\nNGUYEN THI THU NGA\n1901971628\nCN Hội An\nNội dung: NAP ${currentUser?.username || ''}`;
+    navigator.clipboard.writeText(text).then(() => showToast('success', 'Đã sao chép thông tin!'))
+    .catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('success', 'Đã sao chép thông tin!');
+    });
+});
+
+// ============================================================
+// TABS & EVENTS
+// ============================================================
+document.querySelectorAll('.store-tabs button').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentTab = this.dataset.tab;
+        renderStore(currentTab);
+    });
+});
+
+function checkOwnerTab() {
+    const tab = document.getElementById('ownerFlashTabBtn');
+    if (currentUser && currentUser.role === 'owner') {
+        tab.style.display = 'inline-block';
+    } else {
+        tab.style.display = 'none';
+    }
+}
+
+document.getElementById('seasonTabBtn').addEventListener('click', function() {
+    document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentTab = 'season';
+    renderStore(currentTab);
+    renderSeasonPass();
+});
+
+document.getElementById('missionsTabBtn').addEventListener('click', function() {
+    document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById('seasonTabBtn').classList.add('active');
+    currentTab = 'missions';
+    renderStore(currentTab);
+    renderMissions();
+});
+
+document.getElementById('vipTabBtn').addEventListener('click', function() {
+    document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentTab = 'vip';
+    renderStore(currentTab);
+});
+
+document.getElementById('achTabBtn').addEventListener('click', function() {
+    document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentTab = 'achievements';
+    renderStore(currentTab);
+});
+
+document.getElementById('flashSaleTabBtn').addEventListener('click', function() {
+    document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentTab = 'flashsale';
+    renderStore(currentTab);
+});
+
+document.getElementById('ownerFlashTabBtn').addEventListener('click', function() {
+    document.querySelectorAll('.store-tabs button').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    currentTab = 'ownerflash';
+    renderStore(currentTab);
+});
+
+document.getElementById('freePassBtn').addEventListener('click', function() {
+    if (!seasonData.isElite) {
+        this.classList.add('active');
+        document.getElementById('elitePassBtn').classList.remove('active');
+        renderSeasonPass();
+    }
+});
+
+document.getElementById('elitePassBtn').addEventListener('click', function() {
+    if (seasonData.isElite) {
+        this.classList.add('active');
+        document.getElementById('freePassBtn').classList.remove('active');
+        renderSeasonPass();
+    } else {
+        showToast('info', 'Bạn chưa có Elite Pass. Nhấn "NÂNG CẤP PASSE" để nâng cấp!');
+    }
+});
+
+document.getElementById('upgradePassBtn').addEventListener('click', function() {
+    if (seasonData.isElite) {
+        showToast('info', t('toast.season_already_elite'));
+        return;
+    }
+    openModal('upgradeModal');
+});
+
+document.getElementById('buyElitePassBtn').addEventListener('click', function() {
+    if (seasonData.isElite) {
+        showToast('info', t('toast.season_already_elite'));
+        return;
+    }
+    openModal('buyEliteModal');
+});
+
+document.getElementById('confirmUpgradeBtn').addEventListener('click', upgradePass);
+document.getElementById('confirmBuyEliteBtn').addEventListener('click', buyElitePass);
+document.getElementById('vipClaimBtn').addEventListener('click', claimVIPReward);
+document.getElementById('vipBuyBtn').addEventListener('click', function() {
+    if (vipData.isActive) {
+        showToast('info', 'Bạn đã có VIP!');
+        return;
+    }
+    openModal('vipModal');
+});
+document.getElementById('confirmVipBtn').addEventListener('click', activateVIP);
+document.getElementById('claimBirthdayBtn').addEventListener('click', claimBirthday);
+document.getElementById('startFlashBtn').addEventListener('click', startFlashSale);
+document.getElementById('clearFlashBtn').addEventListener('click', clearFlashSale);
+
+// ============================================================
+// LANGUAGE BUTTON
+// ============================================================
+document.getElementById('langBtn').addEventListener('click', function() {
+    const newLang = currentLang === 'vi' ? 'en' : 'vi';
+    setLanguage(newLang);
+    renderSeasonPass();
+    renderMissions();
+    renderStore(currentTab);
+    if (currentTab === 'vip') renderVIP();
+    if (currentTab === 'achievements') renderAchievements();
+    if (currentTab === 'ownerflash') renderFlashManager();
+});
+
+document.getElementById('refreshStoreBtn').addEventListener('click', refreshStore);
+
+// ============================================================
+// LOAD STORE
+// ============================================================
+async function loadStore() {
+    try {
+        loadLanguage();
+
+        const session = await API.getSession();
+        if (!session || !session.loggedIn) {
+            window.location.href = '/login';
+            return;
+        }
+        currentUser = session.user;
+        updateUserUI(currentUser);
+        updateSessionStorage(currentUser);
+        checkOwnerTab();
+
+        try {
+            const seasonResult = await API.getSeasonData(currentUser.username);
+            if (seasonResult && seasonResult.success) {
+                seasonData = seasonResult.data;
+            }
+        } catch (e) {}
+
+        await loadVIPData();
+        await loadAchievements();
+        await loadFlashSale();
+        await loadRandomEffects();
+        await checkBirthday();
+
+        initSocket();
+
+        const storeData = await API.getStoreItems();
+        storeItems = storeData.items || [];
+        storeExpiry = storeData.expiry || 0;
+        renderStore('ranks');
+
+        setInterval(refreshUserData, 10000);
+        setInterval(() => {
+            if (currentTab === 'missions' || currentTab === 'season') {
+                updateResetTimer();
+            }
+            if (currentTab === 'flashsale' || currentTab === 'ownerflash') {
+                if (flashSaleExpiry > 0) {
+                    const remaining = Math.max(0, Math.floor((flashSaleExpiry - Date.now()) / 1000));
+                    const timerEl = document.getElementById('flashTimer');
+                    if (timerEl) timerEl.textContent = formatTimeLeft(remaining);
+                }
+            }
+        }, 1000);
+
+        document.getElementById('loadingOverlay').style.display = 'none';
+    } catch (e) {
+        console.error('Load store error:', e);
+        document.getElementById('loadingOverlay').style.display = 'none';
+        showToast('error', t('toast.loading_error') + e.message);
+    }
+}
+
+loadStore();
+</script>
+</body>
+</html>

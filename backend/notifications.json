@@ -1,0 +1,2478 @@
+{
+  "owner": [
+    {
+      "id": "1793100614864_oh43",
+      "type": "friend_accepted",
+      "data": {
+        "from": "test",
+        "message": "test đã chấp nhận lời mời kết bạn của bạn"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:30:14.864Z"
+    },
+    {
+      "id": "1785051283791_2brc",
+      "type": "achievement",
+      "data": {
+        "name": "VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: VIP"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:43.791Z"
+    },
+    {
+      "id": "1785051276417_up14",
+      "type": "achievement",
+      "data": {
+        "name": "Người kết nối",
+        "icon": "🤝",
+        "message": "🏆 Đã mở khóa thành tựu: Người kết nối"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.417Z"
+    },
+    {
+      "id": "1785051276414_jekt",
+      "type": "achievement",
+      "data": {
+        "name": "Người sành điệu",
+        "icon": "👤",
+        "message": "🏆 Đã mở khóa thành tựu: Người sành điệu"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.414Z"
+    },
+    {
+      "id": "1785051276412_xy77",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà thiết kế",
+        "icon": "🎨",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà thiết kế"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.412Z"
+    },
+    {
+      "id": "1785051276408_sctv",
+      "type": "achievement",
+      "data": {
+        "name": "Người trang trí",
+        "icon": "🖼️",
+        "message": "🏆 Đã mở khóa thành tựu: Người trang trí"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.408Z"
+    },
+    {
+      "id": "1785051276406_ctll",
+      "type": "achievement",
+      "data": {
+        "name": "Phù thủy",
+        "icon": "🧙",
+        "message": "🏆 Đã mở khóa thành tựu: Phù thủy"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.406Z"
+    },
+    {
+      "id": "1785051276403_jwrv",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà ảo thuật",
+        "icon": "✨",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà ảo thuật"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.403Z"
+    },
+    {
+      "id": "1785051276401_947b",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Huyền thoại",
+        "icon": "🌟",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Huyền thoại"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.401Z"
+    },
+    {
+      "id": "1785051276398_3wmc",
+      "type": "achievement",
+      "data": {
+        "name": "Rank VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: Rank VIP"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.398Z"
+    },
+    {
+      "id": "1785051276395_7liz",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Kim cương",
+        "icon": "💠",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Kim cương"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.395Z"
+    },
+    {
+      "id": "1785051276393_ru1n",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạch kim",
+        "icon": "💎",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạch kim"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.393Z"
+    },
+    {
+      "id": "1785051276390_c8bw",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Vàng",
+        "icon": "🥇",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Vàng"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.390Z"
+    },
+    {
+      "id": "1785051276388_26cr",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạc",
+        "icon": "🥈",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạc"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.388Z"
+    },
+    {
+      "id": "1785051276385_he7l",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Đồng",
+        "icon": "🥉",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Đồng"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.385Z"
+    },
+    {
+      "id": "1785051276382_h0xm",
+      "type": "achievement",
+      "data": {
+        "name": "Tỷ phú",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Tỷ phú"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.382Z"
+    },
+    {
+      "id": "1785051276380_klqy",
+      "type": "achievement",
+      "data": {
+        "name": "Đại gia",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Đại gia"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.380Z"
+    },
+    {
+      "id": "1785051276377_9rm4",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà giàu",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà giàu"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.377Z"
+    },
+    {
+      "id": "1785051276375_d1sv",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 3",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 3"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.375Z"
+    },
+    {
+      "id": "1785051276372_wsvf",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 2",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 2"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.372Z"
+    },
+    {
+      "id": "1785051276369_s1fa",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 1",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 1"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T07:34:36.369Z"
+    },
+    {
+      "id": "1784904922295_yec8",
+      "type": "mention",
+      "data": {
+        "from": "user2",
+        "chatId": "private_owner_user2",
+        "message": "user2 đã đề cập đến bạn trong tin nhắn: \"@owner\""
+      },
+      "read": true,
+      "createdAt": "2026-07-24T14:55:22.295Z"
+    },
+    {
+      "id": "1784904906040_m5cr",
+      "type": "mention",
+      "data": {
+        "from": "user2",
+        "chatId": "group_chat_chung",
+        "message": "user2 đã đề cập đến bạn trong tin nhắn: \"@owner\""
+      },
+      "read": true,
+      "createdAt": "2026-07-24T14:55:06.040Z"
+    },
+    {
+      "id": "1784903001026_rh3k",
+      "type": "mention",
+      "data": {
+        "from": "user2",
+        "chatId": "group_chat_chung",
+        "message": "user2 đã đề cập đến bạn trong tin nhắn: \"@owner\""
+      },
+      "read": true,
+      "createdAt": "2026-07-24T14:23:21.026Z"
+    },
+    {
+      "id": "1784902926018_kbvv",
+      "type": "friend_request",
+      "data": {
+        "from": "user2",
+        "message": "user2 đã gửi lời mời kết bạn"
+      },
+      "read": true,
+      "createdAt": "2026-07-24T14:22:06.018Z"
+    }
+  ],
+  "user2": [
+    {
+      "id": "1785036625969_g4cm",
+      "type": "season_elite_purchased",
+      "data": {
+        "message": "Bạn đã mua Elite Pass và nhận được 100 phần thưởng!",
+        "rewards": [
+          {
+            "type": "cash",
+            "amount": 500,
+            "icon": "💵",
+            "name": "500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 500,
+            "icon": "💵",
+            "name": "500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 600,
+            "icon": "💵",
+            "name": "600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 1000,
+            "icon": "💵",
+            "name": "1000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 1500,
+            "icon": "💵",
+            "name": "1500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 2400,
+            "icon": "💵",
+            "name": "2400 💵"
+          },
+          {
+            "type": "effect",
+            "key": "twinkle",
+            "icon": "✨",
+            "name": "Lấp lánh"
+          },
+          {
+            "type": "cash",
+            "amount": 2000,
+            "icon": "💵",
+            "name": "2000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 2500,
+            "icon": "💵",
+            "name": "2500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "shimmer",
+            "icon": "💫",
+            "name": "Hiệu ứng Sáng bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 1800,
+            "icon": "💵",
+            "name": "1800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 4800,
+            "icon": "💵",
+            "name": "4800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 3500,
+            "icon": "💵",
+            "name": "3500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 3500,
+            "icon": "💵",
+            "name": "3500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "shimmer",
+            "icon": "✨",
+            "name": "Sáng bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 4000,
+            "icon": "💵",
+            "name": "4000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 4500,
+            "icon": "💵",
+            "name": "4500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 7200,
+            "icon": "💵",
+            "name": "7200 💵"
+          },
+          {
+            "type": "badge",
+            "name": "Chiến binh mùa",
+            "icon": "🏅"
+          },
+          {
+            "type": "avatarframe",
+            "key": "avtframe1",
+            "icon": "👑",
+            "name": "Khung Avatar Vàng"
+          },
+          {
+            "type": "cash",
+            "amount": 5500,
+            "icon": "💵",
+            "name": "5500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 5500,
+            "icon": "💵",
+            "name": "5500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "glow",
+            "icon": "✨",
+            "name": "Chói lóa"
+          },
+          {
+            "type": "cash",
+            "amount": 9600,
+            "icon": "💵",
+            "name": "9600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 6500,
+            "icon": "💵",
+            "name": "6500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 6500,
+            "icon": "💵",
+            "name": "6500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 4200,
+            "icon": "💵",
+            "name": "4200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 7000,
+            "icon": "💵",
+            "name": "7000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 7500,
+            "icon": "💵",
+            "name": "7500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "glow",
+            "icon": "🌟",
+            "name": "Hiệu ứng Chói lóa"
+          },
+          {
+            "type": "effect",
+            "key": "bubble",
+            "icon": "✨",
+            "name": "Bong bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 8000,
+            "icon": "💵",
+            "name": "8000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 8500,
+            "icon": "💵",
+            "name": "8500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 8500,
+            "icon": "💵",
+            "name": "8500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 5400,
+            "icon": "💵",
+            "name": "5400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14400,
+            "icon": "💵",
+            "name": "14400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 9500,
+            "icon": "💵",
+            "name": "9500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 9500,
+            "icon": "💵",
+            "name": "9500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "explode",
+            "icon": "✨",
+            "name": "Nổ"
+          },
+          {
+            "type": "frame",
+            "key": "frame1",
+            "icon": "🖼️",
+            "name": "Khung Vàng"
+          },
+          {
+            "type": "cash",
+            "amount": 10500,
+            "icon": "💵",
+            "name": "10500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 16800,
+            "icon": "💵",
+            "name": "16800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 6600,
+            "icon": "💵",
+            "name": "6600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11000,
+            "icon": "💵",
+            "name": "11000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11500,
+            "icon": "💵",
+            "name": "11500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11500,
+            "icon": "💵",
+            "name": "11500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "rainbow",
+            "icon": "✨",
+            "name": "Cầu vồng"
+          },
+          {
+            "type": "cash",
+            "amount": 19200,
+            "icon": "💵",
+            "name": "19200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 12500,
+            "icon": "💵",
+            "name": "12500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "bubble",
+            "icon": "🫧",
+            "name": "Hiệu ứng Bong bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 7800,
+            "icon": "💵",
+            "name": "7800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 13000,
+            "icon": "💵",
+            "name": "13000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 13500,
+            "icon": "💵",
+            "name": "13500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 21600,
+            "icon": "💵",
+            "name": "21600 💵"
+          },
+          {
+            "type": "effect",
+            "key": "fire",
+            "icon": "✨",
+            "name": "Lửa"
+          },
+          {
+            "type": "cash",
+            "amount": 14000,
+            "icon": "💵",
+            "name": "14000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14500,
+            "icon": "💵",
+            "name": "14500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14500,
+            "icon": "💵",
+            "name": "14500 💵"
+          },
+          {
+            "type": "badge",
+            "name": "Huyền thoại",
+            "icon": "🏅"
+          },
+          {
+            "type": "avatarframe",
+            "key": "avtframe2",
+            "icon": "👑",
+            "name": "Khung Avatar Bạch kim"
+          },
+          {
+            "type": "cash",
+            "amount": 15500,
+            "icon": "💵",
+            "name": "15500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 15500,
+            "icon": "💵",
+            "name": "15500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "dragon",
+            "icon": "✨",
+            "name": "Rồng cuộn"
+          },
+          {
+            "type": "cash",
+            "amount": 16000,
+            "icon": "💵",
+            "name": "16000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 16500,
+            "icon": "💵",
+            "name": "16500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 26400,
+            "icon": "💵",
+            "name": "26400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 10200,
+            "icon": "💵",
+            "name": "10200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 17000,
+            "icon": "💵",
+            "name": "17000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 17500,
+            "icon": "💵",
+            "name": "17500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "explode",
+            "icon": "💥",
+            "name": "Hiệu ứng Nổ"
+          },
+          {
+            "type": "effect",
+            "key": "twinkle",
+            "icon": "✨",
+            "name": "Lấp lánh"
+          },
+          {
+            "type": "cash",
+            "amount": 28800,
+            "icon": "💵",
+            "name": "28800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 18500,
+            "icon": "💵",
+            "name": "18500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 18500,
+            "icon": "💵",
+            "name": "18500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11400,
+            "icon": "💵",
+            "name": "11400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 19000,
+            "icon": "💵",
+            "name": "19000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 19500,
+            "icon": "💵",
+            "name": "19500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 31200,
+            "icon": "💵",
+            "name": "31200 💵"
+          },
+          {
+            "type": "effect",
+            "key": "shimmer",
+            "icon": "✨",
+            "name": "Sáng bóng"
+          },
+          {
+            "type": "frame",
+            "key": "frame3",
+            "icon": "🖼️",
+            "name": "Khung Kim Cương"
+          },
+          {
+            "type": "cash",
+            "amount": 20500,
+            "icon": "💵",
+            "name": "20500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 20500,
+            "icon": "💵",
+            "name": "20500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 12600,
+            "icon": "💵",
+            "name": "12600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 33600,
+            "icon": "💵",
+            "name": "33600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 21500,
+            "icon": "💵",
+            "name": "21500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 21500,
+            "icon": "💵",
+            "name": "21500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 13200,
+            "icon": "💵",
+            "name": "13200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 22000,
+            "icon": "💵",
+            "name": "22000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 22500,
+            "icon": "💵",
+            "name": "22500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "dragon",
+            "icon": "🐉",
+            "name": "Hiệu ứng Rồng cuộn"
+          },
+          {
+            "type": "cash",
+            "amount": 13800,
+            "icon": "💵",
+            "name": "13800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 23000,
+            "icon": "💵",
+            "name": "23000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 23500,
+            "icon": "💵",
+            "name": "23500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 23500,
+            "icon": "💵",
+            "name": "23500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14400,
+            "icon": "💵",
+            "name": "14400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 38400,
+            "icon": "💵",
+            "name": "38400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 24500,
+            "icon": "💵",
+            "name": "24500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 24500,
+            "icon": "💵",
+            "name": "24500 💵"
+          },
+          {
+            "type": "rank",
+            "key": "legend",
+            "icon": "🌟",
+            "name": "Rank Huyền thoại (7 ngày)"
+          },
+          {
+            "type": "rank",
+            "key": "vip",
+            "icon": "👑",
+            "name": "Rank VIP (7 ngày)"
+          }
+        ]
+      },
+      "read": false,
+      "createdAt": "2026-07-26T03:30:25.969Z"
+    },
+    {
+      "id": "1785036618720_kt02",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "40000",
+        "itemLabel": "40,000 💵",
+        "message": "owner đã tặng bạn 40,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T03:30:18.720Z"
+    },
+    {
+      "id": "1785033504393_5fg1",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "theme",
+        "item": "theme5",
+        "itemLabel": "Theme theme5",
+        "message": "owner đã tặng bạn Theme theme5"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T02:38:24.394Z"
+    },
+    {
+      "id": "1785033443387_kr80",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T02:37:23.387Z"
+    },
+    {
+      "id": "1785033429916_hdbm",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T02:37:09.916Z"
+    },
+    {
+      "id": "1785032491994_9oqy",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T02:21:31.994Z"
+    },
+    {
+      "id": "1784902934649_jpyt",
+      "type": "friend_accepted",
+      "data": {
+        "from": "owner",
+        "message": "owner đã chấp nhận lời mời kết bạn của bạn"
+      },
+      "read": true,
+      "createdAt": "2026-07-24T14:22:14.649Z"
+    }
+  ],
+  "user1": [
+    {
+      "id": "1785226206691_69n3",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T08:10:06.691Z"
+    },
+    {
+      "id": "1785211717296_vrgf",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:08:37.296Z"
+    },
+    {
+      "id": "1785211624522_4b28",
+      "type": "achievement",
+      "data": {
+        "name": "Phù thủy",
+        "icon": "🧙",
+        "message": "🏆 Đã mở khóa thành tựu: Phù thủy"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:07:04.522Z"
+    },
+    {
+      "id": "1785211622347_1i53",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 3",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 3"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:07:02.347Z"
+    },
+    {
+      "id": "1785210070047_vuan",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà ảo thuật",
+        "icon": "✨",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà ảo thuật"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T03:41:10.047Z"
+    },
+    {
+      "id": "1785207723744_qswq",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà thiết kế",
+        "icon": "🎨",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà thiết kế"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T03:02:03.744Z"
+    },
+    {
+      "id": "1785138076020_po0d",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "theme",
+        "item": "theme1",
+        "itemLabel": "theme1",
+        "message": "owner đã tặng bạn theme1"
+      },
+      "read": false,
+      "createdAt": "2026-07-27T07:41:16.020Z"
+    },
+    {
+      "id": "1785137809775_qqq1",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "theme",
+        "item": "theme4",
+        "itemLabel": "Theme theme4",
+        "message": "owner đã tặng bạn Theme theme4"
+      },
+      "read": false,
+      "createdAt": "2026-07-27T07:36:49.775Z"
+    },
+    {
+      "id": "1785137546836_emsg",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-27T07:32:26.836Z"
+    },
+    {
+      "id": "1785072983530_na8r",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T13:36:23.530Z"
+    },
+    {
+      "id": "1785063051829_67jb",
+      "type": "achievement",
+      "data": {
+        "name": "VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: VIP"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:51.829Z"
+    },
+    {
+      "id": "1785063019004_sux0",
+      "type": "achievement",
+      "data": {
+        "name": "Người sành điệu",
+        "icon": "👤",
+        "message": "🏆 Đã mở khóa thành tựu: Người sành điệu"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:19.004Z"
+    },
+    {
+      "id": "1785063019001_auxs",
+      "type": "achievement",
+      "data": {
+        "name": "Người trang trí",
+        "icon": "🖼️",
+        "message": "🏆 Đã mở khóa thành tựu: Người trang trí"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:19.001Z"
+    },
+    {
+      "id": "1785063018998_3xx0",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Huyền thoại",
+        "icon": "🌟",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Huyền thoại"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.998Z"
+    },
+    {
+      "id": "1785063018995_6cyk",
+      "type": "achievement",
+      "data": {
+        "name": "Rank VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: Rank VIP"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.995Z"
+    },
+    {
+      "id": "1785063018993_ccth",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Kim cương",
+        "icon": "💠",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Kim cương"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.993Z"
+    },
+    {
+      "id": "1785063018990_l18u",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạch kim",
+        "icon": "💎",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạch kim"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.990Z"
+    },
+    {
+      "id": "1785063018987_3vd6",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Vàng",
+        "icon": "🥇",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Vàng"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.987Z"
+    },
+    {
+      "id": "1785063018985_zb58",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạc",
+        "icon": "🥈",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạc"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.985Z"
+    },
+    {
+      "id": "1785063018982_sr9j",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Đồng",
+        "icon": "🥉",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Đồng"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.982Z"
+    },
+    {
+      "id": "1785063018979_se9d",
+      "type": "achievement",
+      "data": {
+        "name": "Đại gia",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Đại gia"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.979Z"
+    },
+    {
+      "id": "1785063018977_60as",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà giàu",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà giàu"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.977Z"
+    },
+    {
+      "id": "1785063018974_7mwa",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 2",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 2"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.974Z"
+    },
+    {
+      "id": "1785063018971_egeu",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 1",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 1"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T10:50:18.971Z"
+    },
+    {
+      "id": "1785034617171_j9nt",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-26T02:56:57.171Z"
+    },
+    {
+      "id": "1784988184191_rs1k",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T14:03:04.191Z"
+    },
+    {
+      "id": "1784988157508_av8f",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T14:02:37.508Z"
+    },
+    {
+      "id": "1784987721357_4i0l",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T13:55:21.357Z"
+    },
+    {
+      "id": "1784974437373_g2p4",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T10:13:57.373Z"
+    },
+    {
+      "id": "1784972346001_aucp",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T09:39:06.001Z"
+    },
+    {
+      "id": "1784967290011_w0la",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "theme",
+        "item": "theme3",
+        "itemLabel": "Theme theme3",
+        "message": "owner đã tặng bạn Theme theme3"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T08:14:50.011Z"
+    },
+    {
+      "id": "1784967244230_haf2",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T08:14:04.230Z"
+    },
+    {
+      "id": "1784967229686_tds1",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T08:13:49.686Z"
+    },
+    {
+      "id": "1784966113722_52xw",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T07:55:13.722Z"
+    },
+    {
+      "id": "1784963190787_6j5q",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T07:06:30.787Z"
+    },
+    {
+      "id": "1784958957394_ut12",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "theme",
+        "item": "theme5",
+        "itemLabel": "Theme theme5",
+        "message": "owner đã tặng bạn Theme theme5"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T05:55:57.394Z"
+    },
+    {
+      "id": "1784958926187_wr4r",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T05:55:26.187Z"
+    },
+    {
+      "id": "1784958890548_a8mc",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T05:54:50.548Z"
+    },
+    {
+      "id": "1784956087105_13w8",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T05:08:07.105Z"
+    },
+    {
+      "id": "1784955990250_5ekz",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T05:06:30.250Z"
+    },
+    {
+      "id": "1784955947901_et9u",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": true,
+      "createdAt": "2026-07-25T05:05:47.901Z"
+    }
+  ],
+  "nam": [
+    {
+      "id": "1785222713395_cc1l",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 3",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 3"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T07:11:53.395Z"
+    },
+    {
+      "id": "1785218403031_p99n",
+      "type": "achievement",
+      "data": {
+        "name": "VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: VIP"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T06:00:03.031Z"
+    },
+    {
+      "id": "1785212223907_gzix",
+      "type": "achievement",
+      "data": {
+        "name": "Huyền thoại mùa",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: Huyền thoại mùa"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.907Z"
+    },
+    {
+      "id": "1785212223902_fesw",
+      "type": "achievement",
+      "data": {
+        "name": "Thợ săn",
+        "icon": "🏹",
+        "message": "🏆 Đã mở khóa thành tựu: Thợ săn"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.902Z"
+    },
+    {
+      "id": "1785212223896_sh9q",
+      "type": "achievement",
+      "data": {
+        "name": "Chiến binh mùa",
+        "icon": "⚔️",
+        "message": "🏆 Đã mở khóa thành tựu: Chiến binh mùa"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.896Z"
+    },
+    {
+      "id": "1785212223891_js00",
+      "type": "achievement",
+      "data": {
+        "name": "Người sành điệu",
+        "icon": "👤",
+        "message": "🏆 Đã mở khóa thành tựu: Người sành điệu"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.891Z"
+    },
+    {
+      "id": "1785212223887_v8xa",
+      "type": "achievement",
+      "data": {
+        "name": "Người trang trí",
+        "icon": "🖼️",
+        "message": "🏆 Đã mở khóa thành tựu: Người trang trí"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.887Z"
+    },
+    {
+      "id": "1785212223882_jfhw",
+      "type": "achievement",
+      "data": {
+        "name": "Phù thủy",
+        "icon": "🧙",
+        "message": "🏆 Đã mở khóa thành tựu: Phù thủy"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.882Z"
+    },
+    {
+      "id": "1785212223878_ggrg",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà ảo thuật",
+        "icon": "✨",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà ảo thuật"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.878Z"
+    },
+    {
+      "id": "1785212223873_51w4",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Huyền thoại",
+        "icon": "🌟",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Huyền thoại"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.873Z"
+    },
+    {
+      "id": "1785212223869_8iaz",
+      "type": "achievement",
+      "data": {
+        "name": "Rank VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: Rank VIP"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.869Z"
+    },
+    {
+      "id": "1785212223864_3if2",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Kim cương",
+        "icon": "💠",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Kim cương"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.864Z"
+    },
+    {
+      "id": "1785212223860_2tug",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạch kim",
+        "icon": "💎",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạch kim"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.860Z"
+    },
+    {
+      "id": "1785212223853_t59e",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Vàng",
+        "icon": "🥇",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Vàng"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.853Z"
+    },
+    {
+      "id": "1785212223845_p91v",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạc",
+        "icon": "🥈",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạc"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.845Z"
+    },
+    {
+      "id": "1785212223838_e7o6",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Đồng",
+        "icon": "🥉",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Đồng"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.838Z"
+    },
+    {
+      "id": "1785212223826_92iq",
+      "type": "achievement",
+      "data": {
+        "name": "Tỷ phú",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Tỷ phú"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.826Z"
+    },
+    {
+      "id": "1785212223821_2w8x",
+      "type": "achievement",
+      "data": {
+        "name": "Đại gia",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Đại gia"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.821Z"
+    },
+    {
+      "id": "1785212223816_th0j",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 2",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 2"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.816Z"
+    },
+    {
+      "id": "1785212223812_ue98",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 1",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 1"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.812Z"
+    },
+    {
+      "id": "1785212223806_9y2d",
+      "type": "season_elite_purchased",
+      "data": {
+        "message": "Bạn đã mua Elite Pass và nhận được 100 phần thưởng!",
+        "rewards": [
+          {
+            "type": "cash",
+            "amount": 500,
+            "icon": "💵",
+            "name": "500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 500,
+            "icon": "💵",
+            "name": "500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 600,
+            "icon": "💵",
+            "name": "600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 1000,
+            "icon": "💵",
+            "name": "1000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 1500,
+            "icon": "💵",
+            "name": "1500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 2400,
+            "icon": "💵",
+            "name": "2400 💵"
+          },
+          {
+            "type": "effect",
+            "key": "twinkle",
+            "icon": "✨",
+            "name": "Lấp lánh"
+          },
+          {
+            "type": "cash",
+            "amount": 2000,
+            "icon": "💵",
+            "name": "2000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 2500,
+            "icon": "💵",
+            "name": "2500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "shimmer",
+            "icon": "💫",
+            "name": "Hiệu ứng Sáng bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 1800,
+            "icon": "💵",
+            "name": "1800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 4800,
+            "icon": "💵",
+            "name": "4800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 3500,
+            "icon": "💵",
+            "name": "3500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 3500,
+            "icon": "💵",
+            "name": "3500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "shimmer",
+            "icon": "✨",
+            "name": "Sáng bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 4000,
+            "icon": "💵",
+            "name": "4000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 4500,
+            "icon": "💵",
+            "name": "4500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 7200,
+            "icon": "💵",
+            "name": "7200 💵"
+          },
+          {
+            "type": "badge",
+            "name": "Chiến binh mùa",
+            "icon": "🏅"
+          },
+          {
+            "type": "avatarframe",
+            "key": "avtframe1",
+            "icon": "👑",
+            "name": "Khung Avatar Vàng"
+          },
+          {
+            "type": "cash",
+            "amount": 5500,
+            "icon": "💵",
+            "name": "5500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 5500,
+            "icon": "💵",
+            "name": "5500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "glow",
+            "icon": "✨",
+            "name": "Chói lóa"
+          },
+          {
+            "type": "cash",
+            "amount": 9600,
+            "icon": "💵",
+            "name": "9600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 6500,
+            "icon": "💵",
+            "name": "6500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 6500,
+            "icon": "💵",
+            "name": "6500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 4200,
+            "icon": "💵",
+            "name": "4200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 7000,
+            "icon": "💵",
+            "name": "7000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 7500,
+            "icon": "💵",
+            "name": "7500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "glow",
+            "icon": "🌟",
+            "name": "Hiệu ứng Chói lóa"
+          },
+          {
+            "type": "effect",
+            "key": "bubble",
+            "icon": "✨",
+            "name": "Bong bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 8000,
+            "icon": "💵",
+            "name": "8000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 8500,
+            "icon": "💵",
+            "name": "8500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 8500,
+            "icon": "💵",
+            "name": "8500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 5400,
+            "icon": "💵",
+            "name": "5400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14400,
+            "icon": "💵",
+            "name": "14400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 9500,
+            "icon": "💵",
+            "name": "9500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 9500,
+            "icon": "💵",
+            "name": "9500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "explode",
+            "icon": "✨",
+            "name": "Nổ"
+          },
+          {
+            "type": "frame",
+            "key": "frame1",
+            "icon": "🖼️",
+            "name": "Khung Vàng"
+          },
+          {
+            "type": "cash",
+            "amount": 10500,
+            "icon": "💵",
+            "name": "10500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 16800,
+            "icon": "💵",
+            "name": "16800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 6600,
+            "icon": "💵",
+            "name": "6600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11000,
+            "icon": "💵",
+            "name": "11000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11500,
+            "icon": "💵",
+            "name": "11500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11500,
+            "icon": "💵",
+            "name": "11500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "rainbow",
+            "icon": "✨",
+            "name": "Cầu vồng"
+          },
+          {
+            "type": "cash",
+            "amount": 19200,
+            "icon": "💵",
+            "name": "19200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 12500,
+            "icon": "💵",
+            "name": "12500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "bubble",
+            "icon": "🫧",
+            "name": "Hiệu ứng Bong bóng"
+          },
+          {
+            "type": "cash",
+            "amount": 7800,
+            "icon": "💵",
+            "name": "7800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 13000,
+            "icon": "💵",
+            "name": "13000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 13500,
+            "icon": "💵",
+            "name": "13500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 21600,
+            "icon": "💵",
+            "name": "21600 💵"
+          },
+          {
+            "type": "effect",
+            "key": "fire",
+            "icon": "✨",
+            "name": "Lửa"
+          },
+          {
+            "type": "cash",
+            "amount": 14000,
+            "icon": "💵",
+            "name": "14000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14500,
+            "icon": "💵",
+            "name": "14500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14500,
+            "icon": "💵",
+            "name": "14500 💵"
+          },
+          {
+            "type": "badge",
+            "name": "Huyền thoại",
+            "icon": "🏅"
+          },
+          {
+            "type": "avatarframe",
+            "key": "avtframe2",
+            "icon": "👑",
+            "name": "Khung Avatar Bạch kim"
+          },
+          {
+            "type": "cash",
+            "amount": 15500,
+            "icon": "💵",
+            "name": "15500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 15500,
+            "icon": "💵",
+            "name": "15500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "dragon",
+            "icon": "✨",
+            "name": "Rồng cuộn"
+          },
+          {
+            "type": "cash",
+            "amount": 16000,
+            "icon": "💵",
+            "name": "16000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 16500,
+            "icon": "💵",
+            "name": "16500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 26400,
+            "icon": "💵",
+            "name": "26400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 10200,
+            "icon": "💵",
+            "name": "10200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 17000,
+            "icon": "💵",
+            "name": "17000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 17500,
+            "icon": "💵",
+            "name": "17500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "explode",
+            "icon": "💥",
+            "name": "Hiệu ứng Nổ"
+          },
+          {
+            "type": "effect",
+            "key": "twinkle",
+            "icon": "✨",
+            "name": "Lấp lánh"
+          },
+          {
+            "type": "cash",
+            "amount": 28800,
+            "icon": "💵",
+            "name": "28800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 18500,
+            "icon": "💵",
+            "name": "18500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 18500,
+            "icon": "💵",
+            "name": "18500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 11400,
+            "icon": "💵",
+            "name": "11400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 19000,
+            "icon": "💵",
+            "name": "19000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 19500,
+            "icon": "💵",
+            "name": "19500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 31200,
+            "icon": "💵",
+            "name": "31200 💵"
+          },
+          {
+            "type": "effect",
+            "key": "shimmer",
+            "icon": "✨",
+            "name": "Sáng bóng"
+          },
+          {
+            "type": "frame",
+            "key": "frame3",
+            "icon": "🖼️",
+            "name": "Khung Kim Cương"
+          },
+          {
+            "type": "cash",
+            "amount": 20500,
+            "icon": "💵",
+            "name": "20500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 20500,
+            "icon": "💵",
+            "name": "20500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 12600,
+            "icon": "💵",
+            "name": "12600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 33600,
+            "icon": "💵",
+            "name": "33600 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 21500,
+            "icon": "💵",
+            "name": "21500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 21500,
+            "icon": "💵",
+            "name": "21500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 13200,
+            "icon": "💵",
+            "name": "13200 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 22000,
+            "icon": "💵",
+            "name": "22000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 22500,
+            "icon": "💵",
+            "name": "22500 💵"
+          },
+          {
+            "type": "effect",
+            "key": "dragon",
+            "icon": "🐉",
+            "name": "Hiệu ứng Rồng cuộn"
+          },
+          {
+            "type": "cash",
+            "amount": 13800,
+            "icon": "💵",
+            "name": "13800 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 23000,
+            "icon": "💵",
+            "name": "23000 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 23500,
+            "icon": "💵",
+            "name": "23500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 23500,
+            "icon": "💵",
+            "name": "23500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 14400,
+            "icon": "💵",
+            "name": "14400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 38400,
+            "icon": "💵",
+            "name": "38400 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 24500,
+            "icon": "💵",
+            "name": "24500 💵"
+          },
+          {
+            "type": "cash",
+            "amount": 24500,
+            "icon": "💵",
+            "name": "24500 💵"
+          },
+          {
+            "type": "rank",
+            "key": "legend",
+            "icon": "🌟",
+            "name": "Rank Huyền thoại (7 ngày)"
+          },
+          {
+            "type": "rank",
+            "key": "vip",
+            "icon": "👑",
+            "name": "Rank VIP (7 ngày)"
+          }
+        ]
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:17:03.807Z"
+    },
+    {
+      "id": "1785212215869_qky3",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà giàu",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà giàu"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:16:55.869Z"
+    },
+    {
+      "id": "1785212215863_8qsl",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "400000",
+        "itemLabel": "400,000 💵",
+        "message": "owner đã tặng bạn 400,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-07-28T04:16:55.863Z"
+    }
+  ],
+  "fasf": [
+    {
+      "id": "1785215907025_sid1",
+      "type": "mention",
+      "data": {
+        "from": "nam",
+        "chatId": "group_chat_chung",
+        "message": "nam đã đề cập đến bạn trong tin nhắn: \"@fasf\""
+      },
+      "read": false,
+      "createdAt": "2026-07-28T05:18:27.025Z"
+    }
+  ],
+  "test": [
+    {
+      "id": "1793100592321_76y4",
+      "type": "friend_request",
+      "data": {
+        "from": "owner",
+        "message": "owner đã gửi lời mời kết bạn"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:29:52.321Z"
+    },
+    {
+      "id": "1793100520149_is6q",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà ảo thuật",
+        "icon": "✨",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà ảo thuật"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:40.149Z"
+    },
+    {
+      "id": "1793100512123_g1es",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà giàu",
+        "icon": "💰",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà giàu"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:32.123Z"
+    },
+    {
+      "id": "1793100512118_neis",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "100000",
+        "itemLabel": "100,000 💵",
+        "message": "owner đã tặng bạn 100,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:32.118Z"
+    },
+    {
+      "id": "1793100480857_tykd",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Huyền thoại",
+        "icon": "🌟",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Huyền thoại"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.857Z"
+    },
+    {
+      "id": "1793100480852_pbgb",
+      "type": "achievement",
+      "data": {
+        "name": "Rank VIP",
+        "icon": "👑",
+        "message": "🏆 Đã mở khóa thành tựu: Rank VIP"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.852Z"
+    },
+    {
+      "id": "1793100480848_ql5l",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Kim cương",
+        "icon": "💠",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Kim cương"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.848Z"
+    },
+    {
+      "id": "1793100480844_11oo",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạch kim",
+        "icon": "💎",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạch kim"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.844Z"
+    },
+    {
+      "id": "1793100480841_brj6",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Vàng",
+        "icon": "🥇",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Vàng"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.841Z"
+    },
+    {
+      "id": "1793100480837_4ews",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Bạc",
+        "icon": "🥈",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Bạc"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.837Z"
+    },
+    {
+      "id": "1793100480833_wq02",
+      "type": "achievement",
+      "data": {
+        "name": "Rank Đồng",
+        "icon": "🥉",
+        "message": "🏆 Đã mở khóa thành tựu: Rank Đồng"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:28:00.833Z"
+    },
+    {
+      "id": "1793100458631_fu2l",
+      "type": "gift_received",
+      "data": {
+        "from": "owner",
+        "type": "cash",
+        "item": "10000",
+        "itemLabel": "10,000 💵",
+        "message": "owner đã tặng bạn 10,000 💵"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:27:38.631Z"
+    },
+    {
+      "id": "1793100433813_opc1",
+      "type": "achievement",
+      "data": {
+        "name": "Nhà sưu tập cấp 1",
+        "icon": "📦",
+        "message": "🏆 Đã mở khóa thành tựu: Nhà sưu tập cấp 1"
+      },
+      "read": false,
+      "createdAt": "2026-10-27T11:27:13.813Z"
+    }
+  ]
+}

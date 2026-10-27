@@ -1,0 +1,26 @@
+[
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-20T07:22:46.323Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T05:32:36.624Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "admin",
+    "text": "jhi",
+    "time": "2026-07-21T05:32:50.208Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "user3",
+    "text": "hi",
+    "time": "2026-07-21T05:33:06.008Z",
+    "effect": "dragon"
+  }
+]

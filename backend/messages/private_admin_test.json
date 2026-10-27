@@ -1,0 +1,26 @@
+[
+  {
+    "from": "test",
+    "text": "hi",
+    "time": "2026-07-20T05:10:53.075Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-20T05:10:57.787Z",
+    "effect": "none"
+  },
+  {
+    "from": "test",
+    "text": "hi",
+    "time": "2026-07-20T05:11:00.515Z",
+    "effect": "none"
+  },
+  {
+    "from": "test",
+    "text": "hi",
+    "time": "2026-07-20T05:11:15.331Z",
+    "effect": "none"
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "groupId": "chat_chung",
+    "userId": "owner",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "admin",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "manager",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "support",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "test",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "demo",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "user1",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "user2",
+    "role": "member",
+    "joinedAt": "2026-07-23T04:17:40.822Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "adminfake",
+    "role": "member",
+    "joinedAt": "2026-07-23T06:25:17.612Z"
+  },
+  {
+    "groupId": "g_1784789178617",
+    "userId": "adminfake",
+    "role": "admin",
+    "joinedAt": "2026-07-23T06:46:18.618Z"
+  },
+  {
+    "groupId": "g_1784800942551",
+    "userId": "owner",
+    "role": "admin",
+    "joinedAt": "2026-07-23T10:02:22.565Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "thunguyen",
+    "role": "member",
+    "joinedAt": "2026-07-23T10:07:45.480Z"
+  },
+  {
+    "groupId": "g_1784800942551",
+    "userId": "user1",
+    "role": "member",
+    "joinedAt": "2026-07-23T11:09:02.463Z"
+  },
+  {
+    "groupId": "chat_chung",
+    "userId": "nam",
+    "role": "member",
+    "joinedAt": "2026-07-28T04:16:35.763Z"
+  }
+]

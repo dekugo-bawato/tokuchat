@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toku</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/chat.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div class="app-container" id="app">
+    <div class="loading-overlay" id="loadingOverlay" style="display:flex;">
+        <div class="loading-spinner"></div>
+    </div>
+    <div class="chat-layout" id="chatLayout" style="display:none;">
+        <!-- ===== SIDEBAR ===== -->
+        <div class="sidebar" id="sidebar">
+            <div class="user-info">
+                <div class="avatar-wrapper" id="sidebarAvatarWrapper">
+                    <div class="avatar" id="sidebarAvatar">
+                        <span class="avatar-text" id="avatarText">U</span>
+                        <img id="avatarImage" style="display:none;" alt="Avatar">
+                        <div class="avatar-edit" id="avatarEditBtn"><i class="fas fa-camera"></i> <span class="avatar-edit-text">Change</span></div>
+                    </div>
+                    <div class="avatar-frame default-frame" id="avatarFrameDisplay"></div>
+                    <div class="avatar-frame-btn" id="avatarFrameBtn" title="Change avatar frame">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+                <div class="info">
+                    <div class="name">
+                        <span id="sidebarName">User</span>
+                        <span class="role-badge user" id="sidebarTier">User</span>
+                        <span id="sidebarBadgeDisplay" style="font-size:0.6rem; background:rgba(255,215,0,0.15); padding:0 10px; border-radius:12px; color:#ffd700; border:1px solid rgba(255,215,0,0.15); display:none;"></span>
+                        <span id="vipSidebarBadge" style="display:none; font-size:0.6rem; background:linear-gradient(135deg, #ffd700, #f7971e); padding:0 10px; border-radius:12px; color:#222; font-weight:700;">👑 VIP</span>
+                    </div>
+                    <div id="badgesContainer" class="badges-container"></div>
+                    <div class="status">● <span class="status-text">Online</span></div>
+                    <div class="cash-display">💰 <span id="userCash">0</span> 💵</div>
+                    <div class="effect-expiry" id="effectExpiryDisplay"></div>
+                </div>
+            </div>
+            <div class="tabs">
+                <button class="active" id="tabFriends"><i class="fas fa-user-friends"></i> <span class="tab-label">Friends</span></button>
+                <button id="tabGroups"><i class="fas fa-users"></i> <span class="tab-label">Groups</span></button>
+            </div>
+            <div class="list" id="sidebarList"></div>
+            <div class="actions">
+                <button id="addFriendBtn"><i class="fas fa-user-plus"></i> <span>Add Friend</span></button>
+                <button id="createGroupBtn"><i class="fas fa-plus-circle"></i> <span>Group</span></button>
+                <button id="storeBtn" class="store-btn"><i class="fas fa-store"></i> <span>Store</span></button>
+                <button id="themeBtn"><i class="fas fa-palette"></i> <span>Theme</span></button>
+                <button id="achievementBtn" class="achievement-btn"><i class="fas fa-trophy"></i> <span>Achievements</span></button>
+                <button id="seasonPassBtn" class="season-pass-btn"><i class="fas fa-fire"></i> <span>Season</span></button>
+                <button id="vipBtn" class="vip-btn" style="display:none;"><i class="fas fa-crown"></i> <span>VIP</span></button>
+                <button id="adminManageBtn" class="admin-btn hidden"><i class="fas fa-user-cog"></i> <span>Admin</span></button>
+                <button id="settingsBtn" class="settings-btn"><i class="fas fa-cog"></i> <span>Settings</span></button>
+                <button id="notificationBtn" class="notification-btn"><i class="fas fa-bell"></i> <span>Thông báo</span> <span class="notif-badge" id="notifBadge">0</span></button>
+                <button id="logoutBtn" class="danger"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></button>
+            </div>
+        </div>
+
+        <!-- ===== MAIN ===== -->
+        <div class="main" id="mainContainer">
+            <!-- Theme Background -->
+            <div class="theme-background" id="themeBackground">
+                <img id="themeImage" src="" alt="Theme Background" style="display:none;">
+                <div class="theme-overlay" id="themeOverlay"></div>
+            </div>
+            
+            <!-- Messages -->
+            <div class="messages-wrapper" id="messagesWrapper">
+                <div class="messages" id="messages">
+                    <div style="color:rgba(255,255,255,0.2);text-align:center;padding:40px 0;"><i class="fas fa-comments"></i> <span class="placeholder-text">Select a conversation to start</span></div>
+                </div>
+            </div>
+
+            <!-- Header -->
+            <div class="header" id="chatHeader">
+                <div class="avatar-wrapper" id="chatAvatarWrapper">
+                    <div class="avatar" id="chatAvatar">
+                        <span id="chatAvatarText">💬</span>
+                        <img id="chatAvatarImage" style="display:none;" alt="Avatar">
+                    </div>
+                    <div class="avt-frame" id="chatAvatarFrame" style="display:none;"></div>
+                </div>
+                <div class="info">
+                    <h4 id="chatTitle">Toku</h4>
+                    <p id="chatSub">Select a friend or group to chat</p>
+                </div>
+                <div class="actions">
+                    <span class="member-count" id="memberCount" style="display:none;"></span>
+                    <span class="muted-badge" id="mutedBadge">🔇 Muted</span>
+                    <span class="banned-badge" id="bannedBadge">🚫 Banned</span>
+                    <button id="langBtn" class="lang-btn" title="Change language">
+                        <span class="flag" id="langFlag">🇻🇳</span>
+                        <span id="langLabel">VI</span>
+                    </button>
+                    <button id="addMemberBtn" title="Add member" style="display:none;"><i class="fas fa-user-plus"></i></button>
+                    <button id="viewMembersBtn" title="Members" style="display:none;"><i class="fas fa-users"></i></button>
+                    <button id="clearChatBtn" title="Clear chat"><i class="fas fa-trash-alt"></i></button>
+                    <button id="leaveGroupBtn" title="Leave group" style="display:none;"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <!-- Chat Toolbar -->
+            <div class="chat-toolbar" id="chatToolbar">
+                <button id="emojiBtn"><i class="fas fa-smile"></i> <span class="emoji-label">Emoji</span></button>
+                <button id="effectBtn"><i class="fas fa-magic"></i> <span class="effect-label">Effect</span> <span class="effect-badge" id="currentEffectLabel">Off</span></button>
+                <button id="frameBtn" class="feature-btn" title="Select frame"><i class="fas fa-border-all"></i> <span class="frame-label">Frame</span></button>
+                <button id="gradientBtn" class="feature-btn" title="Toggle Gradient Text"><i class="fas fa-fill-drip"></i> <span class="gradient-label">Gradient</span></button>
+                <button id="typingBtn" class="feature-btn" title="Toggle Typing Effect"><i class="fas fa-keyboard"></i> <span class="typing-label">Typing</span></button>
+                <button id="highlightBtn" class="feature-btn" title="Toggle Highlight Name"><i class="fas fa-star"></i> <span class="highlight-label">Highlight</span></button>
+                <button id="imageToolbarBtn" class="feature-btn" title="Send image"><i class="fas fa-image"></i> <span class="image-label">Image</span></button>
+                <div class="color-picker-wrap"><span class="bg-label">BG Color</span><input type="color" id="bgColorPicker" value="#0d0d1a"></div>
+                <div class="color-picker-wrap"><span class="msg-label">Msg Color</span><input type="color" id="msgColorPicker" value="#6C2BD9"></div>
+                <div class="emoji-picker-container">
+                    <div class="emoji-picker" id="emojiPicker"></div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area" id="inputArea">
+                <input type="text" id="msgInput" placeholder="Type a message... (type @ to tag someone)" />
+                <div class="input-buttons">
+                    <button class="image-btn" id="imageBtn" title="Send image"><i class="fas fa-image"></i></button>
+                    <button class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i> <span class="send-label">Send</span></button>
+                </div>
+                <div class="char-limit-warning" id="charLimitWarning"></div>
+            </div>
+
+            <!-- Muted Overlay -->
+            <div class="muted-overlay" id="mutedOverlay">
+                <div class="icon">🔇</div>
+                <div class="title" id="mutedOverlayTitle">You are muted</div>
+                <div class="desc" id="mutedOverlayDesc">You cannot send messages in this group</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FILE INPUTS ===== -->
+<input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
+<input type="file" id="fileInput" accept="image/*" style="display:none;">
+
+<!-- ===== MODALS ===== -->
+<!-- Image Preview Modal -->
+<div class="modal image-preview-modal" id="imagePreviewModal">
+    <div class="modal-content" style="position:relative;">
+        <span class="close-preview" onclick="closeModal('imagePreviewModal')">&times;</span>
+        <img id="previewImage" src="" alt="Preview">
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal" id="settingsModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-cog" style="color:#6C2BD9;"></i> <span class="settings-title">Settings</span></h3>
+        <p class="settings-sub">Customize your app</p>
+        <div class="settings-option">
+            <span class="label"><i class="fas fa-globe"></i> <span class="lang-setting-label">Language</span></span>
+            <span class="value" id="currentLangDisplay">🇻🇳 Vietnamese</span>
+            <button class="btn-switch" id="toggleLangBtn">Switch to EN</button>
+        </div>
+        <div class="settings-option">
+            <span class="label"><i class="fas fa-palette"></i> <span class="theme-setting-label">Default Theme</span></span>
+            <span class="value" id="currentThemeDisplay">Default</span>
+            <button class="btn-switch" id="openThemeFromSettings">Change</button>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('settingsModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Modal -->
+<div class="modal" id="notificationModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-bell" style="color:#3498db;"></i> <span class="notif-modal-title">Thông báo</span></h3>
+        <p class="notif-modal-sub">Your recent notifications</p>
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <button class="btn-primary" id="markAllReadBtn" style="padding:6px 16px; font-size:0.7rem; border-radius:8px; border:none; cursor:pointer;">Đánh dấu đã đọc</button>
+            <button class="btn-secondary" id="refreshNotifBtn" style="padding:6px 16px; font-size:0.7rem; border-radius:8px; border:none; cursor:pointer;"><i class="fas fa-sync-alt"></i> Làm mới</button>
+        </div>
+        <div id="notificationList" style="max-height:400px; overflow-y:auto;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('notificationModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Frame Modal -->
+<div class="modal" id="frameModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-border-all" style="color:#6C2BD9;"></i> <span class="frame-modal-title">Select Frame</span></h3>
+        <p class="frame-modal-sub">Choose a frame for your messages</p>
+        <div class="frame-grid" id="frameList"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('frameModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Avatar Frame Modal -->
+<div class="modal" id="avatarFrameModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-circle" style="color:#f7971e;"></i> <span class="avatarframe-modal-title">Change Avatar Frame</span></h3>
+        <p class="avatarframe-modal-sub">Choose a frame for your avatar</p>
+        <div class="frame-grid" id="avatarFrameList"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('avatarFrameModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Friend Modal -->
+<div class="modal" id="addFriendModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-plus" style="color:#6C2BD9;"></i> <span class="friend-title">Add Friend</span></h3>
+        <p class="friend-sub">Enter username</p>
+        <input type="text" id="friendUsername" placeholder="Username">
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('addFriendModal')">Cancel</button>
+            <button class="btn-primary" id="sendFriendRequestBtn">Send</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create Group Modal -->
+<div class="modal" id="createGroupModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-users" style="color:#f7971e;"></i> <span class="group-title">Create Group</span></h3>
+        <p class="group-sub">Group Name</p>
+        <input type="text" id="groupNameInput" placeholder="Group Name">
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('createGroupModal')">Cancel</button>
+            <button class="btn-primary" id="createGroupConfirmBtn">Create</button>
+        </div>
+    </div>
+</div>
+
+<!-- Effect Modal -->
+<div class="modal" id="effectModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-magic" style="color:#9b59b6;"></i> <span class="effect-title">Select Effect</span></h3>
+        <div id="effectList"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('effectModal')">Close</button>
+            <button class="btn-danger" id="effectOffBtn">Turn Off</button>
+        </div>
+    </div>
+</div>
+
+<!-- Theme Modal -->
+<div class="modal" id="themeModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-palette" style="color:#f7971e;"></i> <span class="theme-title">Select Theme</span></h3>
+        <p class="theme-sub">Choose background image for chat</p>
+        <div class="theme-grid" id="themeList"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('themeModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Manage Modal -->
+<div class="modal" id="adminManageModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-users-cog" style="color:#e74c3c;"></i> <span class="admin-title">User Management</span></h3>
+        <p class="admin-sub">List of all users</p>
+        <input type="text" class="search-input" id="adminSearchInput" placeholder="Search users...">
+        <div id="adminUserList" style="max-height:400px; overflow-y:auto;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('adminManageModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin User Detail Modal -->
+<div class="modal" id="adminUserDetailModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-circle" style="color:#6C2BD9;"></i> <span class="detail-title">User Info</span>: <span id="userDetailName"></span></h3>
+        <div id="userDetailContent" style="margin:16px 0;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('adminUserDetailModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Gift Modal -->
+<div class="modal" id="adminGiftModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-gift" style="color:#f7971e;"></i> <span class="gift-title">Gift to</span> <span id="adminGiftTarget"></span></h3>
+        <p class="gift-sub">Select gift type and item</p>
+        <div class="admin-gift-card">
+            <label class="gift-type-label">Gift Type</label>
+            <select id="adminGiftType" onchange="handleGiftTypeChange()" style="width:100%; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.04); color:#fff; font-size:0.9rem; outline:none;">
+                <option value="rank">Rank</option>
+                <option value="effect">Effect</option>
+                <option value="theme">Theme</option>
+                <option value="cash">💵 Cash</option>
+                <option value="frame">🖼️ Frame</option>
+                <option value="avatarframe">👑 Avatar Frame</option>
+                <option value="gradient">🌈 Gradient Text</option>
+                <option value="typing">✨ Typing Effect</option>
+                <option value="highlight">🌟 Highlight Name</option>
+            </select>
+        </div>
+        <div class="admin-gift-card" id="adminGiftItemContainer">
+            <label class="gift-item-label">Item</label>
+            <select id="adminGiftItem" style="width:100%; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.04); color:#fff; font-size:0.9rem; outline:none;"></select>
+            <div id="adminGiftCashInput" style="display:none; margin-top:8px;">
+                <label class="gift-cash-label">Amount (💵)</label>
+                <input type="number" id="adminGiftCashAmount" placeholder="Enter amount" style="width:100%; padding:8px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.04); color:#fff; font-size:0.9rem; outline:none;">
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('adminGiftModal')">Cancel</button>
+            <button class="btn-success" id="adminGiftConfirmBtn">Send Gift</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Member Modal -->
+<div class="modal" id="addMemberModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-plus" style="color:#6C2BD9;"></i> <span class="addmember-title">Add member to group</span></h3>
+        <p class="addmember-sub">Select friends to add</p>
+        <div id="friendListForGroup" style="max-height:300px; overflow-y:auto;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('addMemberModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Achievement Modal -->
+<div class="modal" id="achievementModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-trophy" style="color:#f1c40f;"></i> <span class="ach-title">Thành tựu</span></h3>
+        <p class="ach-sub">Danh sách các thành tựu. Bạn có thể bật một thành tựu để hiển thị bên cạnh tên.</p>
+        <div id="achievementList" class="achievement-list"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('achievementModal')">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Member List Modal -->
+<div class="modal" id="memberListModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-users" style="color:#6C2BD9;"></i> <span class="memberlist-title">Group Members</span></h3>
+        <p class="memberlist-sub">List of members in this group</p>
+        <div id="memberListContainer" style="max-height:400px; overflow-y:auto;"></div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('memberListModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Season Pass Modal -->
+<div class="modal" id="seasonPassModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-fire" style="color:#f7971e;"></i> <span class="season-modal-title">Season Pass</span></h3>
+        <div id="seasonPassContainer" class="season-pass-container active">
+            <div class="season-header">
+                <div class="season-title">
+                    <h3>🔥 MÙA 1 - HUYỀN THOẠI</h3>
+                </div>
+                <div class="season-level">
+                    <span class="level-badge" id="seasonLevelDisplay">0 <span>/ 50</span></span>
+                </div>
+            </div>
+            <div class="season-buttons">
+                <button class="free-pass-btn active" id="seasonFreeBtn"><i class="fas fa-gift"></i> FREE</button>
+                <button class="elite-pass-btn" id="seasonEliteBtn"><i class="fas fa-crown"></i> ELITE</button>
+                <button class="upgrade-btn" id="seasonUpgradeBtn"><i class="fas fa-arrow-up"></i> UPGRADE</button>
+                <button class="buy-elite-btn" id="seasonBuyEliteBtn" style="display:none;"><i class="fas fa-crown"></i> MUA ELITE</button>
+            </div>
+            <div class="season-progress">
+                <div class="progress-header">
+                    <span class="level-text">Level <strong id="seasonProgressLevel">0</strong>/50</span>
+                    <span class="exp-text"><span id="seasonCurrentExp">0</span> / <span id="seasonMaxExp">100</span> EXP</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="seasonProgressFill" style="width:0%;"></div>
+                </div>
+            </div>
+            <div class="season-rewards" id="seasonRewardsList"></div>
+            <div class="missions-container active" id="seasonMissionsContainer">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h4 style="color:#fff; font-size:0.9rem;"><i class="fas fa-tasks"></i> <span id="seasonMissionsTitle">Nhiệm vụ</span></h4>
+                    <span style="font-size:0.6rem; color:rgba(255,255,255,0.3);">🔄 <span id="seasonResetLabel">Làm mới sau</span>: <span id="seasonResetTimer">23:59:59</span></span>
+                </div>
+                <div id="seasonMissionsList"></div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('seasonPassModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- VIP Modal -->
+<div class="modal" id="vipModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-crown" style="color:#ffd700;"></i> <span id="vipModalTitle">VIP Subscription</span></h3>
+        <p id="vipModalSub">Manage your VIP subscription</p>
+        <div id="vipModalContent">
+            <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; margin:12px 0;">
+                <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:rgba(255,255,255,0.5);">Trạng thái</span>
+                    <span id="vipModalStatus" style="color:#e74c3c;">Chưa kích hoạt</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <span style="color:rgba(255,255,255,0.5);">Hết hạn</span>
+                    <span id="vipModalExpiry" style="color:rgba(255,255,255,0.5);">--</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                    <span style="color:rgba(255,255,255,0.5);">Thưởng hôm nay</span>
+                    <span id="vipModalDaily" style="color:#2ecc71;">Chưa nhận</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                <button class="btn-success" id="vipModalClaimBtn" style="flex:1; padding:10px; border-radius:10px; border:none; font-weight:600; cursor:pointer;">Nhận thưởng VIP (2,000 💵)</button>
+                <button class="btn-primary" id="vipModalBuyBtn" style="flex:1; padding:10px; border-radius:10px; border:none; font-weight:600; cursor:pointer;">Đăng ký VIP (200,000 💵)</button>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('vipModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Birthday Modal -->
+<div class="modal" id="birthdayModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-birthday-cake" style="color:#ff6b6b;"></i> 🎂 Sinh nhật vui vẻ!</h3>
+        <p>Hôm nay là sinh nhật của bạn! Nhận quà đặc biệt từ cửa hàng</p>
+        <div style="background:rgba(255,107,107,0.1); border-radius:12px; padding:16px; margin:12px 0; border: 1px solid rgba(255,107,107,0.2);">
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Quà tặng</span>
+                <span style="color:#ff6b6b; font-weight:700;">🎁 5,000 💵 + Hiệu ứng Bong bóng</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('birthdayModal')">Đóng</button>
+            <button class="btn-success" id="claimBirthdayBtn">Nhận quà</button>
+        </div>
+    </div>
+</div>
+
+<!-- Gift Modal -->
+<div class="modal" id="giftModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-gift" style="color:#f7971e;"></i> <span id="giftTitle">Tặng quà</span></h3>
+        <p id="giftSub">Chọn bạn bè để tặng</p>
+        <select id="giftFriendSelect" style="width:100%; padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.04); color:#fff; font-size:0.85rem; outline:none; margin-bottom:10px;"></select>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('giftModal')"><span id="giftCancel">Hủy</span></button>
+            <button class="btn-primary" id="confirmGiftBtn"><span id="giftSend">Tặng</span></button>
+        </div>
+    </div>
+</div>
+
+<!-- Upgrade Modal -->
+<div class="modal" id="upgradeModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-crown" style="color:#f7971e;"></i> Nâng cấp Elite Pass</h3>
+        <p>Mở khóa tất cả phần thưởng VIP (Vẫn phải làm nhiệm vụ để nhận thưởng)</p>
+        <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; margin:12px 0;">
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Giá</span>
+                <span style="color:#f7971e; font-weight:700;">250,000 💵</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Phần thưởng</span>
+                <span style="color:#2ecc71;">Mở khóa Elite Pass</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Yêu cầu</span>
+                <span style="color:#f7971e;">Phải làm nhiệm vụ để nhận thưởng</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('upgradeModal')">Hủy</button>
+            <button class="btn-success" id="confirmUpgradeBtn">Nâng cấp ngay</button>
+        </div>
+    </div>
+</div>
+
+<!-- Buy Elite Modal -->
+<div class="modal" id="buyEliteModal">
+    <div class="modal-content">
+        <h3><i class="fas fa-crown" style="color:#f7971e;"></i> Mua Elite Pass</h3>
+        <p>Nhận toàn bộ phần thưởng FREE + ELITE mà KHÔNG cần làm nhiệm vụ</p>
+        <div style="background:rgba(255,255,255,0.03); border-radius:12px; padding:16px; margin:12px 0;">
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Giá</span>
+                <span style="color:#f7971e; font-weight:700;">400,000 💵</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                <span style="color:rgba(255,255,255,0.5);">Phần thưởng</span>
+                <span style="color:#2ecc71;">Tất cả 50 cấp FREE + ELITE</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:4px 0;">
+                <span style="color:rgba(255,255,255,0.5);">Đặc biệt</span>
+                <span style="color:#f7971e;">🔥 Không cần làm nhiệm vụ</span>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn-secondary" onclick="closeModal('buyEliteModal')">Hủy</button>
+            <button class="btn-success" id="confirmBuyEliteBtn">Mua ngay</button>
+        </div>
+    </div>
+</div>
+
+<script src="/chat.js"></script>
+</body>
+</html>

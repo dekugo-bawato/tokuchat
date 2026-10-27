@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toku - Đăng nhập / Đăng ký</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0d0d1a;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(108, 43, 217, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(46, 134, 222, 0.15) 0%, transparent 60%),
+                rgba(0, 0, 0, 0.7);
+            z-index: 0;
+        }
+
+        .main-container {
+            display: flex;
+            width: 940px;
+            max-width: 100%;
+            height: 580px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+
+        /* ===== BÊN TRÁI - REGISTER FORM ===== */
+        .left {
+            flex: 1;
+            padding: 44px 38px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            z-index: 2;
+            transition: all 0.3s;
+        }
+
+        .left .logo {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .left .logo i {
+            font-size: 2.2rem;
+            color: #6C2BD9;
+            margin-right: 8px;
+        }
+
+        .left .logo h1 {
+            font-size: 1.8rem;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        .left .logo h1 .highlight {
+            color: #6C2BD9;
+        }
+
+        .left h2 {
+            font-size: 28px;
+            color: #222;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        .left .sub {
+            color: #888;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: #f5f7fa;
+            border-radius: 10px;
+            padding: 0 16px;
+            border: 2px solid transparent;
+            margin-bottom: 14px;
+            transition: all 0.3s;
+            height: 50px;
+        }
+
+        .input-group:focus-within {
+            border-color: #6C2BD9;
+            background: #fff;
+        }
+
+        .input-group i {
+            color: #aaa;
+            width: 20px;
+            font-size: 0.95rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px;
+            border: none;
+            background: transparent;
+            font-size: 0.95rem;
+            outline: none;
+            color: #333;
+        }
+
+        .input-group input::placeholder {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .btn-submit {
+            background: #6C2BD9;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 4px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            background: #5A1FB0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 43, 217, 0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-submit .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        .btn-submit.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn-submit.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== BÊN PHẢI - OVERLAY ===== */
+        .right {
+            width: 50%;
+            background: linear-gradient(135deg, #6C2BD9, #2E86DE);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            z-index: 3;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+                        background-color 0.5s ease;
+        }
+
+        .right .overlay-icon {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .right h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .right p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .right .btn-slide {
+            background: white;
+            color: #6C2BD9;
+            border: none;
+            padding: 12px 42px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .right .btn-slide:hover {
+            transform: scale(1.05);
+            background: #fefefe;
+        }
+
+        .right .btn-slide:active {
+            transform: scale(0.95);
+        }
+
+        .right.active {
+            transform: translateX(-100%);
+            background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+        }
+        .right.active .btn-slide {
+            color: #2ecc71;
+        }
+
+        /* ===== FORM LOGIN ===== */
+        .login-form-container {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            padding: 44px 38px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 1;
+            border-left: 1px solid #eee;
+        }
+
+        .login-form-container.show {
+            display: flex;
+        }
+
+        .login-form-container .login-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .login-form-container .login-logo i {
+            font-size: 2.2rem;
+            color: #2ecc71;
+            margin-right: 8px;
+        }
+
+        .login-form-container .login-logo h1 {
+            font-size: 1.8rem;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        .login-form-container .login-logo h1 .highlight {
+            color: #2ecc71;
+        }
+
+        .login-form-container h2 {
+            font-size: 28px;
+            color: #222;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+
+        .login-form-container .sub {
+            color: #888;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .login-form-container .input-group:focus-within {
+            border-color: #2ecc71;
+        }
+
+        .login-form-container .btn-submit {
+            background: #2ecc71;
+        }
+
+        .login-form-container .btn-submit:hover {
+            background: #27ae60;
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        /* ===== MESSAGE ===== */
+        .message {
+            text-align: center;
+            font-size: 0.9rem;
+            padding: 10px 14px;
+            border-radius: 10px;
+            display: none;
+            margin-bottom: 12px;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .message.error {
+            display: flex;
+            background: rgba(231, 76, 60, 0.12);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.15);
+        }
+        .message.success {
+            display: flex;
+            background: rgba(46, 204, 113, 0.12);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.15);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 14px;
+        }
+
+        .forgot-password a {
+            color: #2ecc71;
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 750px) {
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                width: 100%;
+                border-radius: 20px;
+            }
+            .left, .right, .login-form-container {
+                width: 100% !important;
+                position: relative !important;
+                transform: none !important;
+                border-left: none !important;
+            }
+            .left {
+                padding: 30px 24px;
+                border-radius: 20px 20px 0 0;
+            }
+            .right {
+                padding: 30px 20px;
+                border-radius: 0;
+                min-height: 180px;
+            }
+            .right.active {
+                transform: none;
+                background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+            }
+            .login-form-container {
+                padding: 30px 24px;
+                border-radius: 0;
+                min-height: 400px;
+            }
+            .right .overlay-icon {
+                font-size: 2.5rem;
+            }
+            .right h2 {
+                font-size: 24px;
+            }
+            .left h2, .login-form-container h2 {
+                font-size: 24px;
+            }
+            .left .logo h1, .login-form-container .login-logo h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .left, .login-form-container {
+                padding: 24px 16px;
+            }
+            .input-group {
+                height: 44px;
+                padding: 0 12px;
+            }
+            .input-group input {
+                font-size: 0.85rem;
+                padding: 10px 8px;
+            }
+            .btn-submit {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            .right h2 {
+                font-size: 20px;
+            }
+            .right .btn-slide {
+                padding: 10px 30px;
+                font-size: 0.9rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(108, 43, 217, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- ===== BÊN TRÁI: REGISTER FORM ===== -->
+    <div class="left">
+        <div class="logo">
+            <i class="fas fa-comment-dots"></i>
+            <h1><span class="highlight">Toku</span></h1>
+        </div>
+        <h2>Tạo tài khoản</h2>
+        <p class="sub">Đăng ký để bắt đầu trò chuyện</p>
+
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="regUsername" placeholder="Tên đăng nhập" autocomplete="username" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="regEmail" placeholder="Email" autocomplete="email" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="regPassword" placeholder="Mật khẩu (tối thiểu 6 ký tự)" autocomplete="new-password" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-check-circle"></i>
+            <input type="password" id="regConfirm" placeholder="Xác nhận mật khẩu" autocomplete="new-password" required>
+        </div>
+
+        <div id="regMessage" class="message"></div>
+
+        <button class="btn-submit" id="btnRegister">
+            <span class="btn-text"><i class="fas fa-user-plus"></i> Đăng ký</span>
+            <span class="spinner"></span>
+        </button>
+    </div>
+
+    <!-- ===== BÊN PHẢI: OVERLAY ===== -->
+    <div class="right" id="rightPanel">
+        <div class="overlay-icon">💬</div>
+        <h2>Đã có tài khoản?</h2>
+        <p>Đăng nhập để tiếp tục trải nghiệm <br>cùng bạn bè và cộng đồng</p>
+        <button class="btn-slide" id="slideBtn">Đăng nhập</button>
+    </div>
+
+    <!-- ===== FORM LOGIN ===== -->
+    <div class="login-form-container" id="loginFormContainer">
+        <div class="login-logo">
+            <i class="fas fa-comment-dots"></i>
+            <h1><span class="highlight">Toku</span></h1>
+        </div>
+        <h2>Chào mừng trở lại</h2>
+        <p class="sub">Đăng nhập để tiếp tục trò chuyện</p>
+
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="loginUsername" placeholder="Tên đăng nhập hoặc Email" autocomplete="username" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="Mật khẩu" autocomplete="current-password" required>
+        </div>
+
+        <div class="forgot-password">
+            <a href="#" onclick="alert('Liên hệ Owner để đặt lại mật khẩu\n📧 nguyenvietnamtthsp@gmail.com')">Quên mật khẩu?</a>
+        </div>
+
+        <div id="loginMessage" class="message"></div>
+
+        <button class="btn-submit" id="btnLogin">
+            <span class="btn-text"><i class="fas fa-sign-in-alt"></i> Đăng nhập</span>
+            <span class="spinner"></span>
+        </button>
+    </div>
+
+</div>
+
+<script>
+    // ============================================================
+    // 1. UI HELPERS
+    // ============================================================
+    function showMessage(element, type, text) {
+        element.className = 'message ' + type;
+        element.innerHTML = text;
+    }
+
+    function setLoading(button, loading) {
+        if (loading) {
+            button.classList.add('loading');
+            button.disabled = true;
+        } else {
+            button.classList.remove('loading');
+            button.disabled = false;
+        }
+    }
+
+    // ============================================================
+    // 2. SLIDE LOGIN / REGISTER
+    // ============================================================
+    const rightPanel = document.getElementById('rightPanel');
+    const loginFormContainer = document.getElementById('loginFormContainer');
+    let isLoginVisible = false;
+
+    function updatePanel(mode) {
+        if (mode === 'login') {
+            rightPanel.innerHTML = `
+                <div class="overlay-icon">🚀</div>
+                <h2>Chưa có tài khoản?</h2>
+                <p>Đăng ký ngay để tham gia<br>cộng đồng Toku</p>
+                <button class="btn-slide" id="slideBtn">Đăng ký</button>
+            `;
+            rightPanel.classList.add('active');
+            loginFormContainer.classList.add('show');
+            isLoginVisible = true;
+        } else {
+            rightPanel.innerHTML = `
+                <div class="overlay-icon">💬</div>
+                <h2>Đã có tài khoản?</h2>
+                <p>Đăng nhập để tiếp tục trải nghiệm <br>cùng bạn bè và cộng đồng</p>
+                <button class="btn-slide" id="slideBtn">Đăng nhập</button>
+            `;
+            rightPanel.classList.remove('active');
+            loginFormContainer.classList.remove('show');
+            isLoginVisible = false;
+        }
+        
+        const newSlideBtn = document.getElementById('slideBtn');
+        if (newSlideBtn) {
+            newSlideBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleSlide();
+            });
+        }
+    }
+
+    function toggleSlide() {
+        if (isLoginVisible) {
+            updatePanel('register');
+        } else {
+            updatePanel('login');
+        }
+    }
+
+    document.getElementById('slideBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleSlide();
+    });
+
+    // ============================================================
+    // 3. AUTH API CALLS
+    // ============================================================
+    async function registerUser(username, email, password, confirm) {
+        if (!username || username.length < 3) {
+            return { success: false, msg: '⚠️ Tên đăng nhập tối thiểu 3 ký tự.' };
+        }
+        if (!email) {
+            return { success: false, msg: '⚠️ Vui lòng nhập email.' };
+        }
+        if (password !== confirm) {
+            return { success: false, msg: '⚠️ Mật khẩu xác nhận không khớp.' };
+        }
+        if (password.length < 6) {
+            return { success: false, msg: '⚠️ Mật khẩu tối thiểu 6 ký tự.' };
+        }
+        
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!re.test(email)) {
+            return { success: false, msg: '⚠️ Email không hợp lệ.' };
+        }
+
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+            
+            if (!response.ok) {
+                const text = await response.text();
+                try {
+                    const data = JSON.parse(text);
+                    return data;
+                } catch {
+                    return { success: false, msg: '❌ Server phản hồi lỗi (HTTP ' + response.status + ')' };
+                }
+            }
+            
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Register error:', error);
+            return { success: false, msg: '❌ Không thể kết nối đến server. Vui lòng kiểm tra server đã chạy chưa.' };
+        }
+    }
+
+    async function loginUser(usernameOrEmail, password) {
+        if (!usernameOrEmail || !password) {
+            return { success: false, msg: '⚠️ Vui lòng nhập đầy đủ thông tin.' };
+        }
+
+        try {
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usernameOrEmail, password })
+            });
+            
+            if (!response.ok) {
+                const text = await response.text();
+                try {
+                    const data = JSON.parse(text);
+                    return data;
+                } catch {
+                    return { success: false, msg: '❌ Server phản hồi lỗi (HTTP ' + response.status + ')' };
+                }
+            }
+            
+            const data = await response.json();
+            console.log('✅ Login response:', data);
+            return data;
+        } catch (error) {
+            console.error('Login error:', error);
+            if (error.message && error.message.includes('Failed to fetch')) {
+                return { success: false, msg: '❌ Không thể kết nối đến server. Vui lòng kiểm tra server đã chạy chưa.' };
+            }
+            return { success: false, msg: '❌ Lỗi kết nối server: ' + error.message };
+        }
+    }
+
+    // ============================================================
+    // 4. EVENT HANDLERS
+    // ============================================================
+
+    // ===== REGISTER =====
+    document.getElementById('btnRegister').addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('regUsername').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value.trim();
+        const confirm = document.getElementById('regConfirm').value.trim();
+        const msg = document.getElementById('regMessage');
+        
+        msg.className = 'message';
+        msg.textContent = '';
+        
+        setLoading(this, true);
+        
+        const result = await registerUser(username, email, password, confirm);
+        
+        setLoading(this, false);
+        
+        if (result.success) {
+            showMessage(msg, 'success', '✅ Đăng ký thành công! Đang chuyển đến chat...');
+            // Clear old session
+            sessionStorage.removeItem('chat_user');
+            sessionStorage.removeItem('chat_user_role');
+            // Save new user
+            if (result.user) {
+                sessionStorage.setItem('chat_user', JSON.stringify(result.user));
+                if (result.user.role) {
+                    sessionStorage.setItem('chat_user_role', result.user.role);
+                }
+                console.log('✅ Saved user:', result.user.username, 'Role:', result.user.role);
+            }
+            setTimeout(() => { 
+                window.location.href = '/chat'; 
+            }, 800);
+        } else {
+            showMessage(msg, 'error', result.msg);
+            if (result.msg.includes('tên đăng nhập') || result.msg.includes('username')) {
+                document.getElementById('regUsername').focus();
+            } else if (result.msg.includes('Email') || result.msg.includes('email')) {
+                document.getElementById('regEmail').focus();
+            } else if (result.msg.includes('mật khẩu') || result.msg.includes('password')) {
+                document.getElementById('regPassword').focus();
+            }
+        }
+    });
+
+    // ===== LOGIN =====
+    document.getElementById('btnLogin').addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        const usernameOrEmail = document.getElementById('loginUsername').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
+        const msg = document.getElementById('loginMessage');
+        
+        msg.className = 'message';
+        msg.textContent = '';
+        
+        setLoading(this, true);
+        
+        const result = await loginUser(usernameOrEmail, password);
+        
+        setLoading(this, false);
+        
+        if (result.success) {
+            showMessage(msg, 'success', '✅ Đăng nhập thành công! Đang chuyển đến chat...');
+            // Clear old session
+            sessionStorage.removeItem('chat_user');
+            sessionStorage.removeItem('chat_user_role');
+            // Save new user
+            if (result.user) {
+                sessionStorage.setItem('chat_user', JSON.stringify(result.user));
+                if (result.user.role) {
+                    sessionStorage.setItem('chat_user_role', result.user.role);
+                }
+                console.log('✅ Saved user:', result.user.username, 'Role:', result.user.role);
+            }
+            setTimeout(() => { 
+                window.location.href = '/chat'; 
+            }, 800);
+        } else {
+            showMessage(msg, 'error', result.msg);
+            document.getElementById('loginUsername').focus();
+            document.getElementById('loginUsername').select();
+        }
+    });
+
+    // Enter key support
+    document.querySelectorAll('.input-group input').forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const left = document.querySelector('.left');
+                if (left.contains(this)) {
+                    document.getElementById('btnRegister').click();
+                } else {
+                    document.getElementById('btnLogin').click();
+                }
+            }
+        });
+    });
+
+    // ============================================================
+    // 5. CHECK SESSION - Redirect if already logged in
+    // ============================================================
+    (async function checkSession() {
+        try {
+            // Check sessionStorage first
+            const storedUser = sessionStorage.getItem('chat_user');
+            if (storedUser) {
+                try {
+                    const user = JSON.parse(storedUser);
+                    if (user && user.username) {
+                        console.log('📦 Found user in sessionStorage:', user.username);
+                        // Verify with server
+                        const response = await fetch('/api/session');
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.loggedIn && data.user) {
+                                // Update sessionStorage with latest data
+                                sessionStorage.setItem('chat_user', JSON.stringify(data.user));
+                                if (data.user.role) {
+                                    sessionStorage.setItem('chat_user_role', data.user.role);
+                                }
+                                window.location.href = '/chat';
+                                return;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log('SessionStorage parse error:', e);
+                }
+            }
+
+            // Check server session
+            const response = await fetch('/api/session');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.loggedIn && data.user) {
+                    sessionStorage.setItem('chat_user', JSON.stringify(data.user));
+                    if (data.user.role) {
+                        sessionStorage.setItem('chat_user_role', data.user.role);
+                    }
+                    window.location.href = '/chat';
+                    return;
+                }
+            }
+        } catch (e) {
+            console.log('Không thể kiểm tra session, tiếp tục hiển thị login');
+        }
+
+        // If we're here, user is not logged in
+        console.log('🔓 User not logged in, showing login page');
+    })();
+
+    // ============================================================
+    // 6. XỬ LÝ LỖI TỪ URL
+    // ============================================================
+    (function handleUrlErrors() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        
+        if (error) {
+            const msgElement = document.getElementById('loginMessage');
+            let errorMsg = '❌ ';
+            
+            switch(error) {
+                case 'session_expired':
+                    errorMsg += 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+                    break;
+                case 'unauthorized':
+                    errorMsg += 'Vui lòng đăng nhập để tiếp tục.';
+                    break;
+                default:
+                    errorMsg += 'Có lỗi xảy ra. Vui lòng thử lại.';
+            }
+            
+            showMessage(msgElement, 'error', errorMsg);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    })();
+
+    // ============================================================
+    // 7. CHECK FOR EXISTING SESSION ON LOAD
+    // ============================================================
+    console.log('📱 Login page loaded');
+    console.log('📝 Tài khoản mặc định:');
+    console.log('  👑 Owner: owner / cihonenam123');
+    console.log('  🛡️ Admin: admin / admin123');
+    console.log('  📊 Manager: manager / manager123');
+    console.log('  🎯 Support: support / support123');
+    console.log('  🧪 Test: test / 123456');
+    console.log('  👤 User1: user1 / 123456');
+    console.log('  👤 User2: user2 / 123456');
+</script>
+
+</body>
+</html>

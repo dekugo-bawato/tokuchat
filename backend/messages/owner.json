@@ -1,0 +1,106 @@
+[
+  {
+    "from": "admin",
+    "text": "alo",
+    "image": "",
+    "time": "2026-07-22T13:59:28.679Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "admin",
+    "text": "",
+    "image": "/uploads/img-1784728917568-50627202.png",
+    "time": "2026-07-22T14:01:58.230Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "user1",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-22T14:06:46.871Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "user1",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-22T14:21:49.721Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "j day",
+    "image": "",
+    "time": "2026-07-23T03:17:53.200Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "alo",
+    "image": "",
+    "time": "2026-07-23T03:18:29.242Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T03:27:59.290Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "alo",
+    "image": "",
+    "time": "2026-07-23T03:34:28.597Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "alo",
+    "image": "",
+    "time": "2026-07-23T04:08:11.158Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:14:50.382Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:18:26.287Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:43:38.551Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "",
+    "image": "/uploads/img-1784781821633-74106854.png",
+    "time": "2026-07-23T04:43:42.102Z",
+    "effect": "none",
+    "mentions": []
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "key": "twinkle",
+      "label": "Lấp lánh",
+      "icon": "✨",
+      "price": 25000,
+      "tier": "pro"
+    },
+    {
+      "key": "dragon",
+      "label": "Rồng cuộn",
+      "icon": "🐉",
+      "price": 30000,
+      "tier": "promax"
+    },
+    {
+      "key": "bubble",
+      "label": "Bong bóng",
+      "icon": "🫧",
+      "price": 30000,
+      "tier": "promax"
+    },
+    {
+      "key": "shimmer",
+      "label": "Sáng bóng",
+      "icon": "💫",
+      "price": 25000,
+      "tier": "pro"
+    },
+    {
+      "key": "explode",
+      "label": "Nổ",
+      "icon": "💥",
+      "price": 30000,
+      "tier": "promax"
+    }
+  ],
+  "expiry": 1793111240174
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "from": "user3",
+    "text": "hi",
+    "time": "2026-07-21T04:13:28.983Z",
+    "effect": "dragon"
+  },
+  {
+    "from": "admin",
+    "text": "alo",
+    "time": "2026-07-21T04:22:06.807Z",
+    "effect": "rainbow"
+  },
+  {
+    "from": "admin",
+    "text": "ghsdgs",
+    "time": "2026-07-21T04:22:12.575Z",
+    "effect": "rainbow"
+  },
+  {
+    "from": "admin",
+    "text": "ghlg",
+    "time": "2026-07-21T04:22:16.063Z",
+    "effect": "fire"
+  },
+  {
+    "from": "admin",
+    "text": "hjkhg",
+    "time": "2026-07-21T04:22:20.295Z",
+    "effect": "explode"
+  },
+  {
+    "from": "admin",
+    "text": "jh",
+    "time": "2026-07-21T04:22:22.135Z",
+    "effect": "explode"
+  },
+  {
+    "from": "admin",
+    "text": "j",
+    "time": "2026-07-21T04:22:23.063Z",
+    "effect": "explode"
+  },
+  {
+    "from": "admin",
+    "text": "j",
+    "time": "2026-07-21T04:22:24.127Z",
+    "effect": "explode"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T05:13:59.343Z",
+    "effect": "bubble"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T05:14:06.103Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:18:48.922Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:18:51.194Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:18:55.258Z",
+    "effect": "twinkle"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-22T04:14:29.465Z",
+    "effect": "none"
+  }
+]

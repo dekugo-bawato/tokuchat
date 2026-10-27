@@ -1,0 +1,32 @@
+[
+  {
+    "from": "manager",
+    "to": "owner",
+    "status": "accepted",
+    "time": "2026-07-23T04:18:16.744Z"
+  },
+  {
+    "from": "adminfake",
+    "to": "owner",
+    "status": "accepted",
+    "time": "2026-07-23T06:25:25.856Z"
+  },
+  {
+    "from": "owner",
+    "to": "user1",
+    "status": "accepted",
+    "time": "2026-07-23T10:04:54.051Z"
+  },
+  {
+    "from": "user2",
+    "to": "owner",
+    "status": "accepted",
+    "time": "2026-07-24T14:22:06.014Z"
+  },
+  {
+    "from": "owner",
+    "to": "test",
+    "status": "accepted",
+    "time": "2026-10-27T11:29:52.318Z"
+  }
+]

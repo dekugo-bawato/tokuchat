@@ -1,0 +1,30 @@
+{
+  "effects": [
+    {
+      "key": "twinkle",
+      "label": "Lấp lánh",
+      "price": 25000
+    },
+    {
+      "key": "bubble",
+      "label": "Bong bóng",
+      "price": 25000
+    },
+    {
+      "key": "rainbow",
+      "label": "Cầu vồng",
+      "price": 35000
+    },
+    {
+      "key": "shimmer",
+      "label": "Sáng bóng",
+      "price": 28000
+    },
+    {
+      "key": "dragon",
+      "label": "Rồng cuộn",
+      "price": 40000
+    }
+  ],
+  "expiry": 1793111240146
+}

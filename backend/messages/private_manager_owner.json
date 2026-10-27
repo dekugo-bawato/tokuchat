@@ -1,0 +1,108 @@
+[
+  {
+    "from": "manager",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:58:38.658Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:58:44.489Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:59:01.944Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:59:07.048Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:59:16.864Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:59:23.400Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T04:59:31.680Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "ưhi",
+    "image": "",
+    "time": "2026-07-23T04:59:33.529Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "manager",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-23T05:38:27.268Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "?",
+    "image": "",
+    "time": "2026-07-23T05:38:43.634Z",
+    "effect": "none",
+    "mentions": []
+  },
+  {
+    "from": "owner",
+    "text": "hi",
+    "image": "",
+    "time": "2026-07-24T14:22:48.149Z",
+    "effect": "rainbow",
+    "mentions": [],
+    "frame": "frame5",
+    "avatarFrame": "avtframe3",
+    "gradient": true,
+    "typing": true,
+    "highlight": true
+  },
+  {
+    "from": "owner",
+    "text": "hui",
+    "image": "",
+    "time": "2026-07-24T14:22:54.365Z",
+    "effect": "shimmer",
+    "mentions": [],
+    "frame": "frame5",
+    "avatarFrame": "avtframe3",
+    "gradient": true,
+    "typing": true,
+    "highlight": true
+  }
+]

@@ -1,0 +1,1120 @@
+[
+  {
+    "username": "owner",
+    "email": "nguyenvietnamtthsp@gmail.com",
+    "password": "cihonenam123",
+    "role": "owner",
+    "tier": "legend",
+    "tierExpiry": null,
+    "displayName": "👑 Owner",
+    "effects": [
+      "twinkle",
+      "shimmer",
+      "glow",
+      "bubble",
+      "explode",
+      "rainbow",
+      "dragon",
+      "starlight",
+      "aurora",
+      "galaxy",
+      "fire"
+    ],
+    "cash": 100000000010014700000,
+    "totalTopup": 100000000010015100000,
+    "badges": [
+      "Người kết nối",
+      "Nhà sưu tập",
+      "Nhà phát tài",
+      "Đại gia",
+      "Huyền thoại",
+      "Nhà giàu",
+      "Nạp thử",
+      "Nạp nhiều"
+    ],
+    "themes": [
+      "default",
+      "theme2",
+      "theme3",
+      "theme4",
+      "theme5",
+      "theme6",
+      "theme7",
+      "theme1"
+    ],
+    "refreshTokens": 963,
+    "currentTheme": "theme4",
+    "currentBadge": "Người kết nối",
+    "frames": [
+      "default",
+      "frame1",
+      "frame2",
+      "frame3",
+      "frame4",
+      "frame5",
+      "frame6",
+      "frame7"
+    ],
+    "gradientText": true,
+    "typingEffect": true,
+    "avatarFrames": [
+      "default",
+      "avtframe1",
+      "avtframe2",
+      "avtframe3",
+      "avtframe6",
+      "avtframe5",
+      "avtframe4"
+    ],
+    "highlightedName": true,
+    "avatarUrl": "/uploads/avatar-1784816382077-927081434.png",
+    "msgColor": "#5c6bb7",
+    "currentFrame": "frame5",
+    "currentAvatarFrame": "avtframe6",
+    "seasonTier": 1,
+    "seasonExp": 35,
+    "seasonMaxExp": 110,
+    "seasonIsElite": true,
+    "seasonClaimedRewards": [
+      1
+    ],
+    "seasonClaimedElite": [],
+    "seasonMissions": {
+      "daily_login": {
+        "current": 1,
+        "claimed": true
+      },
+      "daily_messages_10": {
+        "current": 4,
+        "claimed": false
+      },
+      "daily_messages_30": {
+        "current": 4,
+        "claimed": false
+      },
+      "daily_chat_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_friend": {
+        "current": 1,
+        "claimed": false
+      },
+      "weekly_messages_100": {
+        "current": 183,
+        "claimed": true
+      },
+      "weekly_chat_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_friends_3": {
+        "current": 2,
+        "claimed": false
+      },
+      "special_effects_5": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_rank_gold": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_refer_3": {
+        "current": 0,
+        "claimed": false
+      }
+    },
+    "seasonLastReset": "2026-10-27T11:26:37.329Z",
+    "vipExpiry": "2026-08-25T07:34:43.787Z",
+    "vipActive": false,
+    "vipLastClaimDate": "2026-07-28T03:01:16.848Z",
+    "achievements": {
+      "collector_5": true,
+      "collector_10": true,
+      "collector_20": true,
+      "rich_100k": true,
+      "rich_500k": true,
+      "rich_1m": true,
+      "rank_bronze": true,
+      "rank_silver": true,
+      "rank_gold": true,
+      "rank_platinum": true,
+      "rank_diamond": true,
+      "rank_vip": true,
+      "rank_legend": true,
+      "effects_3": true,
+      "effects_5": true,
+      "frames_3": true,
+      "frames_5": true,
+      "avatar_frames_3": true,
+      "friend_3": true,
+      "vip_subscriber": true
+    }
+  },
+  {
+    "username": "admin",
+    "email": "admin@chat.com",
+    "password": "admin123",
+    "role": "admin",
+    "tier": "vip",
+    "tierExpiry": null,
+    "displayName": "🛡️ Admin",
+    "effects": [
+      "twinkle",
+      "shimmer",
+      "glow"
+    ],
+    "cash": 500000,
+    "totalTopup": 500000,
+    "badges": [
+      "Người kết nối"
+    ],
+    "themes": [
+      "default",
+      "theme1",
+      "theme6",
+      "theme7"
+    ],
+    "refreshTokens": 100,
+    "currentTheme": "default",
+    "currentBadge": null,
+    "frames": [
+      "default",
+      "frame1",
+      "frame3"
+    ],
+    "gradientText": true,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default",
+      "avtframe1"
+    ],
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#3498db"
+  },
+  {
+    "username": "manager",
+    "email": "manager@chat.com",
+    "password": "manager123",
+    "role": "manager",
+    "tier": "legend",
+    "tierExpiry": "2026-07-30T05:43:13.414Z",
+    "displayName": "📊 Manager",
+    "effects": [
+      "glow",
+      "shimmer",
+      "fire",
+      "rainbow"
+    ],
+    "cash": 10000016000,
+    "totalTopup": 10000420000,
+    "badges": [
+      "Người kết nối",
+      "Kim cương",
+      "Nhà giàu",
+      "Nạp thử",
+      "Nạp nhiều",
+      "Đại gia",
+      "Huyền thoại"
+    ],
+    "themes": [
+      "default",
+      "theme1",
+      "theme7"
+    ],
+    "refreshTokens": 50,
+    "currentTheme": "default",
+    "currentBadge": null,
+    "frames": [
+      "default",
+      "frame5",
+      "frame3",
+      "frame2"
+    ],
+    "gradientText": true,
+    "typingEffect": true,
+    "avatarFrames": [
+      "default"
+    ],
+    "highlightedName": true,
+    "avatarUrl": null,
+    "msgColor": "#2ecc71",
+    "currentFrame": "frame5"
+  },
+  {
+    "username": "support",
+    "email": "support@chat.com",
+    "password": "support123",
+    "role": "support",
+    "tier": "legend",
+    "tierExpiry": "2026-07-30T05:43:55.412Z",
+    "displayName": "🎯 Support",
+    "effects": [
+      "twinkle"
+    ],
+    "cash": 200000,
+    "totalTopup": 200000,
+    "badges": [
+      "VIP",
+      "Nhà giàu",
+      "Nạp thử",
+      "Nạp nhiều",
+      "Huyền thoại"
+    ],
+    "themes": [
+      "default",
+      "theme7"
+    ],
+    "refreshTokens": 19,
+    "currentTheme": "default",
+    "currentBadge": null,
+    "frames": [
+      "default"
+    ],
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default"
+    ],
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#f39c12"
+  },
+  {
+    "username": "test",
+    "email": "test@test.com",
+    "password": "123456",
+    "role": "user",
+    "tier": "silver",
+    "tierExpiry": "2026-11-03T11:28:00.825Z",
+    "displayName": "🧪 Test",
+    "effects": [
+      "twinkle",
+      "rainbow",
+      "fire"
+    ],
+    "cash": 66500,
+    "totalTopup": 145000,
+    "badges": [
+      "Bạc",
+      "Nạp thử",
+      "Nhà giàu",
+      "Nạp nhiều"
+    ],
+    "themes": [
+      "default",
+      "theme7"
+    ],
+    "refreshTokens": 1,
+    "currentTheme": "default",
+    "currentBadge": null,
+    "frames": [
+      "default"
+    ],
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default"
+    ],
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#6C2BD9",
+    "seasonTier": 0,
+    "seasonExp": 0,
+    "seasonMaxExp": 100,
+    "seasonIsElite": false,
+    "seasonClaimedRewards": [],
+    "seasonClaimedElite": [],
+    "seasonMissions": {
+      "daily_login": {
+        "current": 1,
+        "claimed": false
+      },
+      "daily_messages_10": {
+        "current": 4,
+        "claimed": false
+      },
+      "daily_messages_30": {
+        "current": 4,
+        "claimed": false
+      },
+      "daily_chat_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_friend": {
+        "current": 1,
+        "claimed": false
+      },
+      "weekly_messages_100": {
+        "current": 4,
+        "claimed": false
+      },
+      "weekly_chat_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_friends_3": {
+        "current": 1,
+        "claimed": false
+      },
+      "special_effects_5": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_rank_gold": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_refer_3": {
+        "current": 0,
+        "claimed": false
+      }
+    },
+    "seasonLastReset": "2026-10-27T11:27:13.806Z",
+    "vipExpiry": null,
+    "vipActive": false,
+    "vipLastClaimDate": null,
+    "achievements": {
+      "collector_5": true,
+      "rank_bronze": true,
+      "rank_silver": true,
+      "rank_gold": true,
+      "rank_platinum": true,
+      "rank_diamond": true,
+      "rank_vip": true,
+      "rank_legend": true,
+      "rich_100k": true,
+      "effects_3": true
+    }
+  },
+  {
+    "username": "demo",
+    "email": "demo@demo.com",
+    "password": "123456",
+    "role": "user",
+    "tier": "user",
+    "tierExpiry": null,
+    "displayName": "🎮 Demo",
+    "effects": [],
+    "cash": 20000,
+    "totalTopup": 0,
+    "badges": [],
+    "themes": [
+      "default",
+      "theme7"
+    ],
+    "refreshTokens": 0,
+    "currentTheme": "default",
+    "currentBadge": null,
+    "frames": [
+      "default"
+    ],
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default"
+    ],
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#6C2BD9"
+  },
+  {
+    "username": "user1",
+    "email": "user1@test.com",
+    "password": "123456",
+    "role": "user",
+    "tier": "legend",
+    "tierExpiry": "2026-08-01T05:54:57.934Z",
+    "displayName": "👤 User One",
+    "effects": [
+      "rainbow",
+      "shimmer",
+      "twinkle",
+      "glow",
+      "starlight"
+    ],
+    "cash": 653501,
+    "totalTopup": 2525000,
+    "badges": [
+      "Nhà sưu tập",
+      "Nhà giàu",
+      "Bạc",
+      "Nạp thử",
+      "Nạp nhiều",
+      "Vàng",
+      "VIP",
+      "Đại gia",
+      "Huyền thoại"
+    ],
+    "themes": [
+      "default",
+      "theme7",
+      "theme6",
+      "theme1",
+      "theme2",
+      "theme4"
+    ],
+    "refreshTokens": 0,
+    "currentTheme": "theme4",
+    "currentBadge": null,
+    "frames": [
+      "default",
+      "frame1",
+      "frame2",
+      "frame5",
+      "frame3",
+      "frame6"
+    ],
+    "gradientText": true,
+    "typingEffect": true,
+    "avatarFrames": [
+      "default",
+      "avtframe3",
+      "avtframe1",
+      "avtframe2"
+    ],
+    "highlightedName": true,
+    "avatarUrl": null,
+    "msgColor": "#2ecc71",
+    "currentAvatarFrame": "avtframe3",
+    "seasonTier": 0,
+    "seasonExp": 20,
+    "seasonMaxExp": 100,
+    "seasonIsElite": true,
+    "seasonClaimedRewards": [],
+    "seasonClaimedElite": [],
+    "seasonMissions": {
+      "daily_login": {
+        "current": 1,
+        "claimed": false
+      },
+      "daily_messages_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_messages_30": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_chat_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_friend": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_messages_100": {
+        "current": 6,
+        "claimed": false
+      },
+      "weekly_chat_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_friends_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_effects_5": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_rank_gold": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_refer_3": {
+        "current": 0,
+        "claimed": false
+      }
+    },
+    "seasonLastReset": "2026-07-28T03:01:12.655Z",
+    "currentFrame": "frame2",
+    "vipExpiry": "2026-08-25T10:50:51.826Z",
+    "vipActive": true,
+    "vipLastClaimDate": "2026-07-28T03:01:41.544Z",
+    "achievements": {
+      "collector_5": true,
+      "collector_10": true,
+      "rich_100k": true,
+      "rich_500k": true,
+      "rank_bronze": true,
+      "rank_silver": true,
+      "rank_gold": true,
+      "rank_platinum": true,
+      "rank_diamond": true,
+      "rank_vip": true,
+      "rank_legend": true,
+      "frames_3": true,
+      "avatar_frames_3": true,
+      "vip_subscriber": true,
+      "frames_5": true,
+      "effects_3": true,
+      "collector_20": true,
+      "effects_5": true
+    }
+  },
+  {
+    "username": "user2",
+    "email": "user2@test.com",
+    "password": "123456",
+    "role": "user",
+    "tier": "vip",
+    "tierExpiry": "2026-08-02T03:30:25.965Z",
+    "displayName": "💎 User Platinum",
+    "effects": [
+      "twinkle",
+      "glow",
+      "shimmer",
+      "bubble",
+      "explode",
+      "rainbow",
+      "fire",
+      "dragon"
+    ],
+    "cash": 1159900,
+    "totalTopup": 400000,
+    "badges": [
+      "Bạch kim",
+      "Nhà sưu tập",
+      "Nhà giàu",
+      "Nạp thử",
+      "Nạp nhiều",
+      "Chiến binh mùa",
+      "Huyền thoại"
+    ],
+    "themes": [
+      "default",
+      "theme1",
+      "theme6",
+      "theme7",
+      "theme5"
+    ],
+    "refreshTokens": 0,
+    "currentTheme": "theme5",
+    "currentBadge": null,
+    "frames": [
+      "default",
+      "frame1",
+      "frame3"
+    ],
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default",
+      "avtframe1",
+      "avtframe2"
+    ],
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#f7971e",
+    "seasonTier": 50,
+    "seasonExp": 0,
+    "seasonMaxExp": 100,
+    "seasonIsElite": true,
+    "seasonClaimedRewards": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "seasonClaimedElite": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "seasonMissions": {
+      "daily_login": {
+        "current": 1,
+        "claimed": false
+      },
+      "daily_messages_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_messages_30": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_chat_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_friend": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_messages_100": {
+        "current": 30,
+        "claimed": false
+      },
+      "weekly_chat_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_friends_3": {
+        "current": 1,
+        "claimed": false
+      },
+      "special_effects_5": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_rank_gold": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_refer_3": {
+        "current": 0,
+        "claimed": false
+      }
+    },
+    "seasonLastReset": "2026-07-26T02:21:09.964Z",
+    "seasonEffectsExpiry": {
+      "twinkle": 1785641425924,
+      "shimmer": 1785641425935,
+      "glow": 1785641425869,
+      "bubble": 1785641425894,
+      "explode": 1785641425923,
+      "rainbow": 1785641425890,
+      "fire": 1785641425902,
+      "dragon": 1785641425951
+    }
+  },
+  {
+    "username": "adminfake",
+    "email": "lancafehoian@gmail.com",
+    "password": "123456",
+    "role": "user",
+    "tier": "legend",
+    "tierExpiry": "2026-07-30T07:07:04.472Z",
+    "displayName": "adminfake",
+    "effects": [],
+    "cash": 9432000,
+    "totalTopup": 10680000,
+    "badges": [
+      "Nhà giàu",
+      "Nạp thử",
+      "Nạp nhiều",
+      "Bạch kim",
+      "Đại gia",
+      "Huyền thoại"
+    ],
+    "themes": [
+      "default",
+      "theme7",
+      "theme4"
+    ],
+    "currentTheme": "default",
+    "refreshTokens": 0,
+    "lastRefreshTokenTime": 1784787917611,
+    "currentBadge": null,
+    "frames": [
+      "default",
+      "frame5",
+      "frame1",
+      "frame3",
+      "frame2"
+    ],
+    "currentFrame": "frame3",
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default"
+    ],
+    "currentAvatarFrame": "default",
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#6C2BD9",
+    "createdAt": "2026-07-23T06:25:17.611Z"
+  },
+  {
+    "username": "thunguyen",
+    "email": "thuhoiantkpt@gmail.com",
+    "password": "nam123",
+    "role": "user",
+    "tier": "user",
+    "tierExpiry": null,
+    "displayName": "thunguyen",
+    "effects": [],
+    "cash": 0,
+    "totalTopup": 0,
+    "badges": [],
+    "themes": [
+      "default",
+      "theme7"
+    ],
+    "currentTheme": "default",
+    "refreshTokens": 0,
+    "lastRefreshTokenTime": 1784801265478,
+    "currentBadge": null,
+    "frames": [
+      "default"
+    ],
+    "currentFrame": "default",
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default"
+    ],
+    "currentAvatarFrame": "default",
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#6C2BD9",
+    "createdAt": "2026-07-23T10:07:45.478Z"
+  },
+  {
+    "username": "nam",
+    "email": "namtranbel@gmail.com",
+    "password": "nam1234",
+    "role": "user",
+    "tier": "legend",
+    "tierExpiry": "2026-08-04T05:49:43.041Z",
+    "displayName": "nam",
+    "effects": [
+      "twinkle",
+      "shimmer",
+      "glow",
+      "bubble",
+      "explode",
+      "rainbow",
+      "fire",
+      "dragon"
+    ],
+    "cash": 211900,
+    "totalTopup": 900000,
+    "badges": [
+      "Nhà giàu",
+      "Nạp thử",
+      "Nạp nhiều",
+      "Chiến binh mùa",
+      "Huyền thoại",
+      "Nhà sưu tập",
+      "Đại gia"
+    ],
+    "themes": [
+      "default",
+      "theme7",
+      "theme1"
+    ],
+    "currentTheme": "default",
+    "refreshTokens": 0,
+    "lastRefreshTokenTime": 1785212195762,
+    "currentBadge": null,
+    "frames": [
+      "default",
+      "frame1",
+      "frame3",
+      "frame2"
+    ],
+    "currentFrame": "default",
+    "gradientText": false,
+    "typingEffect": false,
+    "avatarFrames": [
+      "default",
+      "avtframe1",
+      "avtframe2",
+      "avtframe5",
+      "avtframe6"
+    ],
+    "currentAvatarFrame": "default",
+    "highlightedName": false,
+    "avatarUrl": null,
+    "msgColor": "#6C2BD9",
+    "createdAt": "2026-07-28T04:16:35.762Z",
+    "vipExpiry": "2026-08-27T06:00:03.027Z",
+    "vipActive": true,
+    "vipLastClaimDate": null,
+    "seasonTier": 50,
+    "seasonExp": 0,
+    "seasonMaxExp": 100,
+    "seasonIsElite": true,
+    "seasonClaimedRewards": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "seasonClaimedElite": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50
+    ],
+    "seasonMissions": {
+      "daily_login": {
+        "current": 1,
+        "claimed": false
+      },
+      "daily_messages_10": {
+        "current": 4,
+        "claimed": false
+      },
+      "daily_messages_30": {
+        "current": 4,
+        "claimed": false
+      },
+      "daily_chat_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "daily_friend": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_messages_100": {
+        "current": 4,
+        "claimed": false
+      },
+      "weekly_chat_10": {
+        "current": 0,
+        "claimed": false
+      },
+      "weekly_friends_3": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_effects_5": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_rank_gold": {
+        "current": 0,
+        "claimed": false
+      },
+      "special_refer_3": {
+        "current": 0,
+        "claimed": false
+      }
+    },
+    "seasonLastReset": "2026-07-28T04:16:35.762Z",
+    "seasonStartDate": "2026-07-28T04:16:35.762Z",
+    "seasonEffectsExpiry": {
+      "twinkle": 1785817023756,
+      "shimmer": 1785817023769,
+      "glow": 1785817023692,
+      "bubble": 1785817023723,
+      "explode": 1785817023755,
+      "rainbow": 1785817023719,
+      "fire": 1785817023731,
+      "dragon": 1785817023786
+    },
+    "birthdayClaimed": false,
+    "birthdayYear": 2026,
+    "achievements": {
+      "rich_100k": true,
+      "collector_5": true,
+      "collector_10": true,
+      "rich_500k": true,
+      "rich_1m": true,
+      "rank_bronze": true,
+      "rank_silver": true,
+      "rank_gold": true,
+      "rank_platinum": true,
+      "rank_diamond": true,
+      "rank_vip": true,
+      "rank_legend": true,
+      "effects_3": true,
+      "effects_5": true,
+      "frames_3": true,
+      "avatar_frames_3": true,
+      "season_10": true,
+      "season_25": true,
+      "season_50": true,
+      "vip_subscriber": true,
+      "collector_20": true
+    },
+    "flashSaleSelected": [],
+    "flashSaleActive": false,
+    "flashSaleExpiry": 0
+  }
+]

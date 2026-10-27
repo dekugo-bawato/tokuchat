@@ -1,0 +1,20 @@
+[
+  {
+    "from": "namtest",
+    "text": "hi bn",
+    "time": "2026-07-21T05:39:16.025Z",
+    "effect": "dragon"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T07:29:13.391Z",
+    "effect": "fire"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T07:58:12.882Z",
+    "effect": "fire"
+  }
+]

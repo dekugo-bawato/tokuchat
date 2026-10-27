@@ -1,0 +1,504 @@
+[
+  {
+    "from": "AI",
+    "text": "👋 Chào bạn! Mình là AI trợ lý. Hãy hỏi bất cứ điều gì nhé!",
+    "time": "2026-07-20T10:24:15.813Z",
+    "effect": "none"
+  },
+  {
+    "from": "AI",
+    "text": "👋 Chào bạn! Mình là AI trợ lý. Hãy hỏi bất cứ điều gì nhé!",
+    "time": "2026-07-20T10:24:15.816Z",
+    "effect": "none"
+  },
+  {
+    "from": "user2",
+    "text": "hi",
+    "time": "2026-07-21T02:56:45.010Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T02:56:46.019Z",
+    "effect": "none"
+  },
+  {
+    "from": "user1",
+    "text": "ok",
+    "time": "2026-07-21T03:50:29.765Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "AI",
+    "text": "Bạn có thể giải thích rõ hơn không?",
+    "time": "2026-07-21T03:50:31.119Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:21:44.663Z",
+    "effect": "twinkle"
+  },
+  {
+    "from": "AI",
+    "text": "Cảm ơn bạn đã chia sẻ!",
+    "time": "2026-07-21T04:21:46.043Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:21:49.543Z",
+    "effect": "bubble"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T04:21:50.525Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:21:53.302Z",
+    "effect": "dragon"
+  },
+  {
+    "from": "AI",
+    "text": "Bạn thật hài hước! 🤣",
+    "time": "2026-07-21T04:21:54.456Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:21:56.719Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Hôm nay của bạn thế nào?",
+    "time": "2026-07-21T04:21:58.031Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:22:00.126Z",
+    "effect": "rainbow"
+  },
+  {
+    "from": "AI",
+    "text": "Mình sẽ nhớ điều này.",
+    "time": "2026-07-21T04:22:00.740Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hid",
+    "time": "2026-07-21T04:34:42.521Z",
+    "effect": "rainbow"
+  },
+  {
+    "from": "AI",
+    "text": "Ồ, thú vị đấy! Kể thêm đi.",
+    "time": "2026-07-21T04:34:43.408Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:34:47.464Z",
+    "effect": "glow"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T04:34:48.554Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:34:51.432Z",
+    "effect": "bubble"
+  },
+  {
+    "from": "AI",
+    "text": "Cảm ơn bạn đã chia sẻ!",
+    "time": "2026-07-21T04:34:52.902Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:34:56.153Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Bạn có thể giải thích rõ hơn không?",
+    "time": "2026-07-21T04:34:57.438Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:35:01.560Z",
+    "effect": "rainbow"
+  },
+  {
+    "from": "AI",
+    "text": "Mình sẽ nhớ điều này.",
+    "time": "2026-07-21T04:35:02.302Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:35:05.905Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Hôm nay của bạn thế nào?",
+    "time": "2026-07-21T04:35:07.339Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:35:08.080Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Mình cũng nghĩ vậy!",
+    "time": "2026-07-21T04:35:09.257Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:36:11.272Z",
+    "effect": "twinkle"
+  },
+  {
+    "from": "AI",
+    "text": "Ồ, thú vị đấy! Kể thêm đi.",
+    "time": "2026-07-21T04:36:12.323Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:36:21.024Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "AI",
+    "text": "Mình cũng nghĩ vậy!",
+    "time": "2026-07-21T04:36:21.770Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T04:36:27.553Z",
+    "effect": "glow"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T04:36:28.978Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:18:15.523Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "AI",
+    "text": "Hôm nay của bạn thế nào?",
+    "time": "2026-07-21T06:18:16.800Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:18:17.420Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "admin",
+    "text": "hih",
+    "time": "2026-07-21T06:18:18.267Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "AI",
+    "text": "Ồ, thú vị đấy! Kể thêm đi.",
+    "time": "2026-07-21T06:18:18.746Z",
+    "effect": "none"
+  },
+  {
+    "from": "AI",
+    "text": "Cảm ơn bạn đã chia sẻ!",
+    "time": "2026-07-21T06:18:18.889Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:18:20.506Z",
+    "effect": "shimmer"
+  },
+  {
+    "from": "AI",
+    "text": "Ồ, thú vị đấy! Kể thêm đi.",
+    "time": "2026-07-21T06:18:21.283Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T06:19:45.034Z",
+    "effect": "twinkle"
+  },
+  {
+    "from": "AI",
+    "text": "Mình cũng nghĩ vậy!",
+    "time": "2026-07-21T06:19:46.271Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "ok",
+    "time": "2026-07-21T06:19:47.875Z",
+    "effect": "twinkle"
+  },
+  {
+    "from": "AI",
+    "text": "Chào bạn! Mình là AI. 😊",
+    "time": "2026-07-21T06:19:48.762Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "ok",
+    "time": "2026-07-21T06:19:51.658Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Cảm ơn bạn đã chia sẻ!",
+    "time": "2026-07-21T06:19:53.025Z",
+    "effect": "none"
+  },
+  {
+    "from": "user2",
+    "text": "hi",
+    "time": "2026-07-21T07:10:35.630Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Bạn thật hài hước! 🤣",
+    "time": "2026-07-21T07:10:36.789Z",
+    "effect": "none"
+  },
+  {
+    "from": "user2",
+    "text": "ok",
+    "time": "2026-07-21T07:10:39.469Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Hmm, để mình suy nghĩ...",
+    "time": "2026-07-21T07:10:40.813Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hdsfsd",
+    "time": "2026-07-21T07:25:35.423Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Bạn có thể giải thích rõ hơn không?",
+    "time": "2026-07-21T07:25:36.127Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hu",
+    "time": "2026-07-21T07:25:37.806Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Mình sẽ nhớ điều này.",
+    "time": "2026-07-21T07:25:38.864Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hu",
+    "time": "2026-07-21T07:25:59.312Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Bạn thật hài hước! 🤣",
+    "time": "2026-07-21T07:26:00.267Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T07:26:00.416Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T07:26:01.718Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "hi",
+    "time": "2026-07-21T07:26:24.895Z",
+    "effect": "explode"
+  },
+  {
+    "from": "AI",
+    "text": "Ồ, thú vị đấy! Kể thêm đi.",
+    "time": "2026-07-21T07:26:26.318Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "xịn k",
+    "time": "2026-07-21T07:26:33.591Z",
+    "effect": "dragon"
+  },
+  {
+    "from": "AI",
+    "text": "Mình cũng nghĩ vậy!",
+    "time": "2026-07-21T07:26:34.998Z",
+    "effect": "none"
+  },
+  {
+    "from": "user2",
+    "text": "sad",
+    "time": "2026-07-21T07:26:45.297Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T07:26:46.693Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "yes",
+    "time": "2026-07-21T08:23:03.574Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Chào bạn! Mình là AI. 😊",
+    "time": "2026-07-21T08:23:04.742Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "ok",
+    "time": "2026-07-21T08:23:07.732Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Wow, tuyệt vời!",
+    "time": "2026-07-21T08:23:08.722Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "",
+    "image": "/uploads/img-1784622247483-633203074.jfif",
+    "time": "2026-07-21T08:24:07.493Z",
+    "effect": "fire"
+  },
+  {
+    "from": "test",
+    "text": "",
+    "image": "/uploads/img-1784622274366-786115721.png",
+    "time": "2026-07-21T08:24:34.381Z",
+    "effect": "dragon"
+  },
+  {
+    "from": "admin",
+    "text": "wow",
+    "image": "",
+    "time": "2026-07-21T08:24:44.396Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Mình cũng nghĩ vậy!",
+    "image": "",
+    "time": "2026-07-21T08:24:45.745Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "đẹp thế bro",
+    "image": "",
+    "time": "2026-07-21T08:24:47.772Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Hmm, để mình suy nghĩ...",
+    "image": "",
+    "time": "2026-07-21T08:24:48.423Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "sad",
+    "image": "",
+    "time": "2026-07-21T09:16:57.483Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Mình sẽ nhớ điều này.",
+    "image": "",
+    "time": "2026-07-21T09:16:58.639Z",
+    "effect": "none"
+  },
+  {
+    "from": "admin",
+    "text": "adfa",
+    "image": "",
+    "time": "2026-07-21T09:16:59.146Z",
+    "effect": "fire"
+  },
+  {
+    "from": "AI",
+    "text": "Cảm ơn bạn đã chia sẻ!",
+    "image": "",
+    "time": "2026-07-21T09:17:01.145Z",
+    "effect": "none"
+  }
+]

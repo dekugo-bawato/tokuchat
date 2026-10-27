@@ -1,0 +1,26 @@
+[
+  {
+    "id": "chat_chung",
+    "name": "💬 Chat Chung",
+    "createdBy": "system",
+    "createdAt": "2026-07-23T04:17:40.821Z",
+    "avatar": "💬",
+    "isPermanent": true
+  },
+  {
+    "id": "g_1784789178617",
+    "name": "hi",
+    "createdBy": "adminfake",
+    "createdAt": "2026-07-23T06:46:18.617Z",
+    "avatar": "👥",
+    "isPermanent": false
+  },
+  {
+    "id": "g_1784800942551",
+    "name": "nhóm 1",
+    "createdBy": "owner",
+    "createdAt": "2026-07-23T10:02:22.551Z",
+    "avatar": "👥",
+    "isPermanent": false
+  }
+]
